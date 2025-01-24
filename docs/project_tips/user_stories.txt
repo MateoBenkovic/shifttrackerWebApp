@@ -1,0 +1,4 @@
+1. prijava radnog vremena
+    - login
+    - dolazi na dashboard
+    - potvrda radnog vremena
