@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import lombok.Data;
 
 @Entity
-@Data
 public class AppRole {
 
     @Id
@@ -16,4 +15,37 @@ public class AppRole {
 
     private int orderNumber;
     private String name;
+
+    public AppRole() {
+    }
+
+    public AppRole(int id, int orderNumber, String name) {
+        this.id = id;
+        this.orderNumber = orderNumber;
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

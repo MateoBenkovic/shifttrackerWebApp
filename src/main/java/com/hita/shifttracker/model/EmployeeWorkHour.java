@@ -9,7 +9,6 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 @Entity
-@Data
 public class EmployeeWorkHour {
 
     @Id
@@ -17,4 +16,37 @@ public class EmployeeWorkHour {
     private int id;
     private Timestamp workHour;
     private AppUser appUser;
+
+    public EmployeeWorkHour() {
+    }
+
+    public EmployeeWorkHour(int id, Timestamp workHour, AppUser appUser) {
+        this.id = id;
+        this.workHour = workHour;
+        this.appUser = appUser;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Timestamp getWorkHour() {
+        return workHour;
+    }
+
+    public void setWorkHour(Timestamp workHour) {
+        this.workHour = workHour;
+    }
+
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
 }
