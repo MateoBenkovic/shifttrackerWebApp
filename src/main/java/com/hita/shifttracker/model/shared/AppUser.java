@@ -1,6 +1,7 @@
 package com.hita.shifttracker.model.shared;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 public class AppUser {
@@ -8,6 +9,7 @@ public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String firstName;
     private String lastName;
     private String oib;
@@ -31,7 +33,7 @@ public class AppUser {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_team_per_shift_id")
     private ScheduleTeamPerShift scheduleTeamPerShift;
 

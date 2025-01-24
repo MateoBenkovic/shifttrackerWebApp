@@ -1,6 +1,7 @@
 package com.hita.shifttracker.model.shared;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -21,8 +22,8 @@ public class ScheduleTeamPerShift {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    @OneToMany
-    @JoinColumn(name = "app_user_id")
+    @OneToMany(mappedBy = "scheduleTeamPerShift")
+    //@JoinColumn(name = "app_user_id")
     private List<AppUser> employees;
 
     private int schedulePerMonthId;
@@ -30,8 +31,8 @@ public class ScheduleTeamPerShift {
     public ScheduleTeamPerShift() {
     }
 
-    public ScheduleTeamPerShift(int id, Timestamp date, Shift shift, Team team, List<AppUser> employees,
-                                int schedulePerMonthId) {
+    public ScheduleTeamPerShift(int id, Timestamp date, Shift shift, Team team,
+                                List<AppUser> employees, int schedulePerMonthId) {
         this.id = id;
         this.date = date;
         this.shift = shift;
