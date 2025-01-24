@@ -1,27 +1,28 @@
-package com.hita.shifttracker.model;
+package com.hita.shifttracker.model.shared;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Data;
 
 @Entity
-public class TeamRole {
+public class Team {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int orderNumber;
     private String name;
+    private int type;
 
-    public TeamRole() {
+    public Team() {
     }
 
-    public TeamRole(int id, int orderNumber, String name) {
+    public Team(int id, int orderNumber, String name, int type) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.name = name;
+        this.type = type;
     }
 
     public int getId() {
@@ -46,5 +47,13 @@ public class TeamRole {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

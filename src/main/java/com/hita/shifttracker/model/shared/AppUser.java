@@ -1,7 +1,6 @@
-package com.hita.shifttracker.model;
+package com.hita.shifttracker.model.shared;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
 @Entity
 public class AppUser {
