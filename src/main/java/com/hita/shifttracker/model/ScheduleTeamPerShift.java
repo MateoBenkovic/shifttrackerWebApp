@@ -23,9 +23,13 @@ public class ScheduleTeamPerShift {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    @OneToMany
-    @JoinColumn(name = "app_user_id")
+    @ManyToMany
+    @JoinTable(name = "schedule_employees",
+               joinColumns = @JoinColumn(name = "schedule_id"),
+               inverseJoinColumns = @JoinColumn(name = "app_user_id"))
     private List<AppUser> employees;
+    //OneToMany
+    //MappedBySchedulePerShift
 
-    private int schedulePerMonthId;
+    private int schedulePerMonthId; //dodati vezu
 }
