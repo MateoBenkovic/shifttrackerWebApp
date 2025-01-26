@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - ShiftTracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #1877f2;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h1 {
+            margin: 0;
+        }
+        .navbar button {
+            background-color: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #1877f2;
+            margin-bottom: 1.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #dddfe2;
+        }
+        th {
+            background-color: #f0f2f5;
+            font-weight: bold;
+            color: #1877f2;
+        }
+        tr:hover {
+            background-color: #f5f6f7;
+        }
+        a {
+            color: #1877f2;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .button-group button {
+            background-color: #1877f2;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .button-group button:hover {
+            background-color: #166fe5;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>ShiftTracker Admin Panel</h1>
+        <button onclick="location.href='/logout'">Odjava</button>
+    </div>
+    <div class="container">
+        <h2>Pregled Smjena Zaposlenika</h2>
+        <div class="button-group">
+            <button onclick="alert('Funkcionalnost u izradi')">Nova smjena</button>
+            <button onclick="alert('Funkcionalnost u izradi')">Posebne vrste rada</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Ime i prezime</th>
+                    <th>Email</th>
+                    <th>Akcije</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><a href="#">Ana Anić</a></td>
+                    <td>ana.anic@example.com</td>
+                    <td><a href="#">Pregled smjena</a></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><a href="#">Ivo Ivić</a></td>
+                    <td>ivo.ivic@example.com</td>
+                    <td><a href="#">Pregled smjena</a></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><a href="#">Marija Marić</a></td>
+                    <td>marija.maric@example.com</td>
+                    <td><a href="#">Pregled smjena</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
