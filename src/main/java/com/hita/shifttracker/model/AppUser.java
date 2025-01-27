@@ -18,6 +18,7 @@ public class AppUser {
     private String email;
     private String telephone;
 
+
     @ManyToOne
     @JoinColumn(name = "org_unit_id")
     private OrgUnit orgUnit;

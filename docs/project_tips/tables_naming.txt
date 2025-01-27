@@ -4,6 +4,3 @@ app_role - admin, zaposlenik, glavna sestra, glavna sestra ispostave
 team - hitna pomoc
 shift - dnevna i nocna od 7 -19 i 19 - 7
 schuledule - raspored
-
-
-- glavna sestra moze unjeti novog zaposlenika

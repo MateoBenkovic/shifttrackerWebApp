@@ -8,13 +8,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class LoginController {
 
+
     @Autowired
     AppUserRepository appUserRepositoryDB;
+    private AppUserRepository appUserRepository;
+
 
     // show login form
     @GetMapping("/login")
@@ -53,8 +58,10 @@ public class LoginController {
         return "login.html";
     }
 
+
+
     @GetMapping("/logout")
-    public String logout(HttpSession session) {
+    public String logout(HttpSession session){
         session.invalidate();
         return "redirect:/login";
     }

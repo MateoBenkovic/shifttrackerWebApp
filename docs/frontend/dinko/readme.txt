@@ -1,1 +1,0 @@
-Dinko ovdje stavljas HTML-ove(pazi na mnozinu html).
