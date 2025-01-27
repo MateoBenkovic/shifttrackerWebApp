@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 @Entity
 @Data
@@ -15,17 +14,26 @@ public class ScheduleTeamPerShift {
     private int id;
     private Timestamp date;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "shift_id")
     private Shift shift;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "team_id")
-    private Team team;
+    private Team teamId;
 
-    @OneToMany
-    @JoinColumn(name = "app_user_id")
-    private List<AppUser> employees;
+    @ManyToOne
+    @JoinColumn(name = "employee1_id")
+    private AppUser employee1Id;
+
+    @ManyToOne
+    @JoinColumn(name = "employee2_id")
+    private AppUser employee2Id;
+
+    @ManyToOne
+    @JoinColumn(name = "employee3_id")
+    private AppUser employee3Id;
 
     private int schedulePerMonthId;
+
 }
