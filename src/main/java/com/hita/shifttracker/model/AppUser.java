@@ -14,19 +14,18 @@ public class AppUser {
     private String firstName;
     private String lastName;
     private String oib;
+    private String password;
+    private String email;
+    private String telephone;
 
 
     @ManyToOne
     @JoinColumn(name = "org_unit_id")
     private OrgUnit orgUnit;
 
-    private String email;
-    private String password;
-    private String telephone;
-
     @ManyToOne
     @JoinColumn(name = "app_role_id")
-    private  AppRole appRole;
+    private AppRole appRole;
 
     @ManyToOne
     @JoinColumn(name = "team_role_id")
