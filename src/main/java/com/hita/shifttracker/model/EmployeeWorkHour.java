@@ -12,8 +12,8 @@ public class EmployeeWorkHour {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endLocalDateTime;
 
     @ManyToOne
     @JoinColumn(name = "app_user_id", referencedColumnName = "id")
@@ -21,12 +21,10 @@ public class EmployeeWorkHour {
 
     private int totalHours;
 
-    public EmployeeWorkHour(LocalDateTime startTime, LocalDateTime endTime, int totalHours) {
-        this.startTime = startTime;
-        this.endTime = endTime;
+    public EmployeeWorkHour(LocalDateTime startDateTime, LocalDateTime endLocalDateTime, int totalHours, AppUser appUser) {
+        this.startDateTime = startDateTime;
+        this.endLocalDateTime = endLocalDateTime;
         this.totalHours = totalHours;
-    }
-
-    public EmployeeWorkHour() {
+        this.appUser = appUser;
     }
 }
