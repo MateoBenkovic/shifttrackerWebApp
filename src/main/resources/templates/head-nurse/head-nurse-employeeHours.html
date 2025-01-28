@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hr">
+<html lang="hr" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,8 +37,8 @@
 <header>
     <h1 class="m-0">ShiftTracker</h1>
     <div>
-        <span>Korisnik: Ivan Horvat</span>
-        <button class="btn btn-danger btn-sm ms-3">Odjava</button>
+        <span th:text="${appUser.firstName + ' ' + appUser.lastName}">Ivan Horvat</span>
+        <button class="btn btn-danger btn-sm ms-3" onclick="location.href = '/logout'">Odjava</button>
     </div>
 </header>
 
@@ -48,7 +48,7 @@
         <div class="col-md-6">
             <h4>Podaci o Radniku</h4>
             <ul>
-                <li>Ime i Prezime: Ivan Horvat</li>
+                <li th:text="'Ime i Prezime: ' + ${employee.firstName + ' ' + employee.lastName}">Ime i Prezime: Ivan Horvat</li>
                 <li>Radna Jedinica: Krapina</li>
                 <li>Ime Tima: Tim1</li>
                 <li>Matična Ispostava: Krapina</li>

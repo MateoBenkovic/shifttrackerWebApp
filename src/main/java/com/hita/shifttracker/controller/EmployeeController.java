@@ -16,7 +16,11 @@ import java.time.LocalDateTime;
 @Controller
 public class EmployeeController {
 
+    private EmployeeWorkHourRepository employeeWorkHourRepository;
 
+    public EmployeeController(EmployeeWorkHourRepository employeeWorkHourRepository) {
+        this.employeeWorkHourRepository = employeeWorkHourRepository;
+    }
 
     // get employee dashboard
     @GetMapping("/employee/dashboard")
@@ -38,7 +42,15 @@ public class EmployeeController {
         System.out.println("start time: " + startTime);
         System.out.println("end time: " + endTime);
 
-        // split this time per date and work hour;
+        AppUser appUser = (AppUser) session.getAttribute("appUser");
+
+
+        LocalDateTime start = LocalDateTime.parse(startTime);
+        LocalDateTime end = LocalDateTime.parse(endTime);
+        int totalHours = (int) Duration.between(start, end).toHours();
+        EmployeeWorkHour employeeWorkHour = new EmployeeWorkHour(start, end, totalHours, appUser);
+
+        employeeWorkHourRepository.save(employeeWorkHour);
 
 
         return "redirect:/employee/dashboard";
