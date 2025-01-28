@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+</head>
+<body>
+<nav>
+    <p th:text="${appUser.firstName + ' ' + appUser.lastName}">Glavna sestra</p>
+    <a href="/logout">Logout</a>
+</nav>
+    <h1>List of all employees</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Ime</th>
+                <th>Prezime</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>User ime</td>
+                <td>User prezime</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

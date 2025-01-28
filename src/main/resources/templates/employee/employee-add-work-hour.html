@@ -12,7 +12,7 @@
   <div class="container-fluid">
     <a class="navbar-brand" href="#">ShiftTracker</a>
     <div class="d-flex">
-      <span class="navbar-text text-white me-3" th:text="${session.user.firstName + ' ' + session.user.lastName}"></span>
+      <span class="navbar-text text-white me-3" th:text="${appUser.firstName + ' ' + appUser.lastName}"></span>
       <!--            <input type="hidden" name="id" th:value="${session.user.id}">-->
       <button class="btn btn-outline-light btn-sm" onclick="location.href = '/logout'">Odjava</button>
     </div>

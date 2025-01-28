@@ -16,13 +16,17 @@ import java.time.LocalDateTime;
 @Controller
 public class EmployeeController {
 
-    @Autowired
-    EmployeeWorkHourRepository employeeWorkHourRepositoryDB;
+
 
     // get employee dashboard
     @GetMapping("/employee/dashboard")
-    public String getEmployeeDashboard(Model model) {
-        return "/employee/employee-add-work-hour";
+    public String getEmployeeDashboard(Model model, HttpSession session) {
+
+        AppUser appUser = (AppUser) session.getAttribute("appUser");
+        model.addAttribute("appUser", appUser);
+
+
+        return "/employee/employee-add-work-hour.html";
     }
 
     // potvrdi vrijeme
@@ -31,17 +35,10 @@ public class EmployeeController {
                                       @RequestParam("endTime") String endTime,
                                       Model model,
                                       HttpSession session){
+        System.out.println("start time: " + startTime);
+        System.out.println("end time: " + endTime);
 
-        AppUser currentUser = (AppUser) session.getAttribute("user");
-
-        LocalDateTime start = LocalDateTime.parse(startTime);
-        LocalDateTime end = LocalDateTime.parse(endTime);
-
-        int totalHours = (int) Duration.between(start, end).toHours();
-
-        EmployeeWorkHour newEmployeeWorkHour = new EmployeeWorkHour(start, end, totalHours);
-        newEmployeeWorkHour.setAppUser(currentUser);
-        employeeWorkHourRepositoryDB.save(newEmployeeWorkHour);
+        // split this time per date and work hour;
 
 
         return "redirect:/employee/dashboard";

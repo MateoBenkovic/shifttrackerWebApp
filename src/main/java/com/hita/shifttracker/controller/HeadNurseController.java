@@ -4,6 +4,7 @@ import com.hita.shifttracker.model.AppUser;
 import com.hita.shifttracker.model.EmployeeWorkHour;
 import com.hita.shifttracker.repository.AppUserRepository;
 import com.hita.shifttracker.repository.EmployeeWorkHourRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,13 @@ public class HeadNurseController {
 
     @Autowired
     EmployeeWorkHourRepository employeeWorkHourRepositoryDB;
+
+    @GetMapping("/head-nurse/dashboard")
+    public String getHeadNurseDashboard(Model model, HttpSession session) {
+        AppUser appUser = (AppUser) session.getAttribute("appUser");
+        model.addAttribute("appUser", appUser);
+        return "head-nurse/head-nurse-dashboard.html";
+    }
 
     @GetMapping("/employeeList")
     public String employeeList(Model model) {

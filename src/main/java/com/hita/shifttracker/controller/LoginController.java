@@ -18,46 +18,44 @@ public class LoginController {
     }
 
 
-    // show login form
+    // show login.html form
     @GetMapping("/login")
     public String getLogin() {
         return "/login";
     }
 
-    // login process
+    // login.html process
     @GetMapping("/loginProcess")
     public String processLogin(@RequestParam("email") String email,
                                @RequestParam("password") String password,
                                Model model,
                                HttpSession session) {
-        AppUser user = null;
+        AppUser appUser = null;
 
         for (AppUser u : appUserRepository.findAll()) {
-            System.out.println("Users: " + u);
             if (u.getEmail().equals(email) && u.getPassword().equals(password)) {
-                user = u;
-            }
-        }
-        if (user == null) {
-            model.addAttribute("loginMessage", "Netočan email ili lozinka!");
-            return "login";
-        } else {
-            System.out.println("User logged in: " + user);
-            if (user.getAppRole().getId() == 1) {
-                session.setAttribute("user", user);
-                return "redirect:/employee/dashboard";
-            } else if (user.getAppRole().getId() == 3) {
-                session.setAttribute("user", user);
-                return "redirect:/employeeList";
+                appUser = u;
+                System.out.println("user: " + appUser.toString());
             }
         }
 
-        return "login";
+        if (appUser == null) {
+            model.addAttribute("loginMessage", "Netočan email ili lozinka!");
+            return "login.html";
+        } else if (appUser.getAppRole().getId() == 1) {
+            session.setAttribute("appUser", appUser);
+            return "redirect:/employee/dashboard";
+        } else if (appUser.getAppRole().getId() == 2) {
+            session.setAttribute("appUser", appUser);
+            return "redirect:/head-nurse/dashboard";
+        }
+        return "login.html";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session){
+        session.removeAttribute("appUser");
         session.invalidate();
-        return "redirect:/login";
+        return "/login.html";
     }
 }
