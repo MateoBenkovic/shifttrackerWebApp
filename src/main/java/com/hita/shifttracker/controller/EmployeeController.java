@@ -20,13 +20,13 @@ public class EmployeeController {
     EmployeeWorkHourRepository employeeWorkHourRepositoryDB;
 
     // get employee dashboard
-    @GetMapping("/getEmployeeDashboard")
+    @GetMapping("/employee/dashboard")
     public String getEmployeeDashboard(Model model) {
-        return "/employee/addEmployeeWorkHour";
+        return "/employee/employee-add-work-hour";
     }
 
     // potvrdi vrijeme
-    @GetMapping("/addEmployeeWorkHour")
+    @GetMapping("/employee/workHour/add")
     public String addEmployeeWorkHour(@RequestParam("startTime") String startTime,
                                       @RequestParam("endTime") String endTime,
                                       Model model,
@@ -44,7 +44,7 @@ public class EmployeeController {
         employeeWorkHourRepositoryDB.save(newEmployeeWorkHour);
 
 
-        return "redirect:/getEmployeeDashboard";
+        return "redirect:/employee/dashboard";
     }
 
     // get all workhours

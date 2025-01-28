@@ -45,7 +45,7 @@ public class LoginController {
             System.out.println("User logged in: " + user);
             if (user.getAppRole().getId() == 1) {
                 session.setAttribute("user", user);
-                return "redirect:/getEmployeeDashboard";
+                return "redirect:/employee/dashboard";
             } else if (user.getAppRole().getId() == 3) {
                 session.setAttribute("user", user);
                 return "redirect:/employeeList";
