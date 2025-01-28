@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShiftTracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        header {
+            background-color: #212529;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .table th,
+        .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .table .weekend {
+            background-color: #9b3e45 !important;
+        }
+        .container {
+            width: 100%;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 class="m-0">ShiftTracker</h1>
+    <div>
+        <span>Korisnik: Ivan Horvat</span>
+        <button class="btn btn-danger btn-sm ms-3">Odjava</button>
+    </div>
+</header>
+
+<div class="container mt-4">
+
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <h4>Podaci o Radniku</h4>
+            <ul>
+                <li>Ime i Prezime: Ivan Horvat</li>
+                <li>Radna Jedinica: Krapina</li>
+                <li>Ime Tima: Tim1</li>
+                <li>Matična Ispostava: Krapina</li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h4>Podaci o Poslodavcu</h4>
+            <ul>
+                <li>Naziv: Hitna KZŽ</li>
+                <li>Adresa: Ulica Mirka Crkvenca 1, 49000, Krapina</li>
+                <li>OIB: 17813384799 </li>
+                <li>IBAN: HR7223400091110492278 </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <p>Mjesec i Godina:</p>
+            <select class="form-select" id="monthSelect">
+                <option>Siječanj 2025</option>
+                <option>Veljača 2025</option>
+                <option>Ožujak 2025</option>
+                <option>Travanj 2025</option>
+                <option>Svibanj 2025</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <p>Propisani Mjesečni Fond Sati:</p>
+            <p><strong>184</strong></p>
+        </div>
+    </div>
+
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered">
+            <thead class="table-dark">
+            <tr>
+                <th>Vrsta Rada</th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+                <th>11</th>
+                <th>12</th>
+                <th>13</th>
+                <th>14</th>
+                <th>15</th>
+                <th>16</th>
+                <th>17</th>
+                <th>18</th>
+                <th>19</th>
+                <th>20</th>
+                <th>21</th>
+                <th>22</th>
+                <th>23</th>
+                <th>24</th>
+                <th>25</th>
+                <th>26</th>
+                <th>27</th>
+                <th>28</th>
+                <th>29</th>
+                <th>30</th>
+                <th>31</th>
+                <th>Ukupno</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Početak rada</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>Završetak rada</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>Ukupno radno vrijeme</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>Redovan rad</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>Redovan rad II. smjena</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
