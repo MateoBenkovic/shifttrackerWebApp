@@ -1,41 +1,68 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-
+<html lang="hr" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="shortcut icon" type="image/x-icon" href="images/telemedicon.png" />
-
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShiftTracker - Prijava</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .logo {
+            width: 200px;
+            margin-bottom: 2rem;
+        }
+        .form-control {
+            height: 45px;
+            font-size: 14px;
+        }
+        .btn-primary {
+            height: 45px;
+            font-size: 16px;
+        }
+        .logo-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+    </style>
 </head>
-
-<body class="bg-light d-flex justify-content-center align-items-center vh-100">
-
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-            <form class="card p-4 shadow" action="/loginProcess">
-                <div class="form-group mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input class="form-control js-username" type="text" id="email" name="email">
-                </div>
-                <div class="form-group mb-3">
-                    <label for="pass" class="form-label">Lozinka</label>
-                    <input class="form-control js-password" type="password" id="pass" name="password">
-                </div>
-                <div class="d-grid">
-                    <button class="btn btn-primary" type="submit" name="login">Prijavi se</button>
-                    <p th:text="${loginMessage}" class="text-danger text-center"></p>
-                </div>
-            </form>
-            <div class="text-center mt-3">
-                <p>@2025 SHIFTTRACKER SVA PRAVA PRIDRŽANA</p>
+<body>
+    <div class="login-container">
+        <div class="logo-container">
+            <img src="/logo.png" alt="ShiftTracker Logo" class="logo" style="height: 150px; width:300px">
+        </div>
+        <form action="/loginProcess">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="ime@example.com" name="email" required>
             </div>
+            <div class="mb-4">
+                <label for="password" class="form-label">Lozinka</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="d-grid">
+                <button class="btn btn-dark" type="submit" name="login">Prijava</button>
+                <p th:text="${loginMessage}" class="text-danger text-center"></p>
+            </div>
+        </form>
+        <div class="text-center mt-3">
+            <p>&copy;2025 ShiftTracker | Sva prava pridržana</p>
         </div>
     </div>
-</div>
-</body>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
