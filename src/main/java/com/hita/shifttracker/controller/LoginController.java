@@ -24,6 +24,11 @@ public class LoginController {
         return "/login";
     }
 
+    @GetMapping("/")
+    public String redirectToLogin() {
+        return "redirect:/login";
+    }
+
     // login.html process
     @GetMapping("/loginProcess")
     public String processLogin(@RequestParam("email") String email,
