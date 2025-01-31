@@ -64,6 +64,8 @@ public class EmployeeController {
         LocalDateTime startDateTime = LocalDateTime.parse(startTime);
         LocalDateTime endDateTime = LocalDateTime.parse(endTime);
 
+        String ispis = "";
+
         int hourStart = startDateTime.getHour();
         int hourEnd = 24;
         if (startDateTime.getDayOfYear() == endDateTime.getDayOfYear()) {
@@ -123,10 +125,10 @@ public class EmployeeController {
             System.out.println("hour start: " + hourStart);
             System.out.println("hour end: " + hourEnd);
 
-            model.addAttribute("date" + currentDateTime.toLocalDate());
-            model.addAttribute("morning" + morningHours);
-            model.addAttribute("noon" + noonHours);
-            model.addAttribute("night" + nightHours);
+
+             ispis += "Datum: " + currentDateTime.toLocalDate() + ", Redovan rad: " + morningHours + ", Redovan rad II smjena: " + noonHours + ", Redovan rad noc: " + nightHours;
+            model.addAttribute("ispis", ispis);
+
 
             System.out.println(currentDateTime);
             currentDateTime = currentDateTime.plusDays(1).withHour(0);
