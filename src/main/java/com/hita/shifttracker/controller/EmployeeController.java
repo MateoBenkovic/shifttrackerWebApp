@@ -122,6 +122,12 @@ public class EmployeeController {
             System.out.println("night hours: " + nightHours);
             System.out.println("hour start: " + hourStart);
             System.out.println("hour end: " + hourEnd);
+
+            model.addAttribute("date" + currentDateTime.toLocalDate());
+            model.addAttribute("morning" + morningHours);
+            model.addAttribute("noon" + noonHours);
+            model.addAttribute("night" + nightHours);
+
             System.out.println(currentDateTime);
             currentDateTime = currentDateTime.plusDays(1).withHour(0);
             hourStart = 0;
