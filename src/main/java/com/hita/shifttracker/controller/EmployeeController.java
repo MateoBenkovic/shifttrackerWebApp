@@ -126,8 +126,8 @@ public class EmployeeController {
             System.out.println("hour end: " + hourEnd);
 
 
-             ispis += "Datum: " + currentDateTime.toLocalDate() + ", Redovan rad: " + morningHours + ", Redovan rad II smjena: " + noonHours + ", Redovan rad noc: " + nightHours;
-            model.addAttribute("ispis", ispis);
+            ispis += "Datum: " + currentDateTime.toLocalDate() + ", Redovan rad: " + morningHours + ", Redovan rad II smjena: " + noonHours + ", Redovan rad noc: " + nightHours;
+
 
 
             System.out.println(currentDateTime);
@@ -135,6 +135,8 @@ public class EmployeeController {
             hourStart = 0;
             hourEnd = endDateTime.getHour();
         }
+
+        model.addAttribute("ispis",ispis);
 // kraj
 
 
