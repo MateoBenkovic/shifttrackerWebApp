@@ -13,23 +13,16 @@ public class EmployeeWorkHour {
     private int id;
 
     private LocalDateTime date;
-    private int hoursTotal;
+    private int hourStart;
+    private int hourEnd;
+
+    private int hoursTotalPerDay;
 
     private int hoursMorning;
     private int hoursNoon;
     private int hoursNight;
 
-    private int holiday;
-
     @ManyToOne
     @JoinColumn(name = "app_user_id", referencedColumnName = "id")
     private AppUser appUser;
-
-    private int totalHours;
-
-    public EmployeeWorkHour(LocalDateTime date, int totalHours, AppUser appUser) {
-        this.date = date;
-        this.totalHours = totalHours;
-        this.appUser = appUser;
-    }
 }
