@@ -123,7 +123,7 @@ public class EmployeeController {
             System.out.println("hour start: " + hourStart);
             System.out.println("hour end: " + hourEnd);
 
-            model.addAttribute("date" + currentDateTime.toLocalDate());
+            //model.addAttribute("date" + currentDateTime.toLocalDate());
             model.addAttribute("morning" + morningHours);
             model.addAttribute("noon" + noonHours);
             model.addAttribute("night" + nightHours);
