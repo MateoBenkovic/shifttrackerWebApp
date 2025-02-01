@@ -2,9 +2,11 @@ package com.hita.shifttracker.controller;
 
 import com.hita.shifttracker.model.AppUser;
 import com.hita.shifttracker.model.SchedulePerMonth;
+import com.hita.shifttracker.model.system.Poruka;
 import com.hita.shifttracker.repository.EmployeeWorkHourRepository;
 import com.hita.shifttracker.repository.SchedulePerMonthRepository;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,9 @@ public class EmployeeController {
 
     private EmployeeWorkHourRepository employeeWorkHourRepository;
     private SchedulePerMonthRepository schedulePerMonthRepository;
+
+    @Autowired
+    private Poruka msg;
 
     public EmployeeController(EmployeeWorkHourRepository employeeWorkHourRepository, SchedulePerMonthRepository schedulePerMonthRepository) {
         this.employeeWorkHourRepository = employeeWorkHourRepository;
@@ -64,7 +69,6 @@ public class EmployeeController {
         LocalDateTime startDateTime = LocalDateTime.parse(startTime);
         LocalDateTime endDateTime = LocalDateTime.parse(endTime);
 
-        String ispis = "";
 
         int hourStart = startDateTime.getHour();
         int hourEnd = 24;
@@ -126,7 +130,7 @@ public class EmployeeController {
             System.out.println("hour end: " + hourEnd);
 
 
-            ispis += "Datum: " + currentDateTime.toLocalDate() + ", Redovan rad: " + morningHours + ", Redovan rad II smjena: " + noonHours + ", Redovan rad noc: " + nightHours;
+            msg.addToMsg("Datum: " + currentDateTime.toLocalDate() + "\n Redovan rad: " + morningHours + "\n Redovan rad II smjena: " + noonHours + "\n Redovan rad noc: " + nightHours + "\n");
 
 
 
@@ -135,8 +139,9 @@ public class EmployeeController {
             hourStart = 0;
             hourEnd = endDateTime.getHour();
         }
-
-        model.addAttribute("ispis",ispis);
+        System.out.println(msg.getPoruka());
+        model.addAttribute("ispis", msg.getPoruka());
+        msg.clearPoruka();
 // kraj
 
 
@@ -145,7 +150,7 @@ public class EmployeeController {
         //employeeWorkHourRepository.save(employeeWorkHour);
 
 
-        return "redirect:/employee/workHour/list";
+        return "/employee/employee-list-work-hour";
     }
 
     @GetMapping("/goToMain")
