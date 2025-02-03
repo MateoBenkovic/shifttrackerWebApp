@@ -84,8 +84,7 @@
                 <div class="col-md-6">
                     <h5 class="mb-3">Podaci o zaposleniku</h5>
                     <p><strong>Ime i Prezime:</strong> Ivan Horvat</p>
-                    <p><strong>Ime Tima:</strong> Tim 1</p>
-                    <p><strong>Radna jedinica:</strong> Krapina</p>
+                    <p><strong>Radna jedinica:</strong>T1 Krapina</p>
 
                 </div>
                 <div class="col-md-6">
@@ -246,7 +245,7 @@
                         <td>156</td>
                     </tr>
                     <tr>
-                        <td class="work-type">Redovan rad</td>
+                        <td class="work-type">Redovan rad 101010</td>
                         <td>-</td>
                         <td>7</td>
                         <td>-</td>
@@ -281,7 +280,7 @@
                         <td>36</td>
                     </tr>
                     <tr>
-                        <td class="work-type">Redovan rad II. smjena</td>
+                        <td class="work-type">Redovan rad II. smjena 101214</td>
                         <td>-</td>
                         <td>5</td>
                         <td>3</td>
@@ -316,7 +315,7 @@
                         <td>29</td>
                     </tr>
                     <tr>
-                        <td class="work-type">Redovan rad noć</td>
+                        <td class="work-type">Redovan rad noć 101735</td>
                         <td>-</td>
                         <td>-</td>
                         <td>2</td>
@@ -350,16 +349,19 @@
                         <td>-</td>
                         <td>31</td>
                     </tr>
-                    <tr>
-                        <td>
-                            <p>Poruka:</p>
-                            <p th:text="${ispis != null ? ispis : 'Greska'}">Poruka:</p>
-                        </td>
-                    </tr>
-                    <!-- Add more work types... -->
                 </tbody>
             </table>
+<!--                    <tr>-->
+<!--                        <td>-->
+                            <!--<p th:text="${ispis | | replace('\n', '<br/>')}">Poruka:</p>
+&lt;!&ndash;                        </td>&ndash;&gt;-->
+<!--                    </tr>-->
+
+
+                    <!-- Add more work types... -->
+
         </div>
+        <p th:text="${ispis}" style="white-space: pre-line;">Poruka:</p>
     </div>
 
 

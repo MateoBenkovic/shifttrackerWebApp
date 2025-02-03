@@ -54,7 +54,7 @@ public class HeadNurseController {
         model.addAttribute("appUser", appUser);
         model.addAttribute("employee", employee);
 
-        return "/head-nurse/head-nurse-employeeHours.html";
+        return "/employee/employee-list-work-hour.html";
     }
 //
 //    @GetMapping("/employeeList")
