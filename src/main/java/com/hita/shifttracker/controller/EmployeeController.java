@@ -41,7 +41,7 @@ public class EmployeeController {
         List<SchedulePerMonth> workHours = schedulePerMonthRepository.findByAppUserId(appUser.getId());
         model.addAttribute("workHours", workHours);
 
-        return "/employee/employee-schedule.html";
+        return "/employee/employee-add-work-hour.html";
     }
 
     // ispuni smjenu // shift id
