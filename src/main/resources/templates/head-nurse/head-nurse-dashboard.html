@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+</head>
+<body>
+<nav>
+    <p th:text="${appUser.firstName + ' ' + appUser.lastName}">Glavna sestra</p>
+    <a href="/logout">Logout</a>
+</nav>
+    <h1>List of all employees</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Ime</th>
+                <th>Prezime</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="employee : ${employees}">
+                <td th:text="${employee.firstName}">User ime</td>
+                <td th:text="${employee.lastName}">User prezime</td>
+                <td>
+                    <a th:href="@{'/head-nurse/employeeWorkHours?id=' + ${employee.id}}">Vidi satnicu</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

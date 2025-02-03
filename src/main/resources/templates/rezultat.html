@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    Prikaz kako je algoritam rasporedio:
+</body>
+<p>Dnevna</p>
+<p th:text="'Dan: ' + ${morningHour}"></p>
+<p th:text="'Podne: ' + ${noonHour}"></p>
+<p th:text="'Noc: ' + ${nightHour}"></p>
+<!--<p>Subota</p>-->
+<!--<p th:text="'Dan: ' + ${saturdayMorning}"></p>-->
+<!--<p th:text="'Podne: ' + ${saturdayNoon}"></p>-->
+<!--<p th:text="'Noc: ' + ${saturdayNight}"></p>-->
+<!--<p>Nedjelja</p>-->
+<!--<p th:text="'Dan: ' + ${sundayMorning}"></p>-->
+<!--<p th:text="'Podne: ' + ${sundayNoon}"></p>-->
+<!--<p th:text="'Noc: ' + ${sundayNight}"></p>-->
+
+<button onclick="location.href = '/goToMain'">Povratak na unos vremena</button>
+</html>

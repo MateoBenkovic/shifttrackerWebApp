@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upravljanje zaposlenicima</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: white !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .nav-link.active {
+            border-bottom: 2px solid #000;
+        }
+        .table {
+            background-color: white;
+            border-radius: 4px;
+        }
+        .table th {
+            color: #666;
+            font-weight: normal;
+            border-bottom: 1px solid #dee2e6;
+            white-space: nowrap;
+        }
+        .table td {
+            border-bottom: 1px solid #dee2e6;
+        }
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+        .modal-header {
+            border-bottom: none;
+        }
+        .modal-footer {
+            border-top: none;
+        }
+        .form-control {
+            height: 35px;
+            font-size: 14px;
+        }
+        .btn {
+            height: 35px;
+            font-size: 14px;
+            padding: 0 15px;
+        }
+        .sort-icon {
+            font-size: 12px;
+            color: #999;
+        }
+        .dropdown-menu {
+            padding: 8px 0;
+            min-width: 200px;
+        }
+        .dropdown-item {
+            padding: 8px 16px;
+        }
+        .dropdown-item i {
+            margin-right: 10px;
+            color: #666;
+        }
+        body {
+            background-color: #f8f9fa;
+        }
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #dee2e6;
+        }
+        .table th {
+            background-color: #e9ecef;
+        }
+        .work-time {
+            width: 50px;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        td.weekend {
+          background-color: #929292;
+        }
+        thead {
+          position: sticky;
+          top: 0;
+          background-color: white;
+          z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <div class="navbar-nav">
+                <img src="../../../../../../OneDrive/Radna%20površina/dizajn/logo.png" style="height: 50px; width:100px" class="me-5">
+                <a class="nav-link active me-4" href="#">Zaposlenici</a>
+                <!--
+                  <a class="nav-link me-4" href="#">Timovi</a>
+                  <a class="nav-link me-4" href="#">Odsutnosti</a>
+                  <a class="nav-link" href="#">Pravila</a>
+                -->
+            </div>
+            <div class="navbar-nav ms-auto">
+                <!--<a class="nav-link me-3" href="#">Raspored</a>-->
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li class="px-3 py-1 text-muted">Admin</li>
+                        <li class="px-3 pb-2 text-muted small">admin@example.com</li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profil</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Postavke</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right"></i> Odjava</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="ms-3">Zaposlenici</h2>
+            <div class="d-flex gap-3">
+                <input type="search" class="form-control" placeholder="Pretraži zaposlenike..." style="width: 250px;">
+                <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+                    + Dodaj Zaposlenika
+                </button>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div>
+
+          <table class="table">
+
+            <thead>
+              <tr>         
+                <th>#</th><th>Org. jed.</th><th>Zaposlenik</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th>
+                <th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th>
+                <th>27</th><th>28</th><th>29</th><th>30</th><th>31</th><th>Ukupno</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+              <td rowspan="2">1</td><td rowspan="2">Krapina</td><td rowspan="2"><a href="radniSatiZaposlenika.html">Ivana Horvat</a></td>
+              <td>-</td><td>07</td><td>19</td><td class="weekend">00</td><td class="weekend">-</td><td>-</td><td>19</td><td>00</td><td>00</td><td>-</td><td class="weekend">07</td>
+              <td class="weekend">07</td><td>19</td><td>00</td><td>-</td><td>-</td><td>07</td><td class="weekend">23</td><td class="weekend">00</td><td>07</td><td>-</td><td>07</td>
+              <td>08</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td rowspan="2">156</td>
+            </tr>
+            <tr>
+              <td>-</td><td>19</td><td>24</td><td class="weekend">07</td><td class="weekend">-</td><td>-</td><td>24</td><td>07</td><td>07</td><td>-</td><td class="weekend">19</td>
+              <td class="weekend">19</td><td>24</td><td>07</td><td>-</td><td>-</td><td>19</td><td class="weekend">24</td><td class="weekend">07</td><td>19</td><td>-</td><td>19</td>
+              <td>10</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+            </tr>
+            <td style="border: none;"></td>
+            <tr>
+              <td rowspan="2">2</td><td rowspan="2">Krapina</td><td rowspan="2"><a href="radniSatiZaposlenika.html">Marko Markić</a></td>
+              <td>-</td><td>07</td><td>19</td><td class="weekend">00</td><td class="weekend">-</td><td>-</td><td>19</td><td>00</td><td>00</td><td>-</td><td class="weekend">07</td>
+              <td class="weekend">07</td><td>19</td><td>00</td><td>-</td><td>-</td><td>07</td><td class="weekend">23</td><td class="weekend">00</td><td>07</td><td>-</td><td>07</td>
+              <td>08</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td rowspan="2">156</td>
+            </tr>
+            <tr>
+              <td>-</td><td>19</td><td>24</td><td class="weekend">07</td><td class="weekend">-</td><td>-</td><td>24</td><td>07</td><td>07</td><td>-</td><td class="weekend">19</td>
+              <td class="weekend">19</td><td>24</td><td>07</td><td>-</td><td>-</td><td>19</td><td class="weekend">24</td><td class="weekend">07</td><td>19</td><td>-</td><td>19</td>
+              <td>10</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+            </tr> 
+            <td style="border: none;"></td>
+            <tr>
+              <td rowspan="2">3</td><td rowspan="2">Krapina</td><td rowspan="2"><a href="radniSatiZaposlenika.html">Ivana Ivić</a></td>
+              <td>-</td><td>07</td><td>19</td><td class="weekend">00</td><td class="weekend">-</td><td>-</td><td>19</td><td>00</td><td>00</td><td>-</td><td class="weekend">07</td>
+              <td class="weekend">07</td><td>19</td><td>00</td><td>-</td><td>-</td><td>07</td><td class="weekend">23</td><td class="weekend">00</td><td>07</td><td>-</td><td>07</td>
+              <td>08</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td rowspan="2">156</td>
+            </tr>
+            <tr>
+              <td>-</td><td>19</td><td>24</td><td class="weekend">07</td><td class="weekend">-</td><td>-</td><td>24</td><td>07</td><td>07</td><td>-</td><td class="weekend">19</td>
+              <td class="weekend">19</td><td>24</td><td>07</td><td>-</td><td>-</td><td>19</td><td class="weekend">24</td><td class="weekend">07</td><td>19</td><td>-</td><td>19</td>
+              <td>10</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+            </tr> 
+            <td style="border: none;"></td>
+            <tr>
+              <td rowspan="2">4</td><td rowspan="2">Krapina</td><td rowspan="2"><a href="radniSatiZaposlenika.html">Maja Perić</a></td>
+              <td>-</td><td>07</td><td>19</td><td class="weekend">00</td><td class="weekend">-</td><td>-</td><td>19</td><td>00</td><td>00</td><td>-</td><td class="weekend">07</td>
+              <td class="weekend">07</td><td>19</td><td>00</td><td>-</td><td>-</td><td>07</td><td class="weekend">23</td><td class="weekend">00</td><td>07</td><td>-</td><td>07</td>
+              <td>08</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td rowspan="2">156</td>
+            </tr>
+            <tr>
+              <td>-</td><td>19</td><td>24</td><td class="weekend">07</td><td class="weekend">-</td><td>-</td><td>24</td><td>07</td><td>07</td><td>-</td><td class="weekend">19</td>
+              <td class="weekend">19</td><td>24</td><td>07</td><td>-</td><td>-</td><td>19</td><td class="weekend">24</td><td class="weekend">07</td><td>19</td><td>-</td><td>19</td>
+              <td>10</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+            </tr>   
+            <td style="border: none;"></td>
+            <tr>
+              <td rowspan="2">5</td><td rowspan="2">Krapina</td><td rowspan="2"><a href="radniSatiZaposlenika.html">Luka Novak</a></td>
+              <td>-</td><td>07</td><td>19</td><td class="weekend">00</td><td class="weekend">-</td><td>-</td><td>19</td><td>00</td><td>00</td><td>-</td><td class="weekend">07</td>
+              <td class="weekend">07</td><td>19</td><td>00</td><td>-</td><td>-</td><td>07</td><td class="weekend">23</td><td class="weekend">00</td><td>07</td><td>-</td><td>07</td>
+              <td>08</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td rowspan="2">156</td>
+            </tr>
+            <tr>
+              <td>-</td><td>19</td><td>24</td><td class="weekend">07</td><td class="weekend">-</td><td>-</td><td>24</td><td>07</td><td>07</td><td>-</td><td class="weekend">19</td>
+              <td class="weekend">19</td><td>24</td><td>07</td><td>-</td><td>-</td><td>19</td><td class="weekend">24</td><td class="weekend">07</td><td>19</td><td>-</td><td>19</td>
+              <td>10</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+            </tr> 
+            <td style="border: none;"></td>
+            <tr>
+              <td rowspan="2">6</td><td rowspan="2">Krapina</td><td rowspan="2"><a href="radniSatiZaposlenika.html">Karlo Lukić</a></td>
+              <td>-</td><td>07</td><td>19</td><td class="weekend">00</td><td class="weekend">-</td><td>-</td><td>19</td><td>00</td><td>00</td><td>-</td><td class="weekend">07</td>
+              <td class="weekend">07</td><td>19</td><td>00</td><td>-</td><td>-</td><td>07</td><td class="weekend">23</td><td class="weekend">00</td><td>07</td><td>-</td><td>07</td>
+              <td>08</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td rowspan="2">156</td>
+            </tr>
+            <tr>
+              <td>-</td><td>19</td><td>24</td><td class="weekend">07</td><td class="weekend">-</td><td>-</td><td>24</td><td>07</td><td>07</td><td>-</td><td class="weekend">19</td>
+              <td class="weekend">19</td><td>24</td><td>07</td><td>-</td><td>-</td><td>19</td><td class="weekend">24</td><td class="weekend">07</td><td>19</td><td>-</td><td>19</td>
+              <td>10</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+            </tr>   
+            <td style="border: none;"></td>
+            <tr>
+              <td rowspan="2">7</td><td rowspan="2">Krapina</td><td rowspan="2"><a href="radniSatiZaposlenika.html">Hana Kralj</a></td>
+              <td>-</td><td>07</td><td>19</td><td class="weekend">00</td><td class="weekend">-</td><td>-</td><td>19</td><td>00</td><td>00</td><td>-</td><td class="weekend">07</td>
+              <td class="weekend">07</td><td>19</td><td>00</td><td>-</td><td>-</td><td>07</td><td class="weekend">23</td><td class="weekend">00</td><td>07</td><td>-</td><td>07</td>
+              <td>08</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td rowspan="2">156</td>
+            </tr>
+            <tr>
+              <td>-</td><td>19</td><td>24</td><td class="weekend">07</td><td class="weekend">-</td><td>-</td><td>24</td><td>07</td><td>07</td><td>-</td><td class="weekend">19</td>
+              <td class="weekend">19</td><td>24</td><td>07</td><td>-</td><td>-</td><td>19</td><td class="weekend">24</td><td class="weekend">07</td><td>19</td><td>-</td><td>19</td>
+              <td>10</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+            </tr> 
+            <td style="border: none;"></td>
+            <tr>
+              <td rowspan="2">8</td><td rowspan="2">Krapina</td><td rowspan="2"><a href="radniSatiZaposlenika.html">Nikolas Car</a></td>
+              <td>-</td><td>07</td><td>19</td><td class="weekend">00</td><td class="weekend">-</td><td>-</td><td>19</td><td>00</td><td>00</td><td>-</td><td class="weekend">07</td>
+              <td class="weekend">07</td><td>19</td><td>00</td><td>-</td><td>-</td><td>07</td><td class="weekend">23</td><td class="weekend">00</td><td>07</td><td>-</td><td>07</td>
+              <td>08</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td rowspan="2">156</td>
+            </tr>
+            <tr>
+              <td>-</td><td>19</td><td>24</td><td class="weekend">07</td><td class="weekend">-</td><td>-</td><td>24</td><td>07</td><td>07</td><td>-</td><td class="weekend">19</td>
+              <td class="weekend">19</td><td>24</td><td>07</td><td>-</td><td>-</td><td>19</td><td class="weekend">24</td><td class="weekend">07</td><td>19</td><td>-</td><td>19</td>
+              <td>10</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+            </tr>    
+            <td style="border: none;"></td>
+            <tr>
+              <td rowspan="2">9</td><td rowspan="2">Krapina</td><td rowspan="2"><a href="radniSatiZaposlenika.html">Ivan Mrgud</a></td>
+              <td>-</td><td>07</td><td>19</td><td class="weekend">00</td><td class="weekend">-</td><td>-</td><td>19</td><td>00</td><td>00</td><td>-</td><td class="weekend">07</td>
+              <td class="weekend">07</td><td>19</td><td>00</td><td>-</td><td>-</td><td>07</td><td class="weekend">23</td><td class="weekend">00</td><td>07</td><td>-</td><td>07</td>
+              <td>08</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td rowspan="2">156</td>
+            </tr>
+            <tr>
+              <td>-</td><td>19</td><td>24</td><td class="weekend">07</td><td class="weekend">-</td><td>-</td><td>24</td><td>07</td><td>07</td><td>-</td><td class="weekend">19</td>
+              <td class="weekend">19</td><td>24</td><td>07</td><td>-</td><td>-</td><td>19</td><td class="weekend">24</td><td class="weekend">07</td><td>19</td><td>-</td><td>19</td>
+              <td>10</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+            </tr>     
+            <td style="border: none;"></td>
+            <tr>
+              <td rowspan="2">10</td><td rowspan="2">Krapina</td><td rowspan="2"><a href="radniSatiZaposlenika.html">Jakov Jakić</a></td>
+              <td>-</td><td>07</td><td>19</td><td class="weekend">00</td><td class="weekend">-</td><td>-</td><td>19</td><td>00</td><td>00</td><td>-</td><td class="weekend">07</td>
+              <td class="weekend">07</td><td>19</td><td>00</td><td>-</td><td>-</td><td>07</td><td class="weekend">23</td><td class="weekend">00</td><td>07</td><td>-</td><td>07</td>
+              <td>08</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td rowspan="2">156</td>
+            </tr>
+            <tr>
+              <td>-</td><td>19</td><td>24</td><td class="weekend">07</td><td class="weekend">-</td><td>-</td><td>24</td><td>07</td><td>07</td><td>-</td><td class="weekend">19</td>
+              <td class="weekend">19</td><td>24</td><td>07</td><td>-</td><td>-</td><td>19</td><td class="weekend">24</td><td class="weekend">07</td><td>19</td><td>-</td><td>19</td>
+              <td>10</td><td>-</td><td class="weekend">-</td><td class="weekend">-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+            </tr> 
+
+            </tbody>
+
+          </table>
+
+        </div>
+    </div>
+
+    <!-- Add Employee Modal -->
+    <div class="modal fade" id="addEmployeeModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title">Dodaj novog zaposlenika</h5>
+                        <p class="text-muted mb-0">Ispunite podatke o novom zaposleniku</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Ime</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Prezime</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Uloga</label>
+                            <select class="form-select">
+                                <option>Doktor</option>
+                                <option>Nurse</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tim</label>
+                            <select class="form-select">
+                                <option>Tim 1</option>
+                                <option>Tim 2</option>
+                                <option>Tim 3</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Spol</label>
+                            <select class="form-select">
+                                <option>Muško</option>
+                                <option>Žensko</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Odustani</button>
+                    <button type="button" class="btn btn-dark">Spremi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

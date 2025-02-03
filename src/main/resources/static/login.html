@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hr" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="hr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,25 +42,19 @@
 <body>
     <div class="login-container">
         <div class="logo-container">
-            <img src="/logo.png" alt="ShiftTracker Logo" class="logo" style="height: 150px; width:300px">
+            <img src="../../../../../../OneDrive/Radna%20površina/dizajn/logo.png" alt="ShiftTracker Logo" class="logo" style="height: 150px; width:300px">
         </div>
-        <form action="/loginProcess">
+        <form>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="ime@example.com" name="email" required>
+                <input type="email" class="form-control" id="email" placeholder="ime@example.com" required>
             </div>
             <div class="mb-4">
                 <label for="password" class="form-label">Lozinka</label>
-                <input type="password" class="form-control" id="password" name="password" required>
+                <input type="password" class="form-control" id="password" required>
             </div>
-            <div class="d-grid">
-                <button class="btn btn-dark" type="submit" name="login">Prijava</button>
-                <p th:text="${loginMessage}" class="text-danger text-center"></p>
-            </div>
+            <a type="submit" class="btn btn-dark w-100" href="unosRadnogVremena.html">Prijava</a>
         </form>
-        <div class="text-center mt-3">
-            <p>&copy;2025 ShiftTracker | Sva prava pridržana</p>
-        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
