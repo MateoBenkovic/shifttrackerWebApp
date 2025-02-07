@@ -14,16 +14,8 @@ public class TestController {
     @Autowired
     private AppUserRepository appUserRepository;
 
-    @GetMapping("/")
+    @GetMapping("/test")
     public String test() {
-
-        List<AppUser> appUsers = appUserRepository.findAll();
-
-        for(AppUser appUser : appUsers) {
-            System.out.println(appUser.toString());
-        }
-
-
         return "test";
     }
 }

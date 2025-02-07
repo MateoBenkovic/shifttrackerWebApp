@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raspored Zaposlenika</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: white !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .nav-link.active {
+            border-bottom: 2px solid #000;
+        }
+        .info-section {
+            background-color: white;
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .schedule-table {
+            background-color: white;
+            border-radius: 4px;
+        }
+        .schedule-table th {
+            background-color: #f8f9fa;
+            font-weight: normal;
+            text-align: center;
+            min-width: 40px;
+        }
+        .schedule-table td {
+            text-align: center;
+            padding: 8px;
+        }
+        td.weekend {
+            background-color: #929292;
+        }
+        .work-type {
+            text-align: left !important;
+            font-weight: 500;
+        }
+        .total-row {
+            background-color: #e9ecef;
+        }
+        .info-section p {
+            margin-bottom: 1px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <div class="navbar-nav">
+                <img src="logo.png" style="height: 50px; width:100px" class="me-5">
+                <a class="nav-link active me-4" href="zaposlenici2.html">Zaposlenici</a>
+                <!--
+                <a class="nav-link me-4" href="#">Timovi</a>
+                <a class="nav-link me-4" href="#">Odsutnosti</a>
+                <a class="nav-link" href="#">Pravila</a>
+            -->
+            </div>
+            <div class="navbar-nav ms-auto">
+                <!--<a class="nav-link me-3" href="#">Raspored</a>-->
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li class="px-3 py-1 text-muted">Admin</li>
+                        <li class="px-3 pb-2 text-muted small">admin@example.com</li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profil</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Postavke</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right"></i> Odjava</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <a class="btn btn-dark m-3" href="zaposlenici2.html">Natrag</a>
+
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <!-- Employee Info -->
+        <div class="info-section mb-0 pb-0">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="mb-3">Podaci o zaposleniku</h5>
+                    <p><strong>Ime i Prezime:</strong> Ivan Horvat</p>
+                    <p><strong>Ime Tima:</strong> Tim 1</p>
+                    <p><strong>Radna jedinica:</strong> Krapina</p>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="mb-3">Podaci o poslodavcu</h5>
+                    <p><strong>Naziv:</strong> Hitna KZŽ</p>
+                    <p><strong>Adresa:</strong> Ulica Mirka Crkvenca 1, 49000, Krapina</p>
+                    <p><strong>OIB:</strong> 17813384799</p>
+                    <p><strong>IBAN:</strong> HR7223400091110492278</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Controls -->
+        <div class="info-section pb-3">
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <select class="form-select">
+                        <option>Siječanj</option>
+                        <option>Veljača</option>
+                        <option>Ožujak</option>
+                        <option>Travanj</option>
+                        <option>Svibanj</option>
+                        <option>Lipanj</option>
+                        <option>Srpanj</option>
+                        <option>Kolovoz</option>
+                        <option>Rujan</option>
+                        <option>Listopad</option>
+                        <option>Studeni</option>
+                        <option>Prosinac</option>
+                    </select>
+                </div>
+                <div class="col-md-10">
+                    <p class="mb-0 ps-4"><strong>Propisani mjesečni fond sati:</strong> 184</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Table -->
+        <div class="table-responsive">
+            <table class="table schedule-table">
+                <thead>
+                    <tr>
+                        <th>Vrsta rada</th>
+                        <!-- Generate date columns dynamically -->
+                        <th>1</th>
+                        <th>2</th>
+                        <th class="weekend">3</th>
+                        <th class="weekend">4</th>
+                        <th>5</th>
+                        <th>6</th>
+                        <th>7</th>
+                        <th>8</th>
+                        <th>9</th>
+                        <th>10</th>
+                        <th>11</th>
+                        <th>12</th>
+                        <th>13</th>
+                        <th>14</th>
+                        <th>15</th>
+                        <th>16</th>
+                        <th>17</th>
+                        <th>18</th>
+                        <th>19</th>
+                        <th>20</th>
+                        <th>21</th>
+                        <th>22</th>
+                        <th>23</th>
+                        <th>24</th>
+                        <th>25</th>
+                        <th>26</th>
+                        <th>27</th>
+                        <th>28</th>
+                        <th>29</th>
+                        <th>30</th>
+                        <th>31</th>
+                        <th>Ukupno</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="work-type">Početak rada</td>
+                        <td>-</td>
+                        <td>07</td>
+                        <td>19</td>
+                        <td class="weekend">00</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>19</td>
+                        <td>00</td>
+                        <td>00</td>
+                        <td>-</td>
+                        <td class="weekend">07</td>
+                        <td class="weekend">07</td>
+                        <td>19</td>
+                        <td>00</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>07</td>
+                        <td class="weekend">23</td>
+                        <td class="weekend">00</td>
+                        <td>07</td>
+                        <td>-</td>
+                        <td>07</td>
+                        <td>08</td>
+                        <td>-</td>
+                        <td class="weekend">-</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td class="work-type">Završetak rada</td>
+                        <td>-</td>
+                        <td>19</td>
+                        <td>24</td>
+                        <td class="weekend">07</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>24</td>
+                        <td>07</td>
+                        <td>07</td>
+                        <td>-</td>
+                        <td class="weekend">19</td>
+                        <td class="weekend">19</td>
+                        <td>24</td>
+                        <td>07</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>19</td>
+                        <td class="weekend">24</td>
+                        <td class="weekend">07</td>
+                        <td>19</td>
+                        <td>-</td>
+                        <td>19</td>
+                        <td>10</td>
+                        <td>-</td>
+                        <td class="weekend">-</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td class="work-type">UKUPNO RADNO VRIJEME</td>
+                        <td>-</td>
+                        <td>12</td>
+                        <td>5</td>
+                        <td class="weekend">7</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>5</td>
+                        <td>12</td>
+                        <td>9</td>
+                        <td>-</td>
+                        <td class="weekend">12</td>
+                        <td class="weekend">12</td>
+                        <td>5</td>
+                        <td>7</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>12</td>
+                        <td class="weekend">1</td>
+                        <td class="weekend">7</td>
+                        <td>12</td>
+                        <td>-</td>
+                        <td>12</td>
+                        <td>2</td>
+                        <td>-</td>
+                        <td class="weekend">-</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>8</td>
+                        <td>8</td>
+                        <td>8</td>
+                        <td>-</td>
+                        <td>156</td>
+                    </tr>
+                    <tr>
+                        <td class="work-type">Redovan rad</td>
+                        <td>-</td>
+                        <td>7</td>
+                        <td>-</td>
+                        <td class="weekend">1</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>1</td>
+                        <td>3</td>
+                        <td>-</td>
+                        <td class="weekend">7</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>1</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>7</td>
+                        <td class="weekend">-</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>7</td>
+                        <td>2</td>
+                        <td>-</td>
+                        <td class="weekend">-</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>36</td>
+                    </tr>
+                    <tr>
+                        <td class="work-type">Redovan rad II. smjena</td>
+                        <td>-</td>
+                        <td>5</td>
+                        <td>3</td>
+                        <td class="weekend">-</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td class="weekend">5</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>5</td>
+                        <td class="weekend">-</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>5</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td class="weekend">-</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>29</td>
+                    </tr>
+                    <tr>
+                        <td class="work-type">Redovan rad noć</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>2</td>
+                        <td class="weekend">6</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>2</td>
+                        <td>8</td>
+                        <td>6</td>
+                        <td>-</td>
+                        <td class="weekend">-</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>6</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td class="weekend">1</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td class="weekend">-</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>31</td>
+                    </tr>
+                    <tr>
+                        <td class="work-type">Redovan rad subota</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td class="weekend">-</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td class="weekend">-</td>
+                        <td class="weekend">5</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td class="weekend">-</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td class="weekend">-</td>
+                        <td class="weekend">-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>8</td>
+                    </tr>
+                    <!-- Add more work types... -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

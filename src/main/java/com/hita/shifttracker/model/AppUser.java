@@ -23,7 +23,7 @@ public class AppUser {
     private String telephone;
 
     @ManyToOne
-    @JoinColumn(name = "organization_unit_id")
+    @JoinColumn(name = "org_unit_id")
     private OrganizationUnit organizationUnit;
 
     @ManyToOne
