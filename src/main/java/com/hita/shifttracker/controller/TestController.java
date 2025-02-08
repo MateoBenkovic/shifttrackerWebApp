@@ -17,10 +17,10 @@ public class TestController {
     @GetMapping("/test")
     public String test() {
 
-        List<WorkingTimeUserWtCalView> workingTimeUserWtCalViews = workingTimeUserWtCalViewRepository.findAll();
+        List<WorkingTimeUserWtCalViewDTO> workingTimeUserWtCalViewProjections = workingTimeUserWtCalViewRepository.findAllRecords("NNOVO");
 
-        for(WorkingTimeUserWtCalView workingTimeUserWtCalView : workingTimeUserWtCalViews) {
-            System.out.println(workingTimeUserWtCalView.toString());
+        for(WorkingTimeUserWtCalViewDTO workingTimeUserWtCalViewProjection : workingTimeUserWtCalViewProjections) {
+            System.out.println(workingTimeUserWtCalViewProjection.toString());
         }
 
         return "test";

@@ -1,8 +1,6 @@
 package com.hita.shifttracker.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -10,13 +8,23 @@ import lombok.Data;
 @Data
 public class WorkingTimeUserWtCalView {
 
+    @EmbeddedId
+    private WorkingTimeUserWtCalViewId id;
+
     @Column(name = "godina")
     private int year;
     @Column(name = "mjesec")
     private int month;
 
+    @Column(name = "us_code")
+    private String appUserCode;
+    @Column(name = "id_v_r")
+    private int idWorkTypes;
     @Column(name = "naziv_vr_rada")
     private String workTypeName;
+
+    @Column(name = "app_user_id")
+    private int appUserId;
 
 
     @Column (name = "1")
