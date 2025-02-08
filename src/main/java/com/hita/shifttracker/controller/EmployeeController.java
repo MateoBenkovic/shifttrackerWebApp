@@ -89,9 +89,13 @@ public class EmployeeController {
     public String getEmployeeWorkHourList(Model model, HttpSession session){
         AppUser appUser = (AppUser) session.getAttribute("appUser");
         model.addAttribute("appUser", appUser);
+        String appUserCode = appUser.getAppUserCode();
 
         // wiew by app user code
-        List<WorkingTimeUserWtCalViewDTO> workingTimesUserView = workingTimeUserWtCalViewRepository.findAllRecords(appUser.getAppUserCode());
+        List<WorkingTimeUserWtCalViewDTO> workingTimesUserView = workingTimeUserWtCalViewRepository.findAllRecords(appUserCode);
+        for(WorkingTimeUserWtCalViewDTO wt : workingTimesUserView) {
+            System.out.println(wt.toString());
+        }
 
         return "employee_workhour_list";
     }
