@@ -12,14 +12,15 @@ import java.util.List;
 public class TestController {
 
     @Autowired
-    private WorkingTimeRepository workingTimeRepository;
+    private WorkingTimeUserWtCalViewRepository workingTimeUserWtCalViewRepository;
 
     @GetMapping("/test")
     public String test() {
 
-        List<WorkingTime> workingTimes = workingTimeRepository.findAll();
-        for (WorkingTime workingTime : workingTimes) {
-            System.out.println(workingTime.toString());
+        List<WorkingTimeUserWtCalView> workingTimeUserWtCalViews = workingTimeUserWtCalViewRepository.findAll();
+
+        for(WorkingTimeUserWtCalView workingTimeUserWtCalView : workingTimeUserWtCalViews) {
+            System.out.println(workingTimeUserWtCalView.toString());
         }
 
         return "test";
