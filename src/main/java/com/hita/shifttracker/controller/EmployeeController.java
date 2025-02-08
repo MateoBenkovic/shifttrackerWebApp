@@ -2,8 +2,11 @@ package com.hita.shifttracker.controller;
 
 import com.hita.shifttracker.model.AppUser;
 import com.hita.shifttracker.model.WorkingTime;
+import com.hita.shifttracker.model.WorkingTimeUserWtCalView;
+import com.hita.shifttracker.model.WorkingTimeUserWtCalViewDTO;
 import com.hita.shifttracker.repository.AppUserRepository;
 import com.hita.shifttracker.repository.WorkingTimeRepository;
+import com.hita.shifttracker.repository.WorkingTimeUserWtCalViewRepository;
 import jakarta.servlet.http.HttpSession;
 import org.apache.catalina.LifecycleState;
 import org.springframework.stereotype.Controller;
@@ -21,9 +24,11 @@ import java.util.List;
 public class EmployeeController {
 
     private WorkingTimeRepository workingTimeRepository;
+    private WorkingTimeUserWtCalViewRepository workingTimeUserWtCalViewRepository;
 
-    public EmployeeController(WorkingTimeRepository workingTimeRepository) {
+    public EmployeeController(WorkingTimeRepository workingTimeRepository, WorkingTimeUserWtCalViewRepository workingTimeUserWtCalViewRepository) {
         this.workingTimeRepository = workingTimeRepository;
+        this.workingTimeUserWtCalViewRepository = workingTimeUserWtCalViewRepository;
     }
 
     // employee workhour list
@@ -84,6 +89,10 @@ public class EmployeeController {
     public String getEmployeeWorkHourList(Model model, HttpSession session){
         AppUser appUser = (AppUser) session.getAttribute("appUser");
         model.addAttribute("appUser", appUser);
+
+        // wiew by app user code
+        List<WorkingTimeUserWtCalViewDTO> workingTimesUserView = workingTimeUserWtCalViewRepository.findAllRecords(appUser.getAppUserCode());
+
         return "employee_workhour_list";
     }
 

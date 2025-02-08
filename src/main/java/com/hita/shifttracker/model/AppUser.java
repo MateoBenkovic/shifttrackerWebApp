@@ -22,6 +22,9 @@ public class AppUser {
     private String oib;
     private String telephone;
 
+    @Column(name = "user_code")
+    private String appUserCode;
+
     @ManyToOne
     @JoinColumn(name = "org_unit_id")
     private OrganizationUnit organizationUnit;
