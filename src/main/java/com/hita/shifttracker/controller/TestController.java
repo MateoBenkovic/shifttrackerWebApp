@@ -12,10 +12,16 @@ import java.util.List;
 public class TestController {
 
     @Autowired
-    private AppUserRepository appUserRepository;
+    private WorkingTimeRepository workingTimeRepository;
 
     @GetMapping("/test")
     public String test() {
+
+        List<WorkingTime> workingTimes = workingTimeRepository.findAll();
+        for (WorkingTime workingTime : workingTimes) {
+            System.out.println(workingTime.toString());
+        }
+
         return "test";
     }
 }
