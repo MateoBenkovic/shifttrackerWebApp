@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="hr" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raspored Zaposlenika</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <title>Pregled Smjena</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             background-color: #f8f9fa;
@@ -89,21 +88,24 @@
 
 
     </style>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+
 </head>
 <body>
 <div id="overlay"></div>
-<!-- Navigation -->
+
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <div class="navbar-nav">
             <img src="/logo.png" style="height: 50px; width:100px" class="me-5">
-            <a class="nav-link me-4" href="/employee/dashboard">Unos radnog vremena</a>
-            <a class="nav-link active me-4" href="/employee/workhour/list">Pregled rada</a>
+            <a class="nav-link active me-4" href="">Zaposlenici</a>
         </div>
 
         <div class="navbar-nav ms-auto d-flex align-items-center">
             <div class="d-flex align-items-center me-3">
-                <span th:text="${appUser.firstName + ' ' + appUser.lastName}">ime korisnika</span>
+                <span th:text="${session.appUser.firstName + ' ' + session.appUser.lastName}">ime korisnika</span>
             </div>
 
             <div class="dropdown">
@@ -111,25 +113,31 @@
                     <i class="bi bi-person-circle fs-4"></i> <!-- Dodano fs-4 za veći font-size -->
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li class="px-3 py-1 text-muted" th:text="${appUser.appRole.roleName}">Admin</li>
-                    <li class="px-3 pb-2 text-muted small" th:text="${appUser.email}">admin@example.com</li>
+                    <li class="px-3 py-1 text-muted" th:text="${session.appUser.appRole.roleName}">Admin</li>
+                    <li class="px-3 pb-2 text-muted small" th:text="${session.appUser.email}">admin@example.com</li>
 <!--                    <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profil</a></li>-->
 <!--                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Postavke</a></li>-->
-                    <li><button class="dropdown-item" onclick="location.href = '/logout'"><i class="bi bi-box-arrow-right"></i> Odjava</button></li>
+                    <li>
+                        <button class="dropdown-item" onclick="location.href = '/logout'"><i
+                                class="bi bi-box-arrow-right"></i> Odjava
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
 </nav>
-<!-- Main Content -->
+
+<!--<button onclick="location.href = '/head_nurse/employee/list'" class="btn btn-dark m-2 ms-3">Natrag</button>-->
+
 <div class="container-fluid">
     <!-- Employee Info -->
     <div class="info-section mb-0 pb-0">
         <div class="row">
             <div class="col-md-6">
                 <h5 class="mb-3">Podaci o zaposleniku</h5>
-                <p><strong>Ime i Prezime: </strong> <span th:text="${appUser.firstName + ' ' + appUser.lastName}">Ivan Horvat</span></p>
-                <p><strong>Radna jedinica: </strong> <span th:text="${appUser.team.teamName + ' ' + appUser.organizationUnit.organizationUnitName}">Tim 1</span></p>
+                <p><strong>Ime i Prezime: </strong> <span th:text="${employee.firstName + ' ' + employee.lastName}">Ivan Horvat</span></p>
+                <p><strong>Radna jedinica: </strong> <span th:text="${employee.team.teamName + ' ' + employee.organizationUnit.organizationUnitName}">Tim 1</span></p>
             </div>
             <div class="col-md-6">
                 <h5 class="mb-3">Podaci o poslodavcu</h5>
@@ -168,7 +176,7 @@
 
     <!-- Schedule Table -->
     <div class="table-responsive">
-        <table class="table schedule-table">
+        <table class="table schedule-table table-hover">
             <thead>
             <tr id="calendarRow">
                 <!--                <th>Vrsta rada</th>-->
@@ -486,9 +494,6 @@
     </form>
 </div>
 
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
 
     document.getElementById("monthSelect").addEventListener("change", function() {
@@ -714,5 +719,7 @@ generateCalendar(today.getMonth() + 1);
 
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

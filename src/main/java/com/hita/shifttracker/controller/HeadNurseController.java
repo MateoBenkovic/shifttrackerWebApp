@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -38,5 +39,14 @@ public class HeadNurseController {
         }
 
         return "head_nurse_employee_list";
+    }
+
+    @GetMapping("/head_nurse/workhour/list")
+    public String getEmployeeWorkhour(Model model, HttpSession session, @RequestParam("id") int id) {
+        AppUser employee = (AppUser) appUserRepository.findById(id).get();
+
+        model.addAttribute("employee", employee);
+
+        return "head_nurse_employee_workhour";
     }
 }
