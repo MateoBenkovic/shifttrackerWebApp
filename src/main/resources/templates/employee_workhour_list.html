@@ -313,158 +313,51 @@
                 <td>-</td>
                 <td>156</td>
             </tr>
-            <tr>
-                <td class="work-type">Redovan rad</td>
-                <td>-</td>
-                <td>7</td>
-                <td>-</td>
-                <td class="weekend">1</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>1</td>
-                <td>3</td>
-                <td>-</td>
-                <td class="weekend">7</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>1</td>
-                <td>-</td>
-                <td>-</td>
-                <td>7</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>7</td>
-                <td>2</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>36</td>
-            </tr>
-            <tr>
-                <td class="work-type">Redovan rad II. smjena</td>
-                <td>-</td>
-                <td>5</td>
-                <td>3</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>3</td>
-                <td>3</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="weekend">5</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>5</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>5</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>29</td>
-            </tr>
-            <tr>
-                <td class="work-type">Redovan rad noć</td>
-                <td>-</td>
-                <td>-</td>
-                <td>2</td>
-                <td class="weekend">6</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>2</td>
-                <td>8</td>
-                <td>6</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>6</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="weekend">1</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>31</td>
-            </tr>
-            <tr>
-                <td class="work-type">Redovan rad subota</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">5</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>8</td>
-            </tr>
+
             <!-- Add more work types... -->
             </tbody>
         </table>
 
-        <table>
+        <table class="table schedule-table">
             <thead>
             <tr>
             </tr>
             </thead>
             <tbody>
                 <tr th:each="wtuv : ${workingTimesUserView}">
-
+                    <td class="work-type" th:text="${wtuv.workTypeName}">Redovan rad subota</td>
+                    <td th:text="${wtuv.day01}">-</td><td>-</td>
+                    <td th:text="${wtuv.day02}">-</td>
+                    <td th:text="${wtuv.day03}">-</td>
+                    <td class="weekend" th:text="${wtuv.day04}">-</td>
+                    <td class="weekend" th:text="${wtuv.day05}">-</td>
+                    <td th:text="${wtuv.day06}">-</td>
+                    <td th:text="${wtuv.day07}">-</td>
+                    <td th:text="${wtuv.day08}">-</td>
+                    <td th:text="${wtuv.day09}">-</td>
+                    <td th:text="${wtuv.day10}">-</td>
+                    <td class="weekend" th:text="${wtuv.day11}">-</td>
+                    <td class="weekend" th:text="${wtuv.day12}">5</td>
+                    <td th:text="${wtuv.day13}">-</td>
+                    <td th:text="${wtuv.day14}">-</td>
+                    <td th:text="${wtuv.day15}">-</td>
+                    <td th:text="${wtuv.day16}">-</td>
+                    <td th:text="${wtuv.day17}">-</td>
+                    <td class="weekend" th:text="${wtuv.day18}">-</td>
+                    <td class="weekend" th:text="${wtuv.day19}">-</td>
+                    <td th:text="${wtuv.day20}">-</td>
+                    <td th:text="${wtuv.day21}">-</td>
+                    <td th:text="${wtuv.day22}">-</td>
+                    <td th:text="${wtuv.day23}">-</td>
+                    <td th:text="${wtuv.day24}">-</td>
+                    <td class="weekend" th:text="${wtuv.day25}">>-</td>
+                    <td class="weekend" th:text="${wtuv.day26}">-</td>
+                    <td th:text="${wtuv.day27}">-</td>
+                    <td th:text="${wtuv.day28}">-</td>
+                    <td th:text="${wtuv.day29}">-</td>
+                    <td th:text="${wtuv.day30}">-</td>
+                    <td th:text="${wtuv.day31}">-</td>
+                    <td>8</td>
                 </tr>
             </tbody>
         </table>
