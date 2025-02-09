@@ -13,11 +13,13 @@ import com.hita.shifttracker.repository.WorkingTimeRepository;
 import com.hita.shifttracker.repository.WorkingTimeUserWtCalViewRepository;
 import jakarta.servlet.http.HttpSession;
 import org.apache.catalina.LifecycleState;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.net.http.HttpRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,6 +36,7 @@ public class EmployeeController {
     private CompanyRepository companyRepository;
 
 
+    @Autowired
     public EmployeeController(WorkingTimeRepository workingTimeRepository, AppUserRepository appUserRepository,
                               WorkingTimeUserWtCalViewRepository workingTimeUserWtCalViewRepository, CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
@@ -112,7 +115,7 @@ public class EmployeeController {
 
 
         // wiew by app user code
-        List<WorkingTimeUserWtCalViewDTO> workingTimesUserView = workingTimeUserWtCalViewRepository.findAllRecords(appUserCode);
+        List<WorkingTimeUserWtCalViewDTO> workingTimesUserView = workingTimeUserWtCalViewRepository.findAllRecords(appUserCode, 2, 2025);
         for(WorkingTimeUserWtCalViewDTO wt : workingTimesUserView) {
             System.out.println(wt.toString());
         }
