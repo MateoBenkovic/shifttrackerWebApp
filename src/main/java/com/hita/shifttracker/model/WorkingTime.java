@@ -37,4 +37,8 @@ public class WorkingTime {
     // raspored ????
     //private int schedId;
 
+    @Column(name = "shift_id")
+    private int shiftId;
+
+
 }

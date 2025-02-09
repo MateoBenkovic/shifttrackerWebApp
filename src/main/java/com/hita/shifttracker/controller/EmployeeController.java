@@ -1,16 +1,10 @@
 package com.hita.shifttracker.controller;
 
-import com.hita.shifttracker.model.AppUser;
-import com.hita.shifttracker.model.Company;
-import com.hita.shifttracker.model.WorkingTime;
+import com.hita.shifttracker.model.*;
 //import com.hita.shifttracker.model.WorkingTimeUserWtCalView;
 //import com.hita.shifttracker.model.WorkingTimeUserWtCalViewDTO;
-import com.hita.shifttracker.model.WorkingTimeUserWtCalViewDTO;
-import com.hita.shifttracker.repository.AppUserRepository;
-import com.hita.shifttracker.repository.CompanyRepository;
-import com.hita.shifttracker.repository.WorkingTimeRepository;
+import com.hita.shifttracker.repository.*;
 //import com.hita.shifttracker.repository.WorkingTimeUserWtCalViewRepository;
-import com.hita.shifttracker.repository.WorkingTimeUserWtCalViewRepository;
 import jakarta.servlet.http.HttpSession;
 import org.apache.catalina.LifecycleState;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,18 +26,20 @@ public class EmployeeController {
     private WorkingTimeRepository workingTimeRepository;
     private AppUserRepository appUserRepository;
     private WorkingTimeUserWtCalViewRepository workingTimeUserWtCalViewRepository;
-    // podatci od hitne
     private CompanyRepository companyRepository;
+    private WorkingTimeItemRepository workingTimeItemRepository;
+
 
 
     @Autowired
     public EmployeeController(WorkingTimeRepository workingTimeRepository, AppUserRepository appUserRepository,
-                              WorkingTimeUserWtCalViewRepository workingTimeUserWtCalViewRepository, CompanyRepository companyRepository) {
+                              WorkingTimeUserWtCalViewRepository workingTimeUserWtCalViewRepository, CompanyRepository companyRepository,
+                              WorkingTimeItemRepository workingTimeItemRepository) {
         this.companyRepository = companyRepository;
         this.workingTimeRepository = workingTimeRepository;
         this.appUserRepository = appUserRepository;
         this.workingTimeUserWtCalViewRepository = workingTimeUserWtCalViewRepository;
-
+        this.workingTimeItemRepository = workingTimeItemRepository;
     }
 
     // employee workhour list
@@ -77,6 +73,11 @@ public class EmployeeController {
         LocalDate dateTo = endDateTime.toLocalDate();
         int hoursTo = endDateTime.toLocalTime().getHour();
 
+        int shift = 2;
+        if(dateFrom.equals(dateTo)){
+            shift = 1;
+        }
+
         int totalHours = Math.abs(hoursFrom - hoursTo);
 
         System.out.println("dateFrom: " + dateFrom);
@@ -94,8 +95,17 @@ public class EmployeeController {
         workingTime.setHoursTo(hoursTo);
         workingTime.setTotalHours(totalHours);
         workingTime.setAppUser(appUser);
+        workingTime.setShiftId(shift);
 
-        workingTimeRepository.save(workingTime);
+
+        // if exist dont save
+
+            // update logic
+
+            workingTimeRepository.save(workingTime);
+
+
+
 
         return "redirect:/employee/workhour/list";
     }
@@ -110,6 +120,9 @@ public class EmployeeController {
 
         String appUserCode = appUserRepository.findAppUserCodeById(appUser.getId());
         System.out.println("appUserCode: " + appUserCode);
+
+        // work time item
+        // get all work time ithem where mont equals 2 and app user id
 
         // posalji mi vrste rada po useru
 
