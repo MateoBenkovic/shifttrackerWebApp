@@ -27,7 +27,7 @@ public class WorkingTimeItem {
     private LocalDate date;
 
     @ManyToOne
-    @JoinColumn(name = "work_type_id", referencedColumnName = "id")
+    @JoinColumn(name = "work_type_code", referencedColumnName = "id")
     private WorkType workType;
 
     @Column(name = "hours_from")
