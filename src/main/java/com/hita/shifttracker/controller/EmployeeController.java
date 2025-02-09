@@ -49,14 +49,14 @@ public class EmployeeController {
         AppUser appUser = (AppUser) session.getAttribute("appUser");
         return "redirect:/employee/workhour/list";
     }
-//
-//    @GetMapping("/employee/workhour/add")
-//    public String getEmployeeWorkHourAdd(Model model, HttpSession session){
-//        AppUser appUser = (AppUser) session.getAttribute("appUser");
-//        model.addAttribute("appUser", appUser);
-//
-//        return "employee_workhour_add";
-//    }
+
+    @GetMapping("/employee/workhour/add")
+    public String getEmployeeWorkHourAdd(Model model, HttpSession session){
+        AppUser appUser = (AppUser) session.getAttribute("appUser");
+        model.addAttribute("appUser", appUser);
+
+        return "employee_workhour_add";
+    }
 
     @GetMapping("/employee/workhour/process")
     public String employeeWorkHourProcess(@RequestParam("startShift") String startShift, @RequestParam("endShift") String endShift, Model model, HttpSession session){
