@@ -1,11 +1,15 @@
 package com.hita.shifttracker.controller;
 
 import com.hita.shifttracker.model.AppUser;
+import com.hita.shifttracker.model.Company;
 import com.hita.shifttracker.model.WorkingTime;
-import com.hita.shifttracker.model.WorkingTimeUserWtCalView;
+//import com.hita.shifttracker.model.WorkingTimeUserWtCalView;
+//import com.hita.shifttracker.model.WorkingTimeUserWtCalViewDTO;
 import com.hita.shifttracker.model.WorkingTimeUserWtCalViewDTO;
 import com.hita.shifttracker.repository.AppUserRepository;
+import com.hita.shifttracker.repository.CompanyRepository;
 import com.hita.shifttracker.repository.WorkingTimeRepository;
+//import com.hita.shifttracker.repository.WorkingTimeUserWtCalViewRepository;
 import com.hita.shifttracker.repository.WorkingTimeUserWtCalViewRepository;
 import jakarta.servlet.http.HttpSession;
 import org.apache.catalina.LifecycleState;
@@ -24,27 +28,35 @@ import java.util.List;
 public class EmployeeController {
 
     private WorkingTimeRepository workingTimeRepository;
+    private AppUserRepository appUserRepository;
     private WorkingTimeUserWtCalViewRepository workingTimeUserWtCalViewRepository;
+    // podatci od hitne
+    private CompanyRepository companyRepository;
 
-    public EmployeeController(WorkingTimeRepository workingTimeRepository, WorkingTimeUserWtCalViewRepository workingTimeUserWtCalViewRepository) {
+
+    public EmployeeController(WorkingTimeRepository workingTimeRepository, AppUserRepository appUserRepository,
+                              WorkingTimeUserWtCalViewRepository workingTimeUserWtCalViewRepository, CompanyRepository companyRepository) {
+        this.companyRepository = companyRepository;
         this.workingTimeRepository = workingTimeRepository;
+        this.appUserRepository = appUserRepository;
         this.workingTimeUserWtCalViewRepository = workingTimeUserWtCalViewRepository;
+
     }
 
     // employee workhour list
     @GetMapping("/employee/dashboard")
     public String getDashboard(HttpSession session) {
         AppUser appUser = (AppUser) session.getAttribute("appUser");
-        return "redirect:/employee/workhour/add";
+        return "redirect:/employee/workhour/list";
     }
-
-    @GetMapping("/employee/workhour/add")
-    public String getEmployeeWorkHourAdd(Model model, HttpSession session){
-        AppUser appUser = (AppUser) session.getAttribute("appUser");
-        model.addAttribute("appUser", appUser);
-
-        return "employee_workhour_add";
-    }
+//
+//    @GetMapping("/employee/workhour/add")
+//    public String getEmployeeWorkHourAdd(Model model, HttpSession session){
+//        AppUser appUser = (AppUser) session.getAttribute("appUser");
+//        model.addAttribute("appUser", appUser);
+//
+//        return "employee_workhour_add";
+//    }
 
     @GetMapping("/employee/workhour/process")
     public String employeeWorkHourProcess(@RequestParam("startShift") String startShift, @RequestParam("endShift") String endShift, Model model, HttpSession session){
@@ -89,13 +101,22 @@ public class EmployeeController {
     public String getEmployeeWorkHourList(Model model, HttpSession session){
         AppUser appUser = (AppUser) session.getAttribute("appUser");
         model.addAttribute("appUser", appUser);
-        String appUserCode = appUser.getAppUserCode();
+
+        Company company = companyRepository.findById(1).get();
+        model.addAttribute("company", company);
+
+        String appUserCode = appUserRepository.findAppUserCodeById(appUser.getId());
+        System.out.println("appUserCode: " + appUserCode);
+
+        // posalji mi vrste rada po useru
+
 
         // wiew by app user code
         List<WorkingTimeUserWtCalViewDTO> workingTimesUserView = workingTimeUserWtCalViewRepository.findAllRecords(appUserCode);
         for(WorkingTimeUserWtCalViewDTO wt : workingTimesUserView) {
             System.out.println(wt.toString());
         }
+        model.addAttribute("workingTimesUserView", workingTimesUserView);
 
         return "employee_workhour_list";
     }

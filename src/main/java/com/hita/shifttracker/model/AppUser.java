@@ -21,9 +21,9 @@ public class AppUser {
 
     private String oib;
     private String telephone;
-
-    @Column(name = "user_code", length = 5, nullable = false)
-    private String appUserCode;
+//
+//    @Column(name = "user_code", nullable = false, length = 5, updatable = false)
+//    private String appUserCode;
 
     @ManyToOne
     @JoinColumn(name = "org_unit_id")

@@ -47,4 +47,7 @@ public class Company {
 
     @Column(name = "base_salary_hour", precision = 8, scale = 4)
     private BigDecimal baseSalaryHour;
+
+    @Column(name = "company_city", nullable = false)
+    private String companyCity;
 }

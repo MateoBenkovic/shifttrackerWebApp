@@ -11,16 +11,15 @@ import java.util.List;
 @Controller
 public class TestController {
 
+
     @Autowired
-    private WorkingTimeUserWtCalViewRepository workingTimeUserWtCalViewRepository;
+    private WorkingTimeItemRepository workingTimeItemRepository;
 
     @GetMapping("/test")
     public String test() {
 
-        List<WorkingTimeUserWtCalViewDTO> workingTimeUserWtCalViewProjections = workingTimeUserWtCalViewRepository.findAllRecords("NNOVO");
-
-        for(WorkingTimeUserWtCalViewDTO workingTimeUserWtCalViewProjection : workingTimeUserWtCalViewProjections) {
-            System.out.println(workingTimeUserWtCalViewProjection.toString());
+        for (WorkingTimeItem workingTimeItem : workingTimeItemRepository.findAll()) {
+            System.out.println(workingTimeItem);
         }
 
         return "test";

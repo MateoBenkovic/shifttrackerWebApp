@@ -97,8 +97,8 @@
     <div class="container-fluid">
         <div class="navbar-nav">
             <img src="/logo.png" style="height: 50px; width:100px" class="me-5">
-            <a class="nav-link me-4" href="/employee/dashboard">Unos radnog vremena</a>
-            <a class="nav-link active me-4" href="/employee/workhour/list">Pregled rada</a>
+<!--            <a class="nav-link me-4" href="/employee/dashboard">Unos radnog vremena</a>-->
+<!--            <a class="nav-link active me-4" href="/employee/workhour/list">Pregled rada</a>-->
         </div>
 
         <div class="navbar-nav ms-auto d-flex align-items-center">
@@ -133,10 +133,10 @@
             </div>
             <div class="col-md-6">
                 <h5 class="mb-3">Podaci o poslodavcu</h5>
-                <p><strong>Naziv:</strong> Hitna KZŽ</p>
-                <p><strong>Adresa:</strong> Ulica Mirka Crkvenca 1, 49000, Krapina</p>
-                <p><strong>OIB:</strong> 17813384799</p>
-                <p><strong>IBAN:</strong> HR7223400091110492278</p>
+                <p><strong>Naziv:</strong><span th:text="' ' + ${company.companyName}">Hitna KZŽ</span></p>
+                <p><strong>Adresa:</strong> <span th:text="' ' + ${company.companyAddress} + ', ' + ${company.postalCode} + ', ' + ${company.companyCity}">Ulica Mirka Crkvenca 1, 49000, Krapina</span>></p>
+                <p><strong>OIB:</strong><span th:text="' ' + ${company.companyTaxId}"> 17813384799</span></p>
+                <p><strong>IBAN:</strong> <span th:text="' ' + ${company.companyIBAN}">HR7223400091110492278</span></p>
             </div>
         </div>
     </div>
@@ -454,6 +454,18 @@
                 <td>8</td>
             </tr>
             <!-- Add more work types... -->
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+            <tr>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="wtuv : ${workingTimesUserView}">
+
+                </tr>
             </tbody>
         </table>
     </div>

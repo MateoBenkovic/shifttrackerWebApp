@@ -16,7 +16,7 @@ public class WorkingTimeUserWtCalView {
     @Column(name = "mjesec")
     private int month;
 
-    @Column(name = "us_code")
+    @Column(name = "us_code", length = 5)
     private String appUserCode;
     @Column(name = "id_v_r")
     private int idWorkTypes;
