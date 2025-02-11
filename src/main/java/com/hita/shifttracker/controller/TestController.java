@@ -30,7 +30,7 @@ public class TestController {
         workingTime.setTotalHours(8);
         workingTime.setAppUser(appUserRepository.findById(1).get());
         workingTime.setShiftId(1);
-
+//
         workingTimeRepository.saveWorkingTime(workingTime.getDateFrom(), workingTime.getHoursFrom(), workingTime.getDateTo(), workingTime.getHoursTo(), workingTime.getTotalHours(), workingTime.getAppUser().getId(), workingTime.getShiftId());
 
         return "test";
