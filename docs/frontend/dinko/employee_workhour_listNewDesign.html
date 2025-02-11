@@ -137,16 +137,18 @@
 </nav>
 <!-- Main Content -->
 <div class="container-fluid">
-  <!-- Employee Info -->
-  <div class="info-section mb-4">
-    <h5 class="section-title">Podaci o zaposleniku</h5>
-    <div class="row">
-      <div class="col-md-6">
+  <!-- Employee and Employer Info Section -->
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <div class="info-section h-100">
+        <h5 class="section-title">Podaci o zaposleniku</h5>
         <p><strong>Ime i Prezime: </strong> <span th:text="${appUser.firstName + ' ' + appUser.lastName}">Ivan Horvat</span></p>
         <p><strong>Radna jedinica: </strong> <span th:text="${appUser.team.teamName + ' ' + appUser.organizationUnit.organizationUnitName}">Tim 1</span></p>
       </div>
-      <div class="col-md-6">
-        <h5 class="mb-3">Podaci o poslodavcu</h5>
+    </div>
+    <div class="col-md-6">
+      <div class="info-section h-100">
+        <h5 class="section-title">Podaci o poslodavcu</h5>
         <p><strong>Naziv:</strong><span th:text="' ' + ${company.companyName}">Hitna KZŽ</span></p>
         <p><strong>Adresa:</strong> <span th:text="' ' + ${company.companyAddress} + ', ' + ${company.postalCode} + ', ' + ${company.companyCity}">Ulica Mirka Crkvenca 1, 49000, Krapina</span></p>
         <p><strong>OIB:</strong><span th:text="' ' + ${company.companyTaxId}"> 17813384799</span></p>
@@ -159,24 +161,31 @@
   <div class="info-section mb-4">
     <h5 class="section-title">Kontrole rasporeda</h5>
     <div class="row align-items-center">
-      <div class="col-md-3">
-        <select class="form-select" id="monthSelect">
-          <option value="1">Siječanj</option>
-          <option value="2">Veljača</option>
-          <option value="3">Ožujak</option>
-          <option value="4">Travanj</option>
-          <option value="5">Svibanj</option>
-          <option value="6">Lipanj</option>
-          <option value="7">Srpanj</option>
-          <option value="8">Kolovoz</option>
-          <option value="9">Rujan</option>
-          <option value="10">Listopad</option>
-          <option value="11">Studeni</option>
-          <option value="12">Prosinac</option>
-        </select>
+      <div class="col-md-6">
+        <div class="d-flex gap-3">
+          <select class="form-select" id="monthSelect">
+            <option value="1">Siječanj</option>
+            <option value="2">Veljača</option>
+            <option value="3">Ožujak</option>
+            <option value="4">Travanj</option>
+            <option value="5">Svibanj</option>
+            <option value="6">Lipanj</option>
+            <option value="7">Srpanj</option>
+            <option value="8">Kolovoz</option>
+            <option value="9">Rujan</option>
+            <option value="10">Listopad</option>
+            <option value="11">Studeni</option>
+            <option value="12">Prosinac</option>
+          </select>
+          <select class="form-select" id="yearSelect">
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+          </select>
+        </div>
       </div>
-      <div class="col-md-9">
-        <p class="mb-0 ps-4"><strong>Propisani mjesečni fond sati:</strong> 184</p>
+      <div class="col-md-6">
+        <p class="mb-0"><strong>Propisani mjesečni fond sati:</strong> 184</p>
       </div>
     </div>
   </div>
@@ -349,13 +358,6 @@
         <td>-</td>
         <td>-</td>
         <td>5</td>
-        <td class="weekend">-</td>
-        <td class="weekend">-</td>
-        <td>-</td>
-        <td>-</td>
-        <td>5</td>
-        <td>-</td>
-        <td>-</td>
         <td class="weekend">-</td>
         <td class="weekend">-</td>
         <td>-</td>
