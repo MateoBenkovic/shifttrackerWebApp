@@ -1,23 +1,16 @@
 package com.hita.shifttracker.controller;
 
 import com.hita.shifttracker.model.*;
-//import com.hita.shifttracker.model.WorkingTimeUserWtCalView;
-//import com.hita.shifttracker.model.WorkingTimeUserWtCalViewDTO;
 import com.hita.shifttracker.repository.*;
-//import com.hita.shifttracker.repository.WorkingTimeUserWtCalViewRepository;
 import jakarta.servlet.http.HttpSession;
-import org.apache.catalina.LifecycleState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.math.BigDecimal;
-import java.net.http.HttpRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 @Controller
@@ -97,12 +90,7 @@ public class EmployeeController {
         workingTime.setAppUser(appUser);
         workingTime.setShiftId(shift);
 
-
-        // if exist dont save
-
-            // update logic
-
-            workingTimeRepository.save(workingTime);
+        workingTimeRepository.saveWorkingTime(dateFrom, hoursFrom, dateTo, hoursTo, totalHours, appUser.getId(), shift);
 
 
 
