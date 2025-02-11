@@ -12,26 +12,25 @@ import java.util.List;
 @Controller
 public class TestController {
 
-
     @Autowired
-    private WorkingTimeRepository workingTimeRepository;
+    private WorkingTimeUserWtCalViewRepository repo;
     @Autowired
     private AppUserRepository appUserRepository;
 
     @GetMapping("/test")
     public String test() {
 
-        // insert into
-        WorkingTime workingTime = new WorkingTime();
-        workingTime.setDateFrom(LocalDate.of(2023, 1, 1));
-        workingTime.setHoursFrom(8);
-        workingTime.setDateTo(LocalDate.of(2023, 1, 1));
-        workingTime.setHoursTo(16);
-        workingTime.setTotalHours(8);
-        workingTime.setAppUser(appUserRepository.findById(1).get());
-        workingTime.setShiftId(1);
-//
-        workingTimeRepository.saveWorkingTime(workingTime.getDateFrom(), workingTime.getHoursFrom(), workingTime.getDateTo(), workingTime.getHoursTo(), workingTime.getTotalHours(), workingTime.getAppUser().getId(), workingTime.getShiftId());
+        AppUser user = appUserRepository.findById(1).get();
+
+        System.out.println(user.toString());
+
+        String userCode = appUserRepository.findAppUserCodeById(user.getId());
+
+        List<WorkingTimeUserWtCalView> workingTimes = repo.findRecords(userCode, 2, 2025);
+
+        for(WorkingTimeUserWtCalView wt : workingTimes) {
+            System.out.println(wt.toString());
+        }
 
         return "test";
     }

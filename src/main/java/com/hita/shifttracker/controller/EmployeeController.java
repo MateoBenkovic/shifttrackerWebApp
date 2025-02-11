@@ -18,7 +18,7 @@ public class EmployeeController {
 
     private WorkingTimeRepository workingTimeRepository;
     private AppUserRepository appUserRepository;
-    private WorkingTimeUserWtCalViewRepository workingTimeUserWtCalViewRepository;
+    //private WorkingTimeUserWtCalViewRepository workingTimeUserWtCalViewRepository;
     private CompanyRepository companyRepository;
     private WorkingTimeItemRepository workingTimeItemRepository;
 
@@ -26,12 +26,12 @@ public class EmployeeController {
 
     @Autowired
     public EmployeeController(WorkingTimeRepository workingTimeRepository, AppUserRepository appUserRepository,
-                              WorkingTimeUserWtCalViewRepository workingTimeUserWtCalViewRepository, CompanyRepository companyRepository,
+                              /*WorkingTimeUserWtCalViewRepository workingTimeUserWtCalViewRepository, */CompanyRepository companyRepository,
                               WorkingTimeItemRepository workingTimeItemRepository) {
         this.companyRepository = companyRepository;
         this.workingTimeRepository = workingTimeRepository;
         this.appUserRepository = appUserRepository;
-        this.workingTimeUserWtCalViewRepository = workingTimeUserWtCalViewRepository;
+       // this.workingTimeUserWtCalViewRepository = workingTimeUserWtCalViewRepository;
         this.workingTimeItemRepository = workingTimeItemRepository;
     }
 
@@ -115,12 +115,12 @@ public class EmployeeController {
         // posalji mi vrste rada po useru
 
 
-        // wiew by app user code
-        List<WorkingTimeUserWtCalViewDTO> workingTimesUserView = workingTimeUserWtCalViewRepository.findAllRecords(appUserCode, 2, 2025);
-        for(WorkingTimeUserWtCalViewDTO wt : workingTimesUserView) {
-            System.out.println(wt.toString());
-        }
-        model.addAttribute("workingTimesUserView", workingTimesUserView);
+//        // wiew by app user code
+//        List<WorkingTimeUserWtCalViewDTO> workingTimesUserView = workingTimeUserWtCalViewRepository.findAllRecords(appUserCode, 2, 2025);
+//        for(WorkingTimeUserWtCalViewDTO wt : workingTimesUserView) {
+//            System.out.println(wt.toString());
+//        }
+//        model.addAttribute("workingTimesUserView", workingTimesUserView);
 
         return "employee_workhour_list";
     }
