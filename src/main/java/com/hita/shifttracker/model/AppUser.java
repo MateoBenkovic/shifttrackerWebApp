@@ -22,7 +22,7 @@ public class AppUser {
     private String oib;
     private String telephone;
 //
-//    @Column(name = "user_code", nullable = false, length = 5, updatable = false)
+//    @Column(name = "user_code", nullable = false, length = 5)
 //    private String appUserCode;
 
     @ManyToOne
@@ -41,7 +41,5 @@ public class AppUser {
     @JoinColumn(name = "team_id")
     private Team team;
 
-
-    //private String userCode;
 
 }

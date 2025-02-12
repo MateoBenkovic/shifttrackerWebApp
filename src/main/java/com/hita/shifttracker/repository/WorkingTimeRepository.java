@@ -23,8 +23,9 @@ public interface WorkingTimeRepository extends JpaRepository<WorkingTime, Intege
     @Query(value = "INSERT INTO working_time (app_user_id, date_from, hours_from, date_to, hours_to, total_hours, shift_id) " +
             "VALUES (:appUserId, :dateFrom, :hoursFrom, :dateTo, :hoursTo, :totalHours, :shiftId) " +
             "ON CONFLICT (app_user_id, date_from, date_to) " +
-            "DO UPDATE SET date_from = :dateFrom, hours_from = :hoursFrom, date_to = :dateTo, hours_to = :hoursTo, total_hours = :totalHours" , nativeQuery = true)
-    void saveWorkingTime(@Param("dateFrom") LocalDate dateFrom, @Param("hoursFrom") int hoursFrom, @Param("dateTo") LocalDate dateTo
+            "DO UPDATE SET date_from = :dateFrom, hours_from = :hoursFrom, date_to = :dateTo, hours_to = :hoursTo, total_hours = :totalHours " +
+            "RETURNING *" , nativeQuery = true)
+    WorkingTime saveWorkingTime(@Param("dateFrom") LocalDate dateFrom, @Param("hoursFrom") int hoursFrom, @Param("dateTo") LocalDate dateTo
             , @Param("hoursTo") int hoursTo, @Param("totalHours") int totalHours, @Param("appUserId") int appUserId, @Param("shiftId") int shiftId);
 
     // get all records
