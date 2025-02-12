@@ -1,5 +1,6 @@
 package com.hita.shifttracker.service;
 
+import com.hita.shifttracker.dto.AppUserDTO;
 import com.hita.shifttracker.model.AppUser;
 import com.hita.shifttracker.repository.AppUserRepository;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class AppUserService {
         this.appUserRepository = appUserRepository;
     }
 
-    public List<AppUser> getAllAppUsersWithTeamAndOrganizationUnit() {
+    public List<AppUserDTO> getAllAppUsersWithTeamAndOrganizationUnit() {
         return appUserRepository.findAllWithAppRoleAndTeamAndOrganizationUnit();
     }
 }

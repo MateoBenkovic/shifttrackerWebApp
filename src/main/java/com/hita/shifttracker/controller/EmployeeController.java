@@ -1,7 +1,10 @@
 package com.hita.shifttracker.controller;
 
+import com.hita.shifttracker.dto.AppUserDTO;
+import com.hita.shifttracker.dto.CompanyDTO;
 import com.hita.shifttracker.model.*;
 import com.hita.shifttracker.repository.*;
+import com.hita.shifttracker.service.CompanyService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,25 +20,25 @@ import java.util.List;
 public class EmployeeController {
 
 
+    private final CompanyService companyService;
 
-    // dolazi na stranicu za unos radanog vremena
+    private EmployeeController(CompanyService companyService) {
+        this.companyService = companyService;
+    }
 
     @GetMapping("/employee/workhour/list")
     public String getEmployeeWorkHourList(Model model, HttpSession session) {
 
-        AppUser appUser = (AppUser) session.getAttribute("appUser");
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
 
         System.out.println("first name " + appUser.getFirstName());
         System.out.println("last name " + appUser.getLastName());
         System.out.println("email " + appUser.getEmail());
 
+        CompanyDTO company = companyService.findByIdWithData(1);
+
         model.addAttribute("appUser", appUser);
-
-        // tu treba sljedece app user ime i prezime
-        // radna jedinica T1 Krapina
-
-        // podatci o poslodavcu
-        // naziv adresa oib i iban
+        model.addAttribute("company", company);
 
         return "employee_workhour_list";
     }
