@@ -42,4 +42,19 @@ public class AppUser {
     private Team team;
 
 
+    public AppUser(String firstName, String lastName, String oib, String telephone, OrganizationUnit organizationUnit, AppRole appRole, TeamRole teamRole, Team team, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.oib = oib;
+        this.telephone = telephone;
+        this.organizationUnit = organizationUnit;
+        this.appRole = appRole;
+        this.teamRole = teamRole;
+        this.team = team;
+        this.email = email;
+        this.password = password;
+    }
+
+    public AppUser() {
+    }
 }

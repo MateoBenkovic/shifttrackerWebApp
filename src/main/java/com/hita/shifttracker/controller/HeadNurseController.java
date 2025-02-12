@@ -1,8 +1,9 @@
 package com.hita.shifttracker.controller;
 
-import com.hita.shifttracker.model.AppUser;
-import com.hita.shifttracker.repository.AppUserRepository;
+import com.hita.shifttracker.model.*;
+import com.hita.shifttracker.repository.*;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,18 @@ import java.util.List;
 
 @Controller
 public class HeadNurseController {
+
+    @Autowired
+    private AppRoleRepository appRoleRepository;
+
+    @Autowired
+    private OrganizationUnitRepository organizationUnitRepository;
+
+    @Autowired
+    private TeamRepository teamRepository;
+
+    @Autowired
+    private TeamRoleRepository teamRoleRepository;
 
     private AppUserRepository appUserRepository;
 
@@ -48,5 +61,28 @@ public class HeadNurseController {
         model.addAttribute("employee", employee);
 
         return "head_nurse_employee_workhour";
+    }
+
+    @GetMapping("/head_nurse/add/user")
+    public String addNewUser(Model model, HttpSession session,
+                             @RequestParam("firstName") String firstName,
+                             @RequestParam("lastName") String lastName,
+                             @RequestParam("oib") String oib,
+                             @RequestParam("telephone") String telephone,
+                             @RequestParam("email") String email,
+                             @RequestParam("password") String password,
+                             @RequestParam("teamRole") int teamRole,
+                             @RequestParam("orgUnit") int orgUnit,
+                             @RequestParam("team") int team) {
+
+        AppRole appRole = appRoleRepository.findById(1).get();
+        OrganizationUnit employeeOrgUnit = organizationUnitRepository.findById(orgUnit).get();
+        TeamRole employeeTeamRole = teamRoleRepository.findById(teamRole).get();
+        Team employeeTeam = teamRepository.findById(team).get();
+
+        AppUser newEmployee = new AppUser(firstName, lastName, oib, telephone, employeeOrgUnit, appRole, employeeTeamRole, employeeTeam, email, password);
+        appUserRepository.save(newEmployee);
+
+        return "redirect:/head_nurse/employee/list";
     }
 }
