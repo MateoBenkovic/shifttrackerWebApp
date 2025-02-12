@@ -2,11 +2,10 @@ package com.hita.shifttracker.controller;
 
 import com.hita.shifttracker.dto.AppUserDTO;
 import com.hita.shifttracker.dto.CompanyDTO;
-import com.hita.shifttracker.model.*;
-import com.hita.shifttracker.repository.*;
+import com.hita.shifttracker.model.WorkingTime;
 import com.hita.shifttracker.service.CompanyService;
+import com.hita.shifttracker.service.WorkingTimeService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,33 +13,58 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 @Controller
 public class EmployeeController {
 
 
     private final CompanyService companyService;
+    private final WorkingTimeService workingTimeService;
 
-    private EmployeeController(CompanyService companyService) {
+    private EmployeeController(CompanyService companyService, WorkingTimeService workingTimeService) {
         this.companyService = companyService;
+        this.workingTimeService = workingTimeService;
     }
 
     @GetMapping("/employee/workhour/list")
     public String getEmployeeWorkHourList(Model model, HttpSession session) {
 
         AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
-
-        System.out.println("first name " + appUser.getFirstName());
-        System.out.println("last name " + appUser.getLastName());
-        System.out.println("email " + appUser.getEmail());
-
         CompanyDTO company = companyService.findByIdWithData(1);
 
         model.addAttribute("appUser", appUser);
         model.addAttribute("company", company);
 
         return "employee_workhour_list";
+    }
+
+    @GetMapping("/employee/workhour/process")
+    public String employeeWorkHourProcess(@RequestParam("startShift") String startShift, @RequestParam("endShift") String endShift,
+                                          @RequestParam("shiftType") String shiftType, Model model, HttpSession session){
+
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+
+
+        LocalDateTime startDateTime = LocalDateTime.parse(startShift);
+        LocalDateTime endDateTime = LocalDateTime.parse(endShift);
+
+        LocalDate dateFrom = startDateTime.toLocalDate();
+        int hoursFrom = startDateTime.toLocalTime().getHour();
+        LocalDate dateTo = endDateTime.toLocalDate();
+        int hoursTo = endDateTime.toLocalTime().getHour();
+
+        WorkingTime workingTime = new WorkingTime();
+        workingTime.setDateFrom(dateFrom);
+        workingTime.setHoursFrom(hoursFrom);
+        workingTime.setDateTo(dateTo);
+        workingTime.setHoursTo(hoursTo);
+        workingTime.setAppUserId(appUser.getId());
+        workingTime.setShiftId(Integer.parseInt(shiftType));
+
+        workingTimeService.addWorkingTime(workingTime);
+
+        return "redirect:/employee/workhour/list";
     }
 
 

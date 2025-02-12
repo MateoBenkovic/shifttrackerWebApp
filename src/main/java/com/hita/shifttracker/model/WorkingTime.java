@@ -1,44 +1,43 @@
-//package com.hita.shifttracker.model;
-//
-//import jakarta.persistence.*;
-//import lombok.Data;
-//
-//import java.time.LocalDate;
-//
-//@Entity
-//@Table(name = "working_time")
-//@Data
-//public class WorkingTime {
-//
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "id_work_time")
-//    private int idWorkTime;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "app_user_id")
-//    private AppUser appUser;
-//
-//    @Column(name = "date_from")
-//    private LocalDate dateFrom;
-//
-//    @Column(name = "hours_from")
-//    private int hoursFrom;
-//
-//    @Column(name = "date_to")
-//    private LocalDate dateTo;
-//
-//    @Column(name = "hours_to")
-//    private int hoursTo;
-//
-//    @Column(name = "total_hours")
-//    private int totalHours;
-//
-//    // raspored ????
-//    //private int schedId;
-//
-//    @Column(name = "shift_id")
-//    private int shiftId;
-//
-//
-//}
+package com.hita.shifttracker.model;
+
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
+import java.time.LocalDate;
+
+@Table(name = "working_time")
+@Data
+public class WorkingTime {
+
+    @Id
+    @Column("id_work_time")
+    private int idWorkTime;
+
+    @Column("app_user_id")
+    private int appUserId;
+
+
+    @Column("date_from")
+    private LocalDate dateFrom;
+
+    @Column("hours_from")
+    private int hoursFrom;
+
+    @Column("date_to")
+    private LocalDate dateTo;
+
+    @Column("hours_to")
+    private int hoursTo;
+
+    @Column("total_hours")
+    private int totalHours;
+
+    @Column("sched_id")
+    private int schedId;
+
+    @Column("shift_id")
+    private int shiftId;
+
+}

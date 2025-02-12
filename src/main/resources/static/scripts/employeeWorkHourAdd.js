@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const selectedDate = workDateInput.value;
                 startTimeInput.value = setDateTime(selectedDate, 7, 0);
                 endTimeInput.value = setDateTime(selectedDate, 19, 0);
+
             });
 
             btnNocna.addEventListener('click', function() {
@@ -53,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 startTimeInput.value = setDateTime(selectedDate, 19, 0);
                 endTimeInput.value = setDateTime(nextDay.toISOString().split("T")[0], 7, 0);
+
             });
 
             const workTimeForm = document.getElementById('workTimeForm');

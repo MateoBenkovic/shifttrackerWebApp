@@ -17,14 +17,13 @@ import java.util.List;
 public class TestController {
 
     @Autowired
-    private CompanyService companyService;
+    private WorkingTimeRepository workingTimeRepository;
 
     @GetMapping("/test")
     public String test() {
 
-        CompanyDTO companyDTO = companyService.findByIdWithData(1);
 
-        System.out.println(companyDTO);
+        workingTimeRepository.insertOrUpdateWorkingTime(2, LocalDate.parse("2025-02-12"), 19, LocalDate.parse("2025-02-13"), 7, 12, 2);
 
         return "test";
     }
