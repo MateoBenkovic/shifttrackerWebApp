@@ -1,28 +1,31 @@
 package com.hita.shifttracker.model;
 
-import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Entity
 @Table(name = "org_unit")
 @Data
 public class OrganizationUnit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column("id")
     private int organizationUnitId;
 
-    @Column(name = "name")
+    @Column("name")
     private String organizationUnitName;
 
-    @Column(name = "order_number")
+    @Column("order_number")
     private int organizationUnitOrderNumber;
 
-//    private String organizationUnitAddress;
-//    private String organizationUnitCity;
+    @Column("address")
+    private String organizationUnitAddress;
 
-    //private AppUser appUser;
+    @Column("city")
+    private String organizationUnitCity;
 
-    //private City cityId;
+    // app user id
+
+    // city id
 }

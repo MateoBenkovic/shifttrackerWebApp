@@ -2,6 +2,7 @@ package com.hita.shifttracker.controller;
 
 import com.hita.shifttracker.model.AppUser;
 import com.hita.shifttracker.repository.AppUserRepository;
+import com.hita.shifttracker.service.AppUserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,10 +14,10 @@ import java.util.List;
 @Controller
 public class LoginController {
 
-    private AppUserRepository appUserRepository;
+    private final AppUserService appUserService;
 
-    public LoginController(AppUserRepository appUserRepository) {
-        this.appUserRepository = appUserRepository;
+    public LoginController(AppUserService appUserService) {
+        this.appUserService = appUserService;
     }
 
     @GetMapping("/login")
@@ -33,7 +34,7 @@ public class LoginController {
     public String loginProcess(@RequestParam("email") String email, @RequestParam("password") String password,
                                Model model, HttpSession session) {
 
-        List<AppUser> appUsers = appUserRepository.findAll();
+        List<AppUser> appUsers = appUserService.getAllAppUsersWithTeamAndOrganizationUnit();
         AppUser appUser = null;
         for(AppUser a : appUsers) {
             if(a.getEmail().equals(email) && a.getPassword().equals(password)) {
@@ -43,7 +44,7 @@ public class LoginController {
         if (appUser != null) {
             if (appUser.getAppRole().getRoleUserTypeCode().equals("R")) {
                 session.setAttribute("appUser", appUser);
-                return "redirect:/employee/dashboard";
+                return "redirect:/employee/workhour/list";
             } else if (appUser.getAppRole().getRoleUserTypeCode().equals("S")) {
                 session.setAttribute("appUser", appUser);
                 return "redirect:/head_nurse/dashboard";

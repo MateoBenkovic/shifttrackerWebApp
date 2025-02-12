@@ -1,24 +1,25 @@
 package com.hita.shifttracker.model;
 
-import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Entity
+
 @Table(name = "app_role")
 @Data
 public class AppRole {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column("id")
     private int id;
 
-    @Column(name = "name")
+    @Column("name")
     private String roleName;
 
-    @Column(name = "order_number")
+    @Column("order_number")
     private int roleOrderNumber;
 
-    @Column(name = "user_type_code", length = 1)
+    @Column("user_type_code")
     private String roleUserTypeCode;
 }
