@@ -24,32 +24,43 @@
             margin-bottom: 20px;
         }
         .schedule-table {
-            background-color: white;
-            border-radius: 4px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        border: 3px solid #333333;
+        overflow: hidden;
         }
         .schedule-table th {
-            background-color: #f8f9fa;
-            font-weight: normal;
-            text-align: center;
-            min-width: 40px;
-            cursor: pointer;
+        background-color: #f1f3f5;
+        font-weight: bold;
+        text-align: center;
+        min-width: 40px;
+        border-bottom: 2px solid #333333;
+        cursor: pointer;
         }
         .calendar-day:hover {
             background: rgba(255, 193, 7, 0.8) !important;
         }
         .schedule-table td {
-            text-align: center;
-            padding: 8px;
+        text-align: center;
+        padding: 8px;
+        border: 1px solid #dee2e6;
         }
         td.weekend {
-            background-color: #929292;
+            background-color: #FFEE97;
         }
         .work-type {
             text-align: left !important;
             font-weight: 500;
         }
         .total-row {
-            background-color: #e9ecef;
+        border-top: 2px solid #333333;
+        border-bottom: 2px solid #333333;
+        font-weight: bold;
+        }
+        .table-responsive {
+        border: 2px solid #333333;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         .info-section p {
             margin-bottom: 1px;
@@ -89,7 +100,40 @@
     padding: 5px;
     transition: all 0.3s ease-in-out;
 }
+        .card {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease;
+        }
 
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .card-text {
+            font-size: 14px;
+            color: #4d4d4d;
+        }
+
+        .card:hover {
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+        input[type="month"] {
+            width: 200px;
+            height: 40px;
+            padding: 5px;
+            font-size: 16px;
+            border: 2px solid #a3a3a3;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
     </style>
 </head>
@@ -116,9 +160,13 @@
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li class="px-3 py-1 text-muted" th:text="${appUser.appRole.roleName}">Admin</li>
                     <li class="px-3 pb-2 text-muted small" th:text="${appUser.email}">admin@example.com</li>
-<!--                    <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profil</a></li>-->
-<!--                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Postavke</a></li>-->
-                    <li><button class="dropdown-item" onclick="location.href = '/logout'"><i class="bi bi-box-arrow-right"></i> Odjava</button></li>
+                    <!--                    <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profil</a></li>-->
+                    <!--                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Postavke</a></li>-->
+                    <li>
+                        <button class="dropdown-item" onclick="location.href = '/logout'"><i
+                                class="bi bi-box-arrow-right"></i> Odjava
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -130,48 +178,45 @@
     <div class="info-section mb-0 pb-0">
         <div class="row">
             <div class="col-md-6">
-                <h5 class="mb-3">Podaci o zaposleniku</h5>
-                <p><strong>Ime i Prezime: </strong> <span th:text="${appUser.firstName + ' ' + appUser.lastName}">Ivan Horvat</span></p>
-                <p><strong>Radna jedinica: </strong> <span th:text="${appUser.team.teamName + ' ' + appUser.organizationUnit.organizationUnitName}">Tim 1</span></p>
+                <div class="card">
+                    <div class="card-body">
+                        <p class="mb-3 card-title">Podaci o zaposleniku</p>
+                        <p class="card-text"><strong>Ime i Prezime: </strong> <span
+                                th:text="${appUser.firstName + ' ' + appUser.lastName}">Ivan Horvat</span></p>
+                        <p class="card-text"><strong>Radna jedinica: </strong> <span
+                                th:text="${appUser.team.teamName + ' ' + appUser.organizationUnit.organizationUnitName}">Tim 1</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="container info-section pb-3 pt-2">
+                    <div class="row align-items-center justify-content-center text-center">
+                        <div class="col-md-6 d-flex justify-content-center">
+                            <input type="month" id="monthYearSelection">
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-center">
+                            <p class="mb-0 ps-4"><strong>Propisani mjesečni fond sati:</strong> 184</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6">
-                <h5 class="mb-3">Podaci o poslodavcu</h5>
-                <p><strong>Naziv:</strong><span th:text="' ' + ${company.companyName}">Hitna KZŽ</span></p>
-                <p><strong>Adresa:</strong> <span th:text="' ' + ${company.companyAddress} + ', ' + ${company.postalCode} + ', ' + ${company.companyCity}">Ulica Mirka Crkvenca 1, 49000, Krapina</span></p>
-                <p><strong>OIB:</strong><span th:text="' ' + ${company.companyTaxId}"> 17813384799</span></p>
-                <p><strong>IBAN:</strong> <span th:text="' ' + ${company.companyIBAN}">HR7223400091110492278</span></p>
-            </div>
-        </div>
-    </div>
 
-    <!-- Schedule Controls -->
-    <div class="info-section pb-3">
-        <div class="row align-items-center">
-            <div class="col-md-2">
-                <select class="form-select" id="monthSelect">
-                    <option value="1">Siječanj</option>
-                    <option value="2">Veljača</option>
-                    <option value="3">Ožujak</option>
-                    <option value="4">Travanj</option>
-                    <option value="5">Svibanj</option>
-                    <option value="6">Lipanj</option>
-                    <option value="7">Srpanj</option>
-                    <option value="8">Kolovoz</option>
-                    <option value="9">Rujan</option>
-                    <option value="10">Listopad</option>
-                    <option value="11">Studeni</option>
-                    <option value="12">Prosinac</option>
-                </select>
-            </div>
-            <div class="col-md-10">
-                <p class="mb-0 ps-4"><strong>Propisani mjesečni fond sati:</strong> 184</p>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="mb-3 card-title">Podaci o poslodavcu</p>
+                        <p class="card-text"><strong>Naziv:</strong> Hitna KZŽ</p>
+                        <p class="card-text"><strong>Adresa:</strong> Ulica Mirka Crkvenca 1, 49000, Krapina</p>
+                        <p class="card-text"><strong>OIB:</strong> 17813384799</p>
+                        <p class="card-text"><strong>IBAN:</strong> HR7223400091110492278</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Schedule Table -->
     <div class="table-responsive">
-        <table class="table schedule-table">
+        <table class="table schedule-table table-hover mb-0">
             <thead>
             <tr id="calendarRow">
                 <!--                <th>Vrsta rada</th>-->
@@ -211,6 +256,76 @@
             </tr>
             </thead>
             <tbody>
+            <tr>
+                <td class="work-type">Početak rada prema rasporedu</td>
+                <td>-</td>
+                <td>07</td>
+                <td>19</td>
+                <td class="weekend">00</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>19</td>
+                <td>00</td>
+                <td>00</td>
+                <td>-</td>
+                <td class="weekend">07</td>
+                <td class="weekend">07</td>
+                <td>19</td>
+                <td>00</td>
+                <td>-</td>
+                <td>-</td>
+                <td>07</td>
+                <td class="weekend">23</td>
+                <td class="weekend">00</td>
+                <td>07</td>
+                <td>-</td>
+                <td>07</td>
+                <td>08</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            <tr style="border-bottom: 2px solid #333333;">
+                <td class="work-type">Završetak rada prema rasporedu</td>
+                <td>-</td>
+                <td>19</td>
+                <td>24</td>
+                <td class="weekend">07</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>24</td>
+                <td>07</td>
+                <td>07</td>
+                <td>-</td>
+                <td class="weekend">19</td>
+                <td class="weekend">19</td>
+                <td>24</td>
+                <td>07</td>
+                <td>-</td>
+                <td>-</td>
+                <td>19</td>
+                <td class="weekend">24</td>
+                <td class="weekend">07</td>
+                <td>19</td>
+                <td>-</td>
+                <td>19</td>
+                <td>10</td>
+                <td>-</td>
+                <td class="weekend">-</td>
+                <td class="weekend">-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
             <tr>
                 <td class="work-type">Početak rada</td>
                 <td>-</td>
