@@ -109,15 +109,15 @@
         </div>
         <div class="navbar-nav ms-auto d-flex align-items-center">
             <div class="d-flex align-items-center me-3">
-                <span th:text="${session.appUser.firstName + ' ' + session.appUser.lastName}">ime korisnika</span>
+                <span th:text="${appUser.firstName + ' ' + appUser.lastName}">ime korisnika</span>
             </div>
             <div class="dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                     <i class="bi bi-person-circle fs-4"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li class="px-3 py-1 text-muted" th:text="${session.appUser.appRole.roleName}">Admin</li>
-                    <li class="px-3 pb-2 text-muted small" th:text="${session.appUser.email}">admin@example.com</li>
+                    <li class="px-3 py-1 text-muted" th:text="${appUser.roleName}">Admin</li>
+                    <li class="px-3 pb-2 text-muted small" th:text="${appUser.email}">admin@example.com</li>
                     <li><button class="dropdown-item" onclick="location.href = '/logout'"><i class="bi bi-box-arrow-right"></i> Odjava</button></li>
                 </ul>
             </div>
@@ -170,9 +170,9 @@
                     <td>
                         <a th:text="${employee.firstName} + ' ' + ${employee.lastName}" th:href="@{/head_nurse/workhour/list(id=${employee.id})}" class="employeeName"></a>
                     </td>
-                    <td th:text="${employee.teamRole.teamRoleName}"></td>
-                    <td th:text="${employee.team.teamName}"></td>
-                    <td th:text="${employee.organizationUnit.organizationUnitName}"></td>
+                    <td th:text="${employee.roleName}"></td>
+                    <td th:text="${employee.teamName}"></td>
+                    <td th:text="${employee.orgUnitName}"></td>
                     <td>
                         <a th:href="@{/head_nurse/workhour/list(id=${employee.id})}" class="btn btn-outline-dark">Pregled</a>
                     </td>
