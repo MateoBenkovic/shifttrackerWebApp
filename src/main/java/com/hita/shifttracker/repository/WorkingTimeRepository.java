@@ -180,6 +180,9 @@ public interface WorkingTimeRepository extends CrudRepository<WorkingTime, Integ
     @Query("INSERT INTO working_time (app_user_id, date_from, hours_from, date_to, hours_to, total_hours, shift_id) " +
             "VALUES (:appUserId, :dateFrom, :hoursFrom, :dateTo, :hoursTo, :totalHours, :shiftId) " +
             "ON CONFLICT (app_user_id, date_from, date_to) " +
-            "DO UPDATE SET hours_from = :hoursFrom, hours_to = :hoursTo, total_hours = :totalHours, shift_id = :shiftId")
+            "DO UPDATE SET hours_from = :hoursFrom, hours_to = :hoursTo, total_hours = :totalHours, shift_id = :shiftId, date_from = :dateFrom, date_to = :dateTo")
     void insertOrUpdateWorkingTime(int appUserId, LocalDate dateFrom, int hoursFrom, LocalDate dateTo, int hoursTo, int totalHours, int shiftId);
+
+
+    WorkingTime findWorkingTimeByAppUserAndDate();
 }
