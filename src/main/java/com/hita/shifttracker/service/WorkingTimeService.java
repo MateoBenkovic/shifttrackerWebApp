@@ -22,7 +22,8 @@ public class WorkingTimeService {
 
         workingTimeRepository.insertOrUpdateWorkingTime(workingTime.getAppUserId(), workingTime.getDateFrom(),
                 workingTime.getHoursFrom(), workingTime.getDateTo(), workingTime.getHoursTo(),
-                workingTime.getTotalHours(), workingTime.getShiftId());
+                workingTime.getTotalHours(), workingTime.getShiftId(), workingTime.getHoursFrom(),
+                workingTime.getHoursTo(), workingTime.getTotalHours());
     }
 
 }
