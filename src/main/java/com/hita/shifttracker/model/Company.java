@@ -1,53 +1,53 @@
 package com.hita.shifttracker.model;
 
-import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
 
-@Entity
 @Table(name = "company")
 @Data
 public class Company {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "company_id", nullable = false)
+    @Column("company_id")
     private int companyId;
 
-    @Column(name = "company_name", nullable = false, length = 100)
+    @Column("company_name")
     private String companyName;
 
-    @Column(name = "postal_code", nullable = false, length = 5)
+    @Column("postal_code")
     private String postalCode;
 
-    @Column(name = "company_address", nullable = false, length = 50)
+    @Column("company_address")
     private String companyAddress;
 
-    @Column(name = "company_bank", nullable = false, length = 50)
+    @Column("company_bank")
     private String companyBank;
 
-    @Column(name = "company_tax_id", nullable = false, length = 11)
+    @Column("company_tax_id")
     private String companyTaxId;
 
-    @Column(name = "company_iban", nullable = false, length = 21)
+    @Column("company_iban")
     private String companyIBAN;
 
-    @Column(name = "company_email", nullable = false, length = 50)
+    @Column("company_email")
     private String companyEmail;
 
-    @Column(name = "company_phone", nullable = false, length = 30)
+    @Column("company_phone")
     private String companyPhone;
 
-    @Column(name = "company_fax", nullable = false, length = 30)
+    @Column("company_fax")
     private String companyFax;
 
-    @Column(name = "base_salary_month", precision = 10, scale = 2)
+    @Column("base_salary_month")
     private BigDecimal baseSalaryMonth;
 
-    @Column(name = "base_salary_hour", precision = 8, scale = 4)
+    @Column("base_salary_hour")
     private BigDecimal baseSalaryHour;
 
-    @Column(name = "company_city", nullable = false)
+    @Column("company_city")
     private String companyCity;
 }
