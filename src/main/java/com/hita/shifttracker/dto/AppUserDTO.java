@@ -10,6 +10,7 @@ public class AppUserDTO {
     private String lastName;
     private String email;
     private String password;
+    private String userCode;
 
     // role
     private String roleName;

@@ -154,7 +154,7 @@
 
         <div class="navbar-nav ms-auto d-flex align-items-center">
             <div class="d-flex align-items-center me-3">
-                <span th:text="${session.appUser.firstName + ' ' + session.appUser.lastName}">ime korisnika</span>
+                <span th:text="${appUser.firstName + ' ' + appUser.lastName}">ime korisnika</span>
             </div>
 
             <div class="dropdown">
@@ -162,8 +162,8 @@
                     <i class="bi bi-person-circle fs-4"></i> <!-- Dodano fs-4 za veći font-size -->
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li class="px-3 py-1 text-muted" th:text="${session.appUser.appRole.roleName}">Admin</li>
-                    <li class="px-3 pb-2 text-muted small" th:text="${session.appUser.email}">admin@example.com</li>
+                    <li class="px-3 py-1 text-muted" th:text="${appUser.roleName}">Admin</li>
+                    <li class="px-3 pb-2 text-muted small" th:text="${appUser.email}">admin@example.com</li>
                     <!--                    <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profil</a></li>-->
                     <!--                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Postavke</a></li>-->
                     <li>
@@ -191,7 +191,7 @@
                                 th:text="${employee.firstName + ' ' + employee.lastName}">Ivan Horvat</span>
                         </p>
                         <p class="card-text"><strong>Radna jedinica: </strong> <span
-                                th:text="${employee.team.teamName + ' ' + employee.organizationUnit.organizationUnitName}">Tim 1</span>
+                                th:text="${employee.teamName + ' ' + employee.orgUnitName}">Tim 1</span>
                         </p>
                     </div>
                 </div>
@@ -210,10 +210,10 @@
                 <div class="card">
                     <div class="card-body">
                         <p class="mb-3 card-title">Podaci o poslodavcu</p>
-                        <p class="card-text"><strong>Naziv:</strong> Hitna KZŽ</p>
-                        <p class="card-text"><strong>Adresa:</strong> Ulica Mirka Crkvenca 1, 49000, Krapina</p>
-                        <p class="card-text"><strong>OIB:</strong> 17813384799</p>
-                        <p class="card-text"><strong>IBAN:</strong> HR7223400091110492278</p>
+                        <p class="card-text"><strong>Naziv:</strong> <span th:text="${' ' + company.companyName}">Hitna KZŽ</span></p>
+                        <p class="card-text"><strong>Adresa:</strong> <span th:text="${' ' + company.companyAddress + ', ' + company.postalCode + ', ' + company.companyCity}">Ulica Mirka Crkvenca 1, 49000, Krapina</span></p>
+                        <p class="card-text"><strong>OIB:</strong> <span th:text="${' ' + company.companyTaxId}">17813384799</span></p>
+                        <p class="card-text"><strong>IBAN:</strong> <span th:text="${' ' + company.companyIBAN}">HR7223400091110492278</span></p>
                     </div>
                 </div>
             </div>
@@ -462,146 +462,42 @@
                 <td>-</td>
                 <td>156</td>
             </tr>
-            <tr>
-                <td class="work-type">Redovan rad</td>
+            <tr th:each="wtuv : ${wtuvs}">
+                <td class="work-type" th:text="${wtuv.workTypeName}">Redovan rad subota</td>
+                <td th:text="${wtuv.day01}">-</td>
+                <td th:text="${wtuv.day02}">-</td>
+                <td th:text="${wtuv.day03}">-</td>
+                <td class="weekend" th:text="${wtuv.day04}">-</td>
+                <td class="weekend" th:text="${wtuv.day05}">-</td>
+                <td th:text="${wtuv.day06}">-</td>
+                <td th:text="${wtuv.day07}">-</td>
+                <td th:text="${wtuv.day08}">-</td>
+                <td th:text="${wtuv.day09}">-</td>
+                <td th:text="${wtuv.day10}">-</td>
+                <td class="weekend" th:text="${wtuv.day11}">-</td>
+                <td class="weekend" th:text="${wtuv.day12}">5</td>
+                <td th:text="${wtuv.day13}">-</td>
+                <td th:text="${wtuv.day14}">-</td>
+                <td th:text="${wtuv.day15}">-</td>
+                <td th:text="${wtuv.day16}">-</td>
+                <td th:text="${wtuv.day17}">-</td>
+                <td class="weekend" th:text="${wtuv.day18}">-</td>
+                <td class="weekend" th:text="${wtuv.day19}">-</td>
+                <td th:text="${wtuv.day20}">-</td>
+                <td th:text="${wtuv.day21}">-</td>
+                <td th:text="${wtuv.day22}">-</td>
+                <td th:text="${wtuv.day23}">-</td>
+                <td th:text="${wtuv.day24}">-</td>
+                <td class="weekend" th:text="${wtuv.day25}">-</td>
+                <td class="weekend" th:text="${wtuv.day26}">-</td>
+                <td th:text="${wtuv.day27}">-</td>
+                <td th:text="${wtuv.day28}">-</td>
+                <td th:text="${wtuv.day29}">-</td>
+                <td th:text="${wtuv.day30}">-</td>
+                <td th:text="${wtuv.day31}">-</td>
                 <td>-</td>
-                <td>7</td>
-                <td>-</td>
-                <td class="weekend">1</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>1</td>
-                <td>3</td>
-                <td>-</td>
-                <td class="weekend">7</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>1</td>
-                <td>-</td>
-                <td>-</td>
-                <td>7</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>7</td>
-                <td>2</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>36</td>
             </tr>
-            <tr>
-                <td class="work-type">Redovan rad II. smjena</td>
-                <td>-</td>
-                <td>5</td>
-                <td>3</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>3</td>
-                <td>3</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="weekend">5</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>5</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>5</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>29</td>
-            </tr>
-            <tr>
-                <td class="work-type">Redovan rad noć</td>
-                <td>-</td>
-                <td>-</td>
-                <td>2</td>
-                <td class="weekend">6</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>2</td>
-                <td>8</td>
-                <td>6</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>6</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="weekend">1</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>31</td>
-            </tr>
-            <tr>
-                <td class="work-type">Redovan rad subota</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">5</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>8</td>
-            </tr>
+
             <!-- Add more work types... -->
             </tbody>
         </table>

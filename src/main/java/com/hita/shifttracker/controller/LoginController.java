@@ -48,7 +48,7 @@ public class LoginController {
                 return "redirect:/employee/workhour/list";
             } else if (appUser.getRoleUserTypeCode().equals("S")) {
                 session.setAttribute("appUser", appUser);
-                return "redirect:/head_nurse/dashboard";
+                return "redirect:/head_nurse/employee/list";
             }
         }
         model.addAttribute("error", "Netočan email ili lozinka!");

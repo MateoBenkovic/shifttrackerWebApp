@@ -158,7 +158,7 @@
                     <i class="bi bi-person-circle fs-4"></i> <!-- Dodano fs-4 za veći font-size -->
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li class="px-3 py-1 text-muted" th:text="${appUser.appRole.roleName}">Admin</li>
+                    <li class="px-3 py-1 text-muted" th:text="${appUser.roleName}">Admin</li>
                     <li class="px-3 pb-2 text-muted small" th:text="${appUser.email}">admin@example.com</li>
                     <!--                    <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profil</a></li>-->
                     <!--                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Postavke</a></li>-->
@@ -184,7 +184,7 @@
                         <p class="card-text"><strong>Ime i Prezime: </strong> <span
                                 th:text="${appUser.firstName + ' ' + appUser.lastName}">Ivan Horvat</span></p>
                         <p class="card-text"><strong>Radna jedinica: </strong> <span
-                                th:text="${appUser.team.teamName + ' ' + appUser.organizationUnit.organizationUnitName}">Tim 1</span>
+                                th:text="${appUser.teamName + ' ' + appUser.orgUnitName}">Tim 1</span>
                         </p>
                     </div>
                 </div>
@@ -204,10 +204,10 @@
                 <div class="card">
                     <div class="card-body">
                         <p class="mb-3 card-title">Podaci o poslodavcu</p>
-                        <p class="card-text"><strong>Naziv:</strong> Hitna KZŽ</p>
-                        <p class="card-text"><strong>Adresa:</strong> Ulica Mirka Crkvenca 1, 49000, Krapina</p>
-                        <p class="card-text"><strong>OIB:</strong> 17813384799</p>
-                        <p class="card-text"><strong>IBAN:</strong> HR7223400091110492278</p>
+                        <p class="card-text"><strong>Naziv:</strong> <span th:text="${' ' + company.companyName}">Hitna KZŽ</span></p>
+                        <p class="card-text"><strong>Adresa:</strong> <span th:text="${' ' + company.companyAddress + ', ' + company.postalCode + ', ' + company.companyCity}">Ulica Mirka Crkvenca 1, 49000, Krapina</span></p>
+                        <p class="card-text"><strong>OIB:</strong> <span th:text="${' ' + company.companyTaxId}">17813384799</span></p>
+                        <p class="card-text"><strong>IBAN:</strong> <span th:text="${' ' + company.companyIBAN}">HR7223400091110492278</span></p>
                     </div>
                 </div>
             </div>
@@ -432,12 +432,7 @@
                 <td>156</td>
             </tr>
 
-            <!-- Add more work types... -->
-            </tbody>
-
-
-            <tbody>
-            <tr th:each="wtuv : ${workingTimesUserView}">
+            <tr th:each="wtuv : ${wtuvs}">
                 <td class="work-type" th:text="${wtuv.workTypeName}">Redovan rad subota</td>
                 <td th:text="${wtuv.day01}">-</td>
                 <td th:text="${wtuv.day02}">-</td>
@@ -472,7 +467,9 @@
                 <td th:text="${wtuv.day31}">-</td>
                 <td>-</td>
             </tr>
+            <!-- Add more work types... -->
             </tbody>
+
 
         </table>
     </div>
