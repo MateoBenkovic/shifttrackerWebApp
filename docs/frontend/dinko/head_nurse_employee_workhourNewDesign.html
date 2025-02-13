@@ -31,9 +31,9 @@
     .schedule-table {
         background-color: #ffffff;
         border-radius: 8px;
-        border: 1px solid #dee2e6; /* Updated border style */
+        border: 2px solid #333333; /* Updated: Thicker outer border */
         overflow: hidden;
-        margin-bottom: 0; /* Updated margin */
+        margin-bottom: 0;
     }
     .schedule-table th {
         background-color: #f8f9fa;
@@ -43,17 +43,21 @@
         border: 1px solid #dee2e6;
         min-width: 40px;
     }
+.schedule-table th {
+  border-bottom: 2px solid #333333;
+}
     .schedule-table td {
         text-align: center;
         padding: 12px 8px;
         border: 1px solid #dee2e6;
+
     }
     td.weekend {
         background-color: #f0f0f0;
     }
     .work-type {
         text-align: left !important;
-        font-weight: 500;
+        font-weight: bold;
         background-color: #ffffff !important;
         border-right: 1px solid #dee2e6 !important;
     }
@@ -67,7 +71,7 @@
         margin-bottom: 4px;
     }
     .table-responsive {
-        border: 1px solid #dee2e6;
+        border: 2px solid #333333; /* Updated: Thicker outer border */
         border-radius: 8px;
         overflow: hidden;
         margin-top: 1rem;
@@ -129,15 +133,15 @@
         padding: 1.25rem;
     }
     .card-body div:not(:last-child) {
-        margin-bottom: 0.5rem; /* Updated spacing */
+        margin-bottom: 0.5rem;
     }
     .card-body strong {
         font-weight: 500;
         margin-right: 0.5rem;
-        display: inline-block; /* Updated display */
+        display: inline-block;
     }
     .card.mb-4 {
-        margin-bottom: 0 !important; /* Updated margin */
+        margin-bottom: 0 !important;
     }
     .form-select {
         border: 1px solid #dee2e6;
@@ -153,6 +157,13 @@
     }
     .col-md-6 .card {
         height: 100%;
+    }
+    /* New styles for table borders */
+    .schedule-table tbody tr:nth-child(3) {
+        border-bottom: 2px solid #333333; /* Thicker bottom border for "UKUPNO RADNO VRIJEME" row */
+    }
+    .schedule-table tbody tr:nth-child(3) td {
+        border-top: 2px solid #333333; /* Thicker top border for "UKUPNO RADNO VRIJEME" row */
     }
   </style>
 </head>
