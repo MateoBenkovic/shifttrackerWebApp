@@ -24,7 +24,7 @@ public class TestController {
 
 
         workingTimeRepository.insertOrUpdateWorkingTime(2, LocalDate.parse("2025-02-12"), 19,
-                LocalDate.parse("2025-02-13"), 7, 12, 2, 19, 7, 12);
+                LocalDate.parse("2025-02-13"), 7, 12, 2);
 
         return "test";
     }
