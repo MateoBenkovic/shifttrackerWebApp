@@ -103,7 +103,7 @@
     <div class="container-fluid">
         <div class="navbar-nav">
             <img src="/logo.png" style="height: 50px; width:100px" class="me-5" alt="Logo">
-            <a class="nav-link active me-4" href="/head_nurse/employee/list">Zaposlenici</a>
+            <a class="nav-link active me-4" href="/head_nurse/employee/list">ABC Zaposlenici</a>
             <a class="nav-link me-4" href="#">Raspored</a>
             <a class="nav-link me-4" href="#">Izvještaj</a>
         </div>
@@ -170,8 +170,8 @@
                     <td>
                         <a th:text="${employee.firstName} + ' ' + ${employee.lastName}" th:href="@{/head_nurse/workhour/list(id=${employee.id})}" class="employeeName"></a>
                     </td>
-                    <td th:text="${employee.roleName}"></td>
-                    <td th:text="${employee.teamName}"></td>
+                    <td th:text="${employee.roleName}">Vozač</td>
+                    <td th:text="${employee.teamName}">Tim 1</td>
                     <td th:text="${employee.orgUnitName}"></td>
                     <td>
                         <a th:href="@{/head_nurse/workhour/list(id=${employee.id})}" class="btn btn-outline-dark">Pregled</a>
