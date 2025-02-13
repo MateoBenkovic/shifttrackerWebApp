@@ -23,8 +23,8 @@ public class TestController {
     public String test() {
 
 
-        workingTimeRepository.insertOrUpdateWorkingTime(2, LocalDate.parse("2025-02-12"), 19,
-                LocalDate.parse("2025-02-13"), 7, 12, 2);
+        workingTimeRepository.insertOrUpdateWorkingTime(2, LocalDate.parse("2025-02-12"), 7,
+                LocalDate.parse("2025-02-12"), 19, 12, 1);
 
         return "test";
     }
