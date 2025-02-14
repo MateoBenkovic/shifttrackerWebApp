@@ -5,8 +5,8 @@ document.getElementById("applyFilter").addEventListener("click", function() {
     const rows = document.querySelectorAll("table tbody tr");
 
     rows.forEach(row => {
-        const uloga = row.cells[1].textContent.trim(); // Uloga (2. stupac, index 1)
-        const radnaJedinica = row.cells[3].textContent.trim(); // Radna jedinica (4. stupac, index 3)
+        const uloga = row.cells[3].textContent.trim(); // Uloga (4. stupac, index 3)
+        const radnaJedinica = row.cells[1].textContent.trim(); // Radna jedinica (2. stupac, index 1)
 
         if ((selectedIspostava === "" || radnaJedinica === selectedIspostava) &&
             (selectedUloga === "" || uloga === selectedUloga)) {
