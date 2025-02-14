@@ -16,21 +16,10 @@ import java.util.List;
 @Controller
 public class TestController {
 
-    @Autowired
-    private WorkingTimeRepository workingTimeRepository;
 
     @GetMapping("/test")
     public String test() {
 
-//
-//        workingTimeRepository.insertOrUpdateWorkingTime(2, LocalDate.parse("2025-02-12"), 7,
-//                LocalDate.parse("2025-02-12"), 19, 12, 1);
-
-        List<WorkingTime> workingTimes = workingTimeRepository.findByAppUserIdAndMonth(1,2);
-
-        for(WorkingTime w: workingTimes) {
-            System.out.println(w.toString());
-        }
 
         return "test";
     }

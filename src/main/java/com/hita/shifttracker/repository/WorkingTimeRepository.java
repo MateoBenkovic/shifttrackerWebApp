@@ -16,15 +16,18 @@ import java.util.List;
 public interface WorkingTimeRepository extends CrudRepository<WorkingTime, Integer> {
 
     @Query("INSERT INTO working_time (app_user_id, date_from, hours_from, date_to, hours_to, total_hours, shift_id) " +
-            "VALUES (:appUserId, :dateFrom, :hoursFrom, :dateTo, :hoursTo, :totalHours, :shiftId) " +
-            "ON CONFLICT (app_user_id, date_from, date_to) " +
-            "DO UPDATE SET hours_from = :hoursFrom, hours_to = :hoursTo, total_hours = :totalHours, shift_id = :shiftId, date_from = :dateFrom, date_to = :dateTo")
-    void insertOrUpdateWorkingTime(int appUserId, LocalDate dateFrom, int hoursFrom, LocalDate dateTo, int hoursTo, int totalHours, int shiftId);
+           "VALUES (:appUserId, :dateFrom, :hoursFrom, :dateTo, :hoursTo, :totalHours, :shiftId)")
+    void insertWorkingTime(int appUserId, LocalDate dateFrom, int hoursFrom, LocalDate dateTo, int hoursTo, int totalHours, int shiftId);
+
+    @Query("SELECT wt.id_work_time, wt.app_user_id, wt.date_from, wt.hours_from, wt.date_to, wt.total_hours, wt.shift_id " +
+           "FROM working_time wt WHERE wt.app_user_id = :appUserId AND wt.date_from = :dateFrom")
+    WorkingTime findWorkingTimeByAppUserIdAndDateFrom(int appUserId, LocalDate dateFrom);
+
+    @Query("UPDATE working_time wt" +
+           "SET wt.date_from = :workingTime.getDateFrom(), wt.hours_from = :workingTime.getHoursFrom(), wt.date_to = :workingTime.getDateTo(), " +
+           "wt.hours_to = :workingTime.getHoursTo() " +
+           "WHERE wt.app_user_id = :workingTime.getAppUserId() AND wt.date_from = :workingTime.getDateFrom()")
+    void updateWorkingTimeByAppUserId(WorkingTime workingTime);
 
 
-    @Query("SELECT * FROM working_time wt WHERE app_user_id = :appUserId AND date_from = :dateFrom")
-    List<WorkingTime> findWorkingTimeByAppUserIdAndDate(int appUserId, LocalDate dateFrom);
-
-    @Query("SELECT * FROM working_time wt WHERE app_user_id = :appUserId AND EXTRACT(MONTH FROM wt.date_from) = :month")
-    List<WorkingTime> findByAppUserIdAndMonth(int appUserId, int month);
 }

@@ -24,23 +24,17 @@ public class WorkingTimeService {
     // add workhour
     public void addWorkingTime(WorkingTime workingTime){
 
-        workingTimeRepository.insertOrUpdateWorkingTime(workingTime.getAppUserId(), workingTime.getDateFrom(),
-                workingTime.getHoursFrom(), workingTime.getDateTo(), workingTime.getHoursTo(),
-                workingTime.getTotalHours(), workingTime.getShiftId());
-    }
+        // check if exists
+        WorkingTime wt = workingTimeRepository.findWorkingTimeByAppUserIdAndDateFrom(workingTime.getAppUserId(), workingTime.getDateFrom());
+        if(wt == null) {
+            workingTimeRepository.insertWorkingTime(workingTime.getAppUserId(), workingTime.getDateFrom(),
+                    workingTime.getHoursFrom(), workingTime.getDateTo(), workingTime.getHoursTo(),
+                    workingTime.getTotalHours(), workingTime.getShiftId());
+        } else {
+            workingTimeRepository.updateWorkingTimeByAppUserId(workingTime);
+        }
 
-    public List<WorkingTime> getWorkingTimeByDate(int appUserId, LocalDate dateFrom) {
-        List<WorkingTime> workingTimes = workingTimeRepository.findWorkingTimeByAppUserIdAndDate(appUserId, dateFrom);
-        return workingTimes;
-    }
 
-    public List<WorkingTime> getWorkingTimeByAppUserIdAndMonth(AppUser appUser, LocalDate date){
-
-        int appUserId = appUser.getId();
-        int month = date.getMonthValue();
-        List<WorkingTime> workingTimes = workingTimeRepository.findByAppUserIdAndMonth(appUserId, month);
-
-        return workingTimes;
     }
 
 }
