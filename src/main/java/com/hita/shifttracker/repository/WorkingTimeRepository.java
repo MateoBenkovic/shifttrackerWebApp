@@ -1,33 +1,88 @@
 package com.hita.shifttracker.repository;
 
 import com.hita.shifttracker.model.WorkingTime;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jdbc.repository.query.Modifying;
-import org.springframework.data.jdbc.repository.query.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Repository
+public class WorkingTimeRepository {
 
-public interface WorkingTimeRepository extends CrudRepository<WorkingTime, Integer> {
+    private final JdbcTemplate jdbcTemplate;
 
-    @Query("INSERT INTO working_time (app_user_id, date_from, hours_from, date_to, hours_to, total_hours, shift_id) " +
-           "VALUES (:appUserId, :dateFrom, :hoursFrom, :dateTo, :hoursTo, :totalHours, :shiftId)")
-    void insertWorkingTime(int appUserId, LocalDate dateFrom, int hoursFrom, LocalDate dateTo, int hoursTo, int totalHours, int shiftId);
+    public WorkingTimeRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
-    @Query("SELECT wt.id_work_time, wt.app_user_id, wt.date_from, wt.hours_from, wt.date_to, wt.total_hours, wt.shift_id " +
-           "FROM working_time wt WHERE wt.app_user_id = :appUserId AND wt.date_from = :dateFrom")
-    WorkingTime findWorkingTimeByAppUserIdAndDateFrom(int appUserId, LocalDate dateFrom);
+    // without sched_id
+    public void insertWorkingTimeByAppUserId(WorkingTime workingTime) {
+        String sql = "INSERT INTO working_time (app_user_id, date_from, hours_from, date_to, hours_to," +
+                "total_hours, shift_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-    @Query("UPDATE working_time wt" +
-           "SET wt.date_from = :workingTime.getDateFrom(), wt.hours_from = :workingTime.getHoursFrom(), wt.date_to = :workingTime.getDateTo(), " +
-           "wt.hours_to = :workingTime.getHoursTo() " +
-           "WHERE wt.app_user_id = :workingTime.getAppUserId() AND wt.date_from = :workingTime.getDateFrom()")
-    void updateWorkingTimeByAppUserId(WorkingTime workingTime);
+        jdbcTemplate.update(sql, workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getHoursFrom(),
+                workingTime.getDateTo(), workingTime.getHoursTo(), workingTime.getTotalHours(), workingTime.getShiftId());
+    }
 
+    // find by app user id, date from
+    public WorkingTime findByAppUserIdAndDateFrom(int appUserId, LocalDate dateFrom) {
+        String sql = "SELECT wt.id_work_time, wt.app_user_id, wt.date_from, " +
+                "wt.hours_from, wt.date_to, wt.hours_to, wt.total_hours, wt.shift_id " +
+                "FROM working_time wt WHERE wt.app_user_id = ? AND wt.date_from = ?";
 
+        return jdbcTemplate.queryForObject(sql, new Object[]{appUserId, dateFrom},
+                (rs,rowNum) -> {
+                    WorkingTime workingTime = new WorkingTime();
+
+                    workingTime.setIdWorkTime(rs.getInt("id_work_time"));
+                    workingTime.setAppUserId(rs.getInt("app_user_id"));
+                    workingTime.setDateFrom(rs.getDate("date_from").toLocalDate());
+                    workingTime.setHoursFrom(rs.getInt("hours_from"));
+                    workingTime.setDateTo(rs.getDate("date_to").toLocalDate());
+                    workingTime.setHoursTo(rs.getInt("hours_to"));
+                    workingTime.setTotalHours(rs.getInt("total_hours"));
+                    workingTime.setShiftId(rs.getInt("shift_id"));
+
+                    return workingTime;
+                });
+
+    }
+
+    // exist by app user id and date from
+    public boolean existsByAppUserIdAndDateFrom(int appUserId, LocalDate dateFrom) {
+        String sql = "SELECT * FROM working_time WHERE app_user_id = ? AND date_from = ?";
+
+        // Using query to fetch a list of results (if any)
+        List<WorkingTime> resultList = jdbcTemplate.query(sql, new Object[]{appUserId, dateFrom},
+                (rs, rowNum) -> {
+                    WorkingTime workingTime = new WorkingTime();
+                    workingTime.setAppUserId(rs.getInt("app_user_id"));
+                    workingTime.setDateFrom(rs.getDate("date_from").toLocalDate());
+                    workingTime.setHoursFrom(rs.getInt("hours_from"));
+                    workingTime.setDateTo(rs.getDate("date_to").toLocalDate());
+                    workingTime.setHoursTo(rs.getInt("hours_to"));
+                    workingTime.setTotalHours(rs.getInt("total_hours"));
+                    workingTime.setShiftId(rs.getInt("shift_id"));
+                    return workingTime;
+                });
+
+        return !resultList.isEmpty();  // Returns true if list is not empty
+    }
+
+    // update working time
+    public void updateWorkingTimeByAppUserId(WorkingTime workingTime) {
+        String sql = "UPDATE working_time " +
+                "SET date_from = ?, hours_from = ?, date_to = ?, hours_to = ? " +
+                "WHERE app_user_id = ? AND date_from = ?" ;
+
+        jdbcTemplate.update(sql, workingTime.getDateFrom(), workingTime.getHoursFrom(), workingTime.getDateTo(),
+                workingTime.getHoursTo(), workingTime.getAppUserId(), workingTime.getDateFrom());
+    }
+
+    // delete all
+    public void deleteAll(){
+        String sql = "DELETE FROM working_time";
+        jdbcTemplate.update(sql);
+    }
 }

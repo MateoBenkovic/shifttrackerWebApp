@@ -462,40 +462,39 @@
                 <td>-</td>
                 <td>156</td>
             </tr>
-            <tr th:each="wtuv : ${wtuvs}">
-                <td class="work-type" th:text="${wtuv.workTypeName}">Redovan rad subota</td>
-                <td th:text="${wtuv.day01}">-</td>
-                <td th:text="${wtuv.day02}">-</td>
-                <td th:text="${wtuv.day03}">-</td>
-                <td class="weekend" th:text="${wtuv.day04}">-</td>
-                <td class="weekend" th:text="${wtuv.day05}">-</td>
-                <td th:text="${wtuv.day06}">-</td>
-                <td th:text="${wtuv.day07}">-</td>
-                <td th:text="${wtuv.day08}">-</td>
-                <td th:text="${wtuv.day09}">-</td>
-                <td th:text="${wtuv.day10}">-</td>
-                <td class="weekend" th:text="${wtuv.day11}">-</td>
-                <td class="weekend" th:text="${wtuv.day12}">5</td>
-                <td th:text="${wtuv.day13}">-</td>
-                <td th:text="${wtuv.day14}">-</td>
-                <td th:text="${wtuv.day15}">-</td>
-                <td th:text="${wtuv.day16}">-</td>
-                <td th:text="${wtuv.day17}">-</td>
-                <td class="weekend" th:text="${wtuv.day18}">-</td>
-                <td class="weekend" th:text="${wtuv.day19}">-</td>
-                <td th:text="${wtuv.day20}">-</td>
-                <td th:text="${wtuv.day21}">-</td>
-                <td th:text="${wtuv.day22}">-</td>
-                <td th:text="${wtuv.day23}">-</td>
-                <td th:text="${wtuv.day24}">-</td>
-                <td class="weekend" th:text="${wtuv.day25}">-</td>
-                <td class="weekend" th:text="${wtuv.day26}">-</td>
-                <td th:text="${wtuv.day27}">-</td>
-                <td th:text="${wtuv.day28}">-</td>
-                <td th:text="${wtuv.day29}">-</td>
-                <td th:text="${wtuv.day30}">-</td>
-                <td th:text="${wtuv.day31}">-</td>
-                <td>-</td>
+            <tr th:each="wti : ${wtis}">
+                <td th:text="${wti['work_type_num'] + '. ' + wti['work_type_name'] + ' - ' + wti['account_num']}"></td>
+                <td th:text="${wti['day1']}"></td>
+                <td th:text="${wti['day2']}"></td>
+                <td th:text="${wti['day3']}"></td>
+                <td th:text="${wti['day4']}"></td>
+                <td th:text="${wti['day5']}"></td>
+                <td th:text="${wti['day6']}"></td>
+                <td th:text="${wti['day7']}"></td>
+                <td th:text="${wti['day8']}"></td>
+                <td th:text="${wti['day9']}"></td>
+                <td th:text="${wti['day10']}"></td>
+                <td th:text="${wti['day11']}"></td>
+                <td th:text="${wti['day12']}"></td>
+                <td th:text="${wti['day13']}"></td>
+                <td th:text="${wti['day14']}"></td>
+                <td th:text="${wti['day15']}"></td>
+                <td th:text="${wti['day16']}"></td>
+                <td th:text="${wti['day17']}"></td>
+                <td th:text="${wti['day18']}"></td>
+                <td th:text="${wti['day19']}"></td>
+                <td th:text="${wti['day20']}"></td>
+                <td th:text="${wti['day21']}"></td>
+                <td th:text="${wti['day22']}"></td>
+                <td th:text="${wti['day23']}"></td>
+                <td th:text="${wti['day24']}"></td>
+                <td th:text="${wti['day25']}"></td>
+                <td th:text="${wti['day26']}"></td>
+                <td th:text="${wti['day27']}"></td>
+                <td th:text="${wti['day28']}"></td>
+                <td th:text="${wti['day29']}"></td>
+                <td th:text="${wti['day30']}"></td>
+                <td th:text="${wti['day31']}"></td>
             </tr>
 
             <!-- Add more work types... -->

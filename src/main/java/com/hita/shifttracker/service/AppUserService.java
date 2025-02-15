@@ -16,7 +16,23 @@ public class AppUserService {
         this.appUserRepository = appUserRepository;
     }
 
+    // find all employees
     public List<AppUserDTO> getAllAppUsersWithTeamAndOrganizationUnit() {
-        return appUserRepository.findAllWithAppRoleAndTeamAndOrganizationUnit();
+        return appUserRepository.findAllAppUsers();
+    }
+
+    // get All employees
+    public List<AppUserDTO> getAllEmployees() {
+        return appUserRepository.findAllEmployees();
+    }
+
+    // get employee by id
+    public AppUserDTO getEmployeeById(int appUserId) {
+        return appUserRepository.findEmployeeById(appUserId);
+    }
+
+    // add new Employee
+    public void saveEmployee(AppUser employee) {
+        appUserRepository.insertEmployee(employee);
     }
 }

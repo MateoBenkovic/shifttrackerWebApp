@@ -1,25 +1,28 @@
 package com.hita.shifttracker.controller;
 
-import com.hita.shifttracker.dto.AppUserDTO;
-import com.hita.shifttracker.dto.CompanyDTO;
-import com.hita.shifttracker.model.*;
-import com.hita.shifttracker.repository.*;
-import com.hita.shifttracker.service.AppUserService;
-import com.hita.shifttracker.service.CompanyService;
+import com.hita.shifttracker.service.WorkingTimeItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Controller
 public class TestController {
 
+    @Autowired
+    private WorkingTimeItemService service;
 
     @GetMapping("/test")
-    public String test() {
+    public String test(Model model) {
 
+        List<Map<String, Object>> workingTimeItems = service.getWorkingTimeItemByDays(1,2,2025);
+
+        model.addAttribute("wti", workingTimeItems);
 
         return "test";
     }
