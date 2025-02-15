@@ -1,6 +1,7 @@
 package com.hita.shifttracker.controller;
 
 import com.hita.shifttracker.dto.AppUserDTO;
+import com.hita.shifttracker.model.AppUser;
 import com.hita.shifttracker.model.Company;
 import com.hita.shifttracker.service.AppUserService;
 import com.hita.shifttracker.service.CompanyService;
@@ -74,20 +75,20 @@ public class HeadNurseController {
                                      @RequestParam("orgUnit") int orgUnit,
                                      @RequestParam("team") int team){
 
+        AppUser employee = new AppUser();
+        employee.setFirstName(firstName);
+        employee.setLastName(lastName);
+        employee.setOib(oib);
+        employee.setTelephone(telephone);
+        employee.setEmail(email);
+        employee.setPassword(password);
+        employee.setTeamRoleId(teamRole);
+        employee.setWorkRoleId(teamRole);
+        employee.setOrganizationUnitId(orgUnit);
+        employee.setTeamId(team);
 
-
-       // appUserRepository.addNewEmployee(email, firstName, lastName, oib, password, telephone,1, orgUnit, team, teamRole, generateUsername(firstName, lastName), teamRole, BigDecimal.valueOf(1.00));
-
+        appUserService.saveEmployee(employee);
         return "redirect:/head_nurse/employee/list";
-    }
-
-    public String generateUsername(String firstName, String lastName) {
-
-        char firstChar = Character.toUpperCase(firstName.charAt(0));
-        char thirdChar = Character.toUpperCase(firstName.charAt(2));
-        String lastNamePart = lastName.substring(0, Math.min(3, lastName.length())).toUpperCase();
-
-        return "" + firstChar + thirdChar + lastNamePart;
     }
 
 }

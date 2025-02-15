@@ -103,12 +103,19 @@ public class AppUserRepository {
     public void insertEmployee(AppUser employee) {
         String sql = "INSERT INTO app_user (first_name, last_name, email, password, telephone, oib, " +
                      "org_unit_id, work_role_id, team_id, team_role_id, coefficient, app_role_id, user_code) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        jdbcTemplate.update(sql, employee.getFirstName(), employee.getFirstName(), employee.getEmail(),
+        jdbcTemplate.update(sql, employee.getFirstName(), employee.getLastName(), employee.getEmail(),
                 employee.getPassword(), employee.getTelephone(), employee.getOib(), employee.getOrganizationUnitId(),
                 employee.getWorkRoleId(), employee.getTeamId(), employee.getTeamRoleId(), employee.getCoefficient(),
-                employee.getAppRole(), employee.getAppUserCode());
+                employee.getAppRoleId(), employee.getAppUserCode());
+    }
+
+    // exists by user code
+    public boolean existsByUserCode(String userCode) {
+        String sql = "SELECT COUNT(*) FROM app_user WHERE user_code = ?";
+        int count = jdbcTemplate.queryForObject(sql, new Object[]{userCode}, Integer.class);
+        return count > 0;
     }
 }
 
