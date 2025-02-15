@@ -18,7 +18,7 @@ public class WorkingTimeItemRepository {
     // find all by app user id and month and year
     public List<WorkingTimeItemDTO> findByEmployeeIdAndMonthAndYear(int appUserId, int month, int year) {
         String sql = "SELECT wti.app_user_id, wt.work_type_name, wt.work_type_num, " +
-                     "wt.account_num, wti.date, wti.work_type_code " +
+                     "wt.account_num, wti.date, wti.work_type_code, wti.total_hours " +
                      "FROM working_time_item wti " +
                      "JOIN work_types wt " +
                      "ON wti.work_type_code = wt.id " +
@@ -36,6 +36,7 @@ public class WorkingTimeItemRepository {
             workingTimeItem.setAccountNum(rs.getString("account_num"));
             workingTimeItem.setDate(rs.getDate("date").toLocalDate());
             workingTimeItem.setWorkTypeCode(rs.getInt("work_type_code"));
+            workingTimeItem.setTotalHours(rs.getInt("total_hours"));
 
             return workingTimeItem;
         }, appUserId, month, year);
