@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raspored</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+          background-color: #f8f9fa;
+        }
+        .navbar {
+          background-color: #ffffff !important;
+          box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+          margin-bottom: 1.5rem;
+          padding: 0.5rem 1.5rem;
+        }
+        .nav-link.active {
+          border-bottom: 3px solid #333333;
+          font-weight: bold;
+        }
+        .card {
+          border: 1px solid #dee2e6;
+          border-radius: 8px;
+          box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+          background-color: #ffffff;
+          margin-bottom: 1rem;
+        }
+        .card-header {
+          background-color: #333333 !important;
+          color: #ffffff;
+          border-bottom: none;
+          border-top-left-radius: 8px !important;
+          border-top-right-radius: 8px !important;
+          padding: 0.75rem 1.25rem;
+          font-size: 1rem;
+          font-weight: 500;
+        }
+        .schedule-table {
+          background-color: #ffffff;
+          border-radius: 8px;
+          border: 2px solid #333333;
+          overflow: hidden;
+          margin-bottom: 0;
+        }
+        .schedule-table th, .schedule-table td {
+          text-align: center;
+          padding: 12px 8px;
+          border: 1px solid #dee2e6;
+        }
+        .schedule-table th {
+          background-color: #f8f9fa;
+          font-weight: 600;
+          border-bottom: 2px solid #333333;
+        }
+        .work-type {
+          text-align: left !important;
+          font-weight: bold;
+          background-color: #ffffff !important;
+          border-right: 1px solid #dee2e6 !important;
+        }
+        .total-row {
+          background-color: #f8f9fa;
+          border-top: 2px solid #333333;
+          border-bottom: 2px solid #333333;
+          font-weight: 500;
+        }
+        #workTimeFormContainer {
+          background: white;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+          z-index: 1002;
+          position: absolute;
+          display: none;
+          max-width: 320px;
+        }
+        #overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+          display: none;
+        }
+        .highlighted-date {
+          background: rgba(255, 193, 7, 0.8) !important;
+          color: black !important;
+          box-shadow: 0px 0px 10px rgba(255, 193, 7, 1);
+          border-radius: 5px;
+          padding: 5px;
+          transition: all 0.3s ease-in-out;
+        }
+        #successPopup {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background-color: #ffffff;
+          color: #333333;
+          padding: 15px 20px;
+          border-radius: 8px;
+          box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+          z-index: 1100;
+          display: none;
+          border: 2px solid #28a745;
+        }
+        #generateScheduleBtn {
+          background-color: #333333;
+          color: #ffffff;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 5px;
+          font-weight: 500;
+          transition: background-color 0.3s ease;
+        }
+        #generateScheduleBtn:hover {
+          background-color: #555555;
+        }
+    </style>
+</head>
+<body>
+<div id="overlay"></div>
+<div id="successPopup">
+    <i class="bi bi-check-circle-fill text-success me-2"></i>
+    Raspored uspješno generiran
+</div>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg mb-4">
+    <div class="container-fluid">
+        <div class="navbar-nav">
+            <img src="/logo.png" style="height: 50px; width:100px" class="me-5" alt="Logo">
+            <a class="nav-link me-4" href="/employee/workhour/add">Unos radnog vremena</a>
+            <a class="nav-link active me-4" href="/employee/workhour/list">Pregled rada</a>
+        </div>
+        <div class="navbar-nav ms-auto d-flex align-items-center">
+            <div class="d-flex align-items-center me-3">
+                <span>Ime Prezime</span>
+            </div>
+            <div class="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-person-circle fs-4"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li class="px-3 py-1 text-muted">Glavna sestra</li>
+                    <li class="px-3 pb-2 text-muted small">glavna.sestra@example.com</li>
+                    <li><button class="dropdown-item" onclick="location.href = '/logout'"><i class="bi bi-box-arrow-right"></i> Odjava</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container-fluid">
+    <!-- Schedule Controls -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Kontrole rasporeda</h5>
+        </div>
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <select class="form-select" id="clientSelect">
+                        <option value="">Odaberi klijenta</option>
+                        <option value="1">Klijent 1</option>
+                        <option value="2">Klijent 2</option>
+                        <option value="3">Klijent 3</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mb-3 mb-md-0">
+                    <select class="form-select" id="monthSelect">
+                        <option value="1">Siječanj</option>
+                        <option value="2">Veljača</option>
+                        <option value="3">Ožujak</option>
+                        <option value="4">Travanj</option>
+                        <option value="5">Svibanj</option>
+                        <option value="6">Lipanj</option>
+                        <option value="7">Srpanj</option>
+                        <option value="8">Kolovoz</option>
+                        <option value="9">Rujan</option>
+                        <option value="10">Listopad</option>
+                        <option value="11">Studeni</option>
+                        <option value="12">Prosinac</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mb-3 mb-md-0">
+                    <select class="form-select" id="yearSelect">
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button id="generateScheduleBtn" class="btn">
+                        <i class="bi bi-calendar-plus me-2"></i>Generiraj novi raspored
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Schedule Table -->
+    <div class="table-responsive">
+        <table class="table schedule-table">
+            <thead>
+            <tr id="calendarRow">
+                <!-- Calendar headers will be dynamically generated -->
+            </tr>
+            </thead>
+            <tbody id="scheduleBody">
+            <!-- Schedule rows will be dynamically generated -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="form-section col-md-6 col-lg-5" id="workTimeFormContainer" style="display: none; position: absolute;">
+    <h4 class="mb-4 text-center">Unos radnog vremena</h4>
+    <div class="mb-3 text-center">
+        <input type="date" class="form-control text-center" id="workDate" required>
+    </div>
+    <form id="workTimeForm" action="/employee/workhour/process">
+        <div class="mb-3">
+            <label for="startShift" class="form-label">Početak radnog vremena</label>
+            <input type="time" class="form-control" id="startShift" name="startShift" required>
+        </div>
+        <div class="mb-3">
+            <label for="endShift" class="form-label">Završetak radnog vremena</label>
+            <input type="time" class="form-control" id="endShift" name="endShift" required>
+        </div>
+        <button type="submit" class="btn btn-dark w-100">Spremi</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const monthSelect = document.getElementById("monthSelect");
+      const yearSelect = document.getElementById("yearSelect");
+      const clientSelect = document.getElementById("clientSelect");
+      const generateScheduleBtn = document.getElementById("generateScheduleBtn");
+      const successPopup = document.getElementById("successPopup");
+
+      function generateCalendar(selectedMonth, selectedYear) {
+        const calendarRow = document.getElementById("calendarRow");
+        calendarRow.innerHTML = "";
+
+        const typeTh = document.createElement("th");
+        typeTh.textContent = "Dan";
+        typeTh.style.cursor = "default";
+        calendarRow.appendChild(typeTh);
+
+        const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+
+        for (let day = 1; day <= daysInMonth; day++) {
+          const th = document.createElement("th");
+          th.textContent = day;
+          th.onclick = function() { openForm(day, this); };
+          calendarRow.appendChild(th);
+        }
+      }
+
+      function generateScheduleRows() {
+        const scheduleBody = document.getElementById("scheduleBody");
+        scheduleBody.innerHTML = "";
+
+        const rows = ["Početak rada", "Završetak rada", "Ukupno sati"];
+        rows.forEach((rowName, index) => {
+          const tr = document.createElement("tr");
+          const td = document.createElement("td");
+          td.textContent = rowName;
+          td.className = "work-type";
+          tr.appendChild(td);
+
+          const daysInMonth = document.getElementById("calendarRow").children.length - 1;
+          for (let i = 0; i < daysInMonth; i++) {
+            const dataTd = document.createElement("td");
+            dataTd.textContent = "-";
+            tr.appendChild(dataTd);
+          }
+
+          if (index === 2) {
+            tr.className = "total-row";
+          }
+
+          scheduleBody.appendChild(tr);
+        });
+
+        // Load saved data from localStorage
+        loadScheduleData();
+      }
+
+      function updateCalendar() {
+        const selectedMonth = parseInt(monthSelect.value);
+        const selectedYear = parseInt(yearSelect.value);
+        generateCalendar(selectedMonth, selectedYear);
+        generateScheduleRows();
+      }
+
+      monthSelect.addEventListener("change", updateCalendar);
+      yearSelect.addEventListener("change", updateCalendar);
+      clientSelect.addEventListener("change", updateCalendar);
+
+      function openForm(day, element) {
+        const formContainer = document.getElementById("workTimeFormContainer");
+        const workDateInput = document.getElementById("workDate");
+        const overlay = document.getElementById("overlay");
+
+        const selectedMonth = monthSelect.value.padStart(2, "0");
+        const selectedYear = yearSelect.value;
+        const selectedDate = `${selectedYear}-${selectedMonth}-${String(day).padStart(2, "0")}`;
+
+        workDateInput.value = selectedDate;
+
+        document.querySelectorAll(".highlighted-date").forEach(el => el.classList.remove("highlighted-date"));
+        element.classList.add("highlighted-date");
+
+        const rect = element.getBoundingClientRect();
+        formContainer.style.top = `${rect.bottom + window.scrollY + 5}px`;
+        formContainer.style.left = `${rect.left + window.scrollX}px`;
+
+        formContainer.style.display = "block";
+        overlay.style.display = "block";
+
+        // Load existing data for the selected date
+        const savedData = getScheduleData(selectedDate);
+        if (savedData) {
+          document.getElementById('startShift').value = savedData.startTime;
+          document.getElementById('endShift').value = savedData.endTime;
+        } else {
+          document.getElementById('startShift').value = '';
+          document.getElementById('endShift').value = '';
+        }
+
+        overlay.onclick = function () {
+          formContainer.style.display = "none";
+          overlay.style.display = "none";
+          element.classList.remove("highlighted-date");
+        };
+      }
+
+      const workTimeForm = document.getElementById('workTimeForm');
+      workTimeForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const startTime = document.getElementById('startShift').value;
+        const endTime = document.getElementById('endShift').value;
+        const workDate = document.getElementById('workDate').value;
+
+        // Save data to localStorage
+        saveScheduleData(workDate, startTime, endTime);
+
+        // Update the schedule table
+        updateScheduleTable(workDate, startTime, endTime);
+
+        // Close the form
+        document.getElementById('workTimeFormContainer').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+        document.querySelector('.highlighted-date').classList.remove('highlighted-date');
+      });
+
+      function updateScheduleTable(date, startTime, endTime) {
+        const day = new Date(date).getDate();
+        const rows = document.getElementById('scheduleBody').children;
+
+        rows[0].children[day].textContent = startTime;
+        rows[1].children[day].textContent = endTime;
+
+        // Calculate total hours
+        const start = new Date(`${date}T${startTime}`);
+        const end = new Date(`${date}T${endTime}`);
+        let hours = (end - start) / 3600000;
+        if (hours < 0) hours += 24; // If end time is on the next day
+
+        rows[2].children[day].textContent = hours.toFixed(2);
+      }
+
+      function saveScheduleData(date, startTime, endTime) {
+        const key = `schedule_${clientSelect.value}_${date}`;
+        const data = { startTime, endTime };
+        localStorage.setItem(key, JSON.stringify(data));
+      }
+
+      function getScheduleData(date) {
+        const key = `schedule_${clientSelect.value}_${date}`;
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+      }
+
+      function loadScheduleData() {
+        const selectedMonth = monthSelect.value.padStart(2, "0");
+        const selectedYear = yearSelect.value;
+        const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+
+        for (let day = 1; day <= daysInMonth; day++) {
+          const date = `${selectedYear}-${selectedMonth}-${String(day).padStart(2, "0")}`;
+          const savedData = getScheduleData(date);
+          if (savedData) {
+            updateScheduleTable(date, savedData.startTime, savedData.endTime);
+          }
+        }
+      }
+
+      generateScheduleBtn.addEventListener("click", function() {
+        // Here you would typically send a request to your backend to generate a new schedule
+        console.log("Generating new schedule...");
+
+        // Simulate a delay (remove this in production and replace with actual API call)
+        setTimeout(() => {
+          // Show success popup
+          successPopup.style.display = "block";
+
+          // Hide popup after 3 seconds
+          setTimeout(() => {
+            successPopup.style.display = "none";
+          }, 3000);
+
+          // Optionally, update the calendar with the new schedule data
+          updateCalendar();
+        }, 1000);
+      });
+
+      // Initialize the calendar
+      const today = new Date();
+      monthSelect.value = today.getMonth() + 1;
+      yearSelect.value = today.getFullYear();
+      updateCalendar();
+    });
+</script>
+
+</body>
+</html>
