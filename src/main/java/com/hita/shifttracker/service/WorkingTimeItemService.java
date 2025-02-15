@@ -32,7 +32,7 @@ public class WorkingTimeItemService {
 
             // Convert the date into day (1-31)
             int day = item.getDate().getDayOfMonth();
-            dayData.put("day" + day, item.getWorkTypeCode());
+            dayData.put("day" + day, item.getTotalHours());
 
             // Store the data back in the map
             transposedData.put(key, dayData);
