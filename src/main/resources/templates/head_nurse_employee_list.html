@@ -159,9 +159,9 @@
                 <thead>
                 <tr>
                     <th>Ime i prezime</th>
-                    <th>Uloga</th>
+                    <th>Radna jedinica</th>
                     <th>Tim</th>
-                    <th>Radna</th>
+                    <th>Uloga</th>
                     <th>Upravljanje</th>
                 </tr>
                 </thead>
@@ -170,9 +170,9 @@
                     <td>
                         <a th:text="${employee.firstName} + ' ' + ${employee.lastName}" th:href="@{/head_nurse/workhour/list(id=${employee.id})}" class="employeeName"></a>
                     </td>
-                    <td th:text="${employee.roleName}"></td>
-                    <td th:text="${employee.teamName}"></td>
                     <td th:text="${employee.orgUnitName}"></td>
+                    <td th:text="${employee.teamName}">Tim 1</td>
+                    <td th:text="${employee.teamRoleName}">Vozač</td>
                     <td>
                         <a th:href="@{/head_nurse/workhour/list(id=${employee.id})}" class="btn btn-outline-dark">Pregled</a>
                     </td>
@@ -195,7 +195,7 @@
             </div>
 
             <div class="modal-body">
-                <form action="/head_nurse/add/user">
+                <form action="/head_nurse/add/employee">
                     <div class="mb-3">
                         <label class="form-label">Ime</label>
                         <input type="text" class="form-control" name="firstName">
@@ -328,10 +328,6 @@
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="uloga" id="vozac" value="Vozač">
                         <label class="form-check-label" for="vozac">Vozač</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="uloga" id="tehnicar" value="Tehničar">
-                        <label class="form-check-label" for="tehnicar">Tehničar</label>
                     </div>
                 </div>
             </div>

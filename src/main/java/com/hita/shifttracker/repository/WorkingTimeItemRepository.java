@@ -1,16 +1,43 @@
-//package com.hita.shifttracker.repository;
-//
-//import com.hita.shifttracker.model.WorkingTimeItem;
-//import org.springframework.data.jpa.repository.JpaRepository;
-//import org.springframework.data.jpa.repository.Query;
-//
-//import java.time.LocalDate;
-//
-//public interface WorkingTimeItemRepository extends JpaRepository<WorkingTimeItem, Integer> {
-//
-//    // Exists by user id and shift id
-//   //boolean existsByAppUserIdAndDateAndWorkType(int appUserId, LocalDate date, int workTypeCode);
-//    // find by app user id and date and work type code
-//
-//    // isert into
-//}
+package com.hita.shifttracker.repository;
+
+import com.hita.shifttracker.dto.WorkingTimeItemDTO;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public class WorkingTimeItemRepository {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    public WorkingTimeItemRepository (JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    // find all by app user id and month and year
+    public List<WorkingTimeItemDTO> findByEmployeeIdAndMonthAndYear(int appUserId, int month, int year) {
+        String sql = "SELECT wti.app_user_id, wt.work_type_name, wt.work_type_num, " +
+                     "wt.account_num, wti.date, wti.work_type_code " +
+                     "FROM working_time_item wti " +
+                     "JOIN work_types wt " +
+                     "ON wti.work_type_code = wt.id " +
+                     "WHERE wti.app_user_id = ? " +
+                     "AND EXTRACT(MONTH FROM wti.date) = ? " +
+                     "AND EXTRACT(YEAR FROM wti.date) = ? " +
+                     "ORDER BY wt.id, wti.date";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            WorkingTimeItemDTO workingTimeItem = new WorkingTimeItemDTO();
+
+            workingTimeItem.setAppUserId(rs.getInt("app_user_id"));
+            workingTimeItem.setWorkTypeName(rs.getString("work_type_name"));
+            workingTimeItem.setWorkTypeNum(rs.getString("work_type_num"));
+            workingTimeItem.setAccountNum(rs.getString("account_num"));
+            workingTimeItem.setDate(rs.getDate("date").toLocalDate());
+            workingTimeItem.setWorkTypeCode(rs.getInt("work_type_code"));
+
+            return workingTimeItem;
+        }, appUserId, month, year);
+    }
+}

@@ -21,4 +21,7 @@ public class AppUserDTO {
 
     // org unit
     private String orgUnitName;
+
+    // team role
+    private String teamRoleName;
 }
