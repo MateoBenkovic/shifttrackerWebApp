@@ -53,7 +53,7 @@ public class AppUserService {
         String lastName = employee.getLastName();
         String randomCode = generateRandomCode(6);
         String userCode = firstName.substring(0, 2) + lastName.substring(0, 2) + randomCode;
-        return userCode.substring(0, Math.min(5, userCode.length())).toLowerCase();
+        return userCode.substring(0, Math.min(5, userCode.length())).toUpperCase();
     }
 
     private String generateRandomCode(int length) {
