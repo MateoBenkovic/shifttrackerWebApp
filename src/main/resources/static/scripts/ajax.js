@@ -78,11 +78,11 @@ function updateTable(workHours, workingTimes, year, month) {
         // Add styles for weekends and holidays
         const dayClass = isWeekend ? 'weekend' : isHoliday ? 'holiday' : '';
 
-        scheduleStart += `<td></td>`;
-        scheduleEnd += `<td></td>`;
-        startRow += `<td>${workTime ? workTime.startHour.toString().padStart(2, '0') : ""}</td>`;
-        endRow += `<td>${workTime ? workTime.endHour.toString().padStart(2, '0') : ""}</td>`;
-        totalRow += `<td>${workTime ? workTime.totalHours : ""}</td>`;
+        scheduleStart += `<td class="${dayClass}"></td>`;
+        scheduleEnd += `<td class="${dayClass}"></td>`;
+        startRow += `<td class="${dayClass}">${workTime ? workTime.startHour.toString().padStart(2, '0') : ""}</td>`;
+        endRow += `<td class="${dayClass}">${workTime ? workTime.endHour.toString().padStart(2, '0') : ""}</td>`;
+        totalRow += `<td class="${dayClass}">${workTime ? workTime.totalHours : ""}</td>`;
     }
 
     scheduleStart += `<td></td></tr>`;
