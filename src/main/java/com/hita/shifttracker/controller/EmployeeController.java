@@ -48,6 +48,15 @@ public class EmployeeController {
         List<Map<String, Object>> workingTimeItems = workingTimeItemService.getWorkingTimeItemByDays(appUser.getId(), 2,2025);
         model.addAttribute("wtis", workingTimeItems);
 
+
+        int month = 2;
+        int year = 2025;
+
+        Map<String, List<Integer>> workingTimeData = workingTimeItemService.getFormattedWorkingTimeData(appUser.getId(), 2, 2025);
+        model.addAttribute("workingTimeData", workingTimeData);
+        model.addAttribute("month", month);
+        model.addAttribute("year", year);
+
         return "employee_workhour_list";
     }
 

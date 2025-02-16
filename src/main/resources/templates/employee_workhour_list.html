@@ -11,130 +11,99 @@
             background-color: #f8f9fa;
         }
         .navbar {
-            background-color: white !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background-color: #ffffff !important;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         .nav-link.active {
-            border-bottom: 2px solid #000;
+            border-bottom: 3px solid #333333;
+            font-weight: bold;
         }
         .info-section {
-            background-color: white;
-            border-radius: 4px;
+            background-color: #ffffff;
+            border-radius: 8px;
             padding: 20px;
             margin-bottom: 20px;
+            border: 2px solid #333333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         .schedule-table {
-        background-color: #ffffff;
-        border-radius: 8px;
-        border: 3px solid #333333;
-        overflow: hidden;
+            background-color: #ffffff;
+            border-radius: 8px;
+            border: 3px solid #333333;
+            overflow: hidden;
         }
         .schedule-table th {
-        background-color: #f1f3f5;
-        font-weight: bold;
-        text-align: center;
-        min-width: 40px;
-        border-bottom: 2px solid #333333;
-        cursor: pointer;
-        }
-        .calendar-day:hover {
-            background: rgba(255, 193, 7, 0.8) !important;
+            background-color: #f1f3f5;
+            font-weight: bold;
+            text-align: center;
+            min-width: 40px;
+            border-bottom: 2px solid #333333;
+            cursor: pointer;
         }
         .schedule-table td {
-        text-align: center;
-        padding: 8px;
-        border: 1px solid #dee2e6;
+            text-align: center;
+            padding: 8px;
+            border: 1px solid #dee2e6;
         }
         td.weekend {
-            background-color: #FFEE97;
+            background-color: #f0f0f0;
         }
         .work-type {
             text-align: left !important;
-            font-weight: 500;
+            font-weight: bold;
+            border-right: 3px solid #333333;
+            background-color: #f1f3f5;
         }
         .total-row {
-        border-top: 2px solid #333333;
-        border-bottom: 2px solid #333333;
-        font-weight: bold;
-        }
-        .table-responsive {
-        border: 2px solid #333333;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background-color: #e9ecef;
+            border-top: 2px solid #333333;
+            border-bottom: 2px solid #333333;
+            font-weight: bold;
         }
         .info-section p {
-            margin-bottom: 1px;
+            margin-bottom: 4px;
         }
-
-        /* Stilizacija forme */
-#workTimeFormContainer {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-    z-index: 1002; /* Veći z-index da bude iznad overlay-a */
-    position: absolute;
-    display: none;
-    max-width: 320px;
-}
-
-/* Overlay koji zatamnjuje ostatak ekrana */
-#overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    display: none;
-}
-
-/* Istaknut kliknuti datum */
-/* Stilizacija istaknutog datuma */
-.highlighted-date {
-    background: rgba(255, 193, 7, 0.8) !important;
-    color: black !important;
-    box-shadow: 0px 0px 10px rgba(255, 193, 7, 1);
-    border-radius: 5px;
-    padding: 5px;
-    transition: all 0.3s ease-in-out;
-}
-        .card {
-            background-color: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            transition: box-shadow 0.3s ease;
+        .table-responsive {
+            border: 2px solid #333333;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-
-        .card-body {
+        .section-title {
+            background-color: #333333;
+            color: #ffffff;
+            padding: 10px;
+            margin: -20px -20px 15px -20px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        #workTimeFormContainer {
+            background: white;
             padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1002;
+            position: absolute;
+            display: none;
+            max-width: 320px;
         }
-
-        .card-title {
-            font-size: 18px;
-            margin-bottom: 15px;
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
         }
-
-        .card-text {
-            font-size: 14px;
-            color: #4d4d4d;
-        }
-
-        .card:hover {
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-        }
-        input[type="month"] {
-            width: 200px;
-            height: 40px;
-            padding: 5px;
-            font-size: 16px;
-            border: 2px solid #a3a3a3;
+        .highlighted-date {
+            background: rgba(255, 193, 7, 0.8) !important;
+            color: black !important;
+            box-shadow: 0px 0px 10px rgba(255, 193, 7, 1);
             border-radius: 5px;
-            cursor: pointer;
+            padding: 5px;
+            transition: all 0.3s ease-in-out;
         }
-
     </style>
 </head>
 <body>
@@ -155,18 +124,12 @@
 
             <div class="dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                    <i class="bi bi-person-circle fs-4"></i> <!-- Dodano fs-4 za veći font-size -->
+                    <i class="bi bi-person-circle fs-4"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li class="px-3 py-1 text-muted" th:text="${appUser.roleName}">Admin</li>
                     <li class="px-3 pb-2 text-muted small" th:text="${appUser.email}">admin@example.com</li>
-                    <!--                    <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profil</a></li>-->
-                    <!--                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Postavke</a></li>-->
-                    <li>
-                        <button class="dropdown-item" onclick="location.href = '/logout'"><i
-                                class="bi bi-box-arrow-right"></i> Odjava
-                        </button>
-                    </li>
+                    <li><button class="dropdown-item" onclick="location.href = '/logout'"><i class="bi bi-box-arrow-right"></i> Odjava</button></li>
                 </ul>
             </div>
         </div>
@@ -174,264 +137,86 @@
 </nav>
 <!-- Main Content -->
 <div class="container-fluid">
-    <!-- Employee Info -->
-    <div class="info-section mb-0 pb-0">
-        <div class="row">
+    <!-- Employee and Employer Info Section -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="info-section h-100">
+                <h5 class="section-title">Podaci o zaposleniku</h5>
+                <p><strong>Ime i Prezime: </strong> <span th:text="${appUser.firstName + ' ' + appUser.lastName}">Ivan Horvat</span></p>
+                <p><strong>Radna jedinica: </strong> <span th:text="${appUser.teamName + ' ' + appUser.orgUnitName}">Tim 1</span></p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="info-section h-100">
+                <h5 class="section-title">Podaci o poslodavcu</h5>
+                <p><strong>Naziv:</strong><span th:text="' ' + ${company.companyName}">Hitna KZŽ</span></p>
+                <p><strong>Adresa:</strong> <span th:text="' ' + ${company.companyAddress} + ', ' + ${company.postalCode} + ', ' + ${company.companyCity}">Ulica Mirka Crkvenca 1, 49000, Krapina</span></p>
+                <p><strong>OIB:</strong><span th:text="' ' + ${company.companyTaxId}"> 17813384799</span></p>
+                <p><strong>IBAN:</strong> <span th:text="' ' + ${company.companyIBAN}">HR7223400091110492278</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Schedule Controls -->
+    <div class="info-section mb-4">
+        <h5 class="section-title">Kontrole rasporeda</h5>
+        <div class="row align-items-center">
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="mb-3 card-title">Podaci o zaposleniku</p>
-                        <p class="card-text"><strong>Ime i Prezime: </strong> <span
-                                th:text="${appUser.firstName + ' ' + appUser.lastName}">Ivan Horvat</span></p>
-                        <p class="card-text"><strong>Radna jedinica: </strong> <span
-                                th:text="${appUser.teamName + ' ' + appUser.orgUnitName}">Tim 1</span>
-                        </p>
-                    </div>
-                </div>
-                <div class="container info-section pb-3 pt-2">
-                    <div class="row align-items-center justify-content-center text-center">
-                        <div class="col-md-6 d-flex justify-content-center">
-                            <input type="month" id="monthYearSelection">
-                        </div>
-                        <div class="col-md-6 d-flex justify-content-center">
-                            <p class="mb-0 ps-4"><strong>Propisani mjesečni fond sati:</strong> 184</p>
-                        </div>
-                    </div>
+                <div class="d-flex gap-3">
+                    <select class="form-select" id="monthSelect">
+                        <option value="1">Siječanj</option>
+                        <option value="2">Veljača</option>
+                        <option value="3">Ožujak</option>
+                        <option value="4">Travanj</option>
+                        <option value="5">Svibanj</option>
+                        <option value="6">Lipanj</option>
+                        <option value="7">Srpanj</option>
+                        <option value="8">Kolovoz</option>
+                        <option value="9">Rujan</option>
+                        <option value="10">Listopad</option>
+                        <option value="11">Studeni</option>
+                        <option value="12">Prosinac</option>
+                    </select>
+                    <select class="form-select" id="yearSelect">
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                    </select>
                 </div>
             </div>
-
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="mb-3 card-title">Podaci o poslodavcu</p>
-                        <p class="card-text"><strong>Naziv:</strong> <span th:text="${' ' + company.companyName}">Hitna KZŽ</span></p>
-                        <p class="card-text"><strong>Adresa:</strong> <span th:text="${' ' + company.companyAddress + ', ' + company.postalCode + ', ' + company.companyCity}">Ulica Mirka Crkvenca 1, 49000, Krapina</span></p>
-                        <p class="card-text"><strong>OIB:</strong> <span th:text="${' ' + company.companyTaxId}">17813384799</span></p>
-                        <p class="card-text"><strong>IBAN:</strong> <span th:text="${' ' + company.companyIBAN}">HR7223400091110492278</span></p>
-                    </div>
-                </div>
+                <p class="mb-0"><strong>Propisani mjesečni fond sati:</strong> 184</p>
             </div>
         </div>
     </div>
 
     <!-- Schedule Table -->
     <div class="table-responsive">
-        <table class="table schedule-table table-hover mb-0">
+        <table class="table schedule-table">
             <thead>
             <tr id="calendarRow">
-                <!--                <th>Vrsta rada</th>-->
-                <!--                -->
-                <!--                <th onclick="openForm(1, this)">1</th>-->
-                <!--                <th onclick="openForm(2, this)">2</th>-->
-                <!--                <th onclick="openForm(3, this)" class="weekend">3</th>-->
-                <!--                <th onclick="openForm(4, this)" class="weekend">4</th>-->
-                <!--                <th onclick="openForm(5, this)">5</th>-->
-                <!--                <th onclick="openForm(6, this)">6</th>-->
-                <!--                <th onclick="openForm(7, this)">7</th>-->
-                <!--                <th onclick="openForm(8, this)">8</th>-->
-                <!--                <th onclick="openForm(9, this)">9</th>-->
-                <!--                <th onclick="openForm(10, this)">10</th>-->
-                <!--                <th onclick="openForm(11, this)">11</th>-->
-                <!--                <th onclick="openForm(12, this)">12</th>-->
-                <!--                <th onclick="openForm(13, this)">13</th>-->
-                <!--                <th onclick="openForm(14, this)">14</th>-->
-                <!--                <th onclick="openForm(15, this)">15</th>-->
-                <!--                <th onclick="openForm(16, this)">16</th>-->
-                <!--                <th onclick="openForm(17, this)">17</th>-->
-                <!--                <th onclick="openForm(18, this)">18</th>-->
-                <!--                <th onclick="openForm(19, this)">19</th>-->
-                <!--                <th onclick="openForm(20, this)">20</th>-->
-                <!--                <th onclick="openForm(21, this)">21</th>-->
-                <!--                <th onclick="openForm(22, this)">22</th>-->
-                <!--                <th onclick="openForm(23, this)">23</th>-->
-                <!--                <th onclick="openForm(24, this)">24</th>-->
-                <!--                <th onclick="openForm(25, this)">25</th>-->
-                <!--                <th onclick="openForm(26, this)">26</th>-->
-                <!--                <th onclick="openForm(27, this)">27</th>-->
-                <!--                <th onclick="openForm(28, this)">28</th>-->
-                <!--                <th onclick="openForm(29, this)">29</th>-->
-                <!--                <th onclick="openForm(30, this)">30</th>-->
-                <!--                <th onclick="openForm(31, this)">31</th>-->
-                <!--                <th>Ukupno</th>-->
+                <!-- Calendar headers will be dynamically generated -->
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td class="work-type">Početak rada prema rasporedu</td>
-                <td>-</td>
-                <td>07</td>
-                <td>19</td>
-                <td class="weekend">00</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>19</td>
-                <td>00</td>
-                <td>00</td>
-                <td>-</td>
-                <td class="weekend">07</td>
-                <td class="weekend">07</td>
-                <td>19</td>
-                <td>00</td>
-                <td>-</td>
-                <td>-</td>
-                <td>07</td>
-                <td class="weekend">23</td>
-                <td class="weekend">00</td>
-                <td>07</td>
-                <td>-</td>
-                <td>07</td>
-                <td>08</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-            </tr>
-            <tr style="border-bottom: 2px solid #333333;">
-                <td class="work-type">Završetak rada prema rasporedu</td>
-                <td>-</td>
-                <td>19</td>
-                <td>24</td>
-                <td class="weekend">07</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>24</td>
-                <td>07</td>
-                <td>07</td>
-                <td>-</td>
-                <td class="weekend">19</td>
-                <td class="weekend">19</td>
-                <td>24</td>
-                <td>07</td>
-                <td>-</td>
-                <td>-</td>
-                <td>19</td>
-                <td class="weekend">24</td>
-                <td class="weekend">07</td>
-                <td>19</td>
-                <td>-</td>
-                <td>19</td>
-                <td>10</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-            </tr>
-            <tr><!-- Tu integriraj -->
-                <td class="work-type">Početak rada</td>
-                <td>-</td>
-                <td>07</td>
-                <td>19</td>
-                <td class="weekend">00</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>19</td>
-                <td>00</td>
-                <td>00</td>
-                <td>-</td>
-                <td class="weekend">07</td>
-                <td class="weekend">07</td>
-                <td>19</td>
-                <td>00</td>
-                <td>-</td>
-                <td>-</td>
-                <td>07</td>
-                <td class="weekend">23</td>
-                <td class="weekend">00</td>
-                <td>07</td>
-                <td>-</td>
-                <td>07</td>
-                <td>08</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
+                <td>Hours From</td>
+                <td th:each="day : ${workingTimeData['hoursFrom']}">
+                    <span th:text="${day != null ? day : ' '}" />
+                </td>
             </tr>
             <tr>
-                <td class="work-type">Završetak rada</td>
-                <td>-</td>
-                <td>19</td>
-                <td>24</td>
-                <td class="weekend">07</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>24</td>
-                <td>07</td>
-                <td>07</td>
-                <td>-</td>
-                <td class="weekend">19</td>
-                <td class="weekend">19</td>
-                <td>24</td>
-                <td>07</td>
-                <td>-</td>
-                <td>-</td>
-                <td>19</td>
-                <td class="weekend">24</td>
-                <td class="weekend">07</td>
-                <td>19</td>
-                <td>-</td>
-                <td>19</td>
-                <td>10</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
+                <td>Hours To</td>
+                <td th:each="day : ${workingTimeData['hoursTo']}">
+                    <span th:text="${day != null ? day : ' '}" />
+                </td>
             </tr>
-            <tr class="total-row">
-                <td class="work-type">UKUPNO RADNO VRIJEME</td>
-                <td>-</td>
-                <td>12</td>
-                <td>5</td>
-                <td class="weekend">7</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>5</td>
-                <td>12</td>
-                <td>9</td>
-                <td>-</td>
-                <td class="weekend">12</td>
-                <td class="weekend">12</td>
-                <td>5</td>
-                <td>7</td>
-                <td>-</td>
-                <td>-</td>
-                <td>12</td>
-                <td class="weekend">1</td>
-                <td class="weekend">7</td>
-                <td>12</td>
-                <td>-</td>
-                <td>12</td>
-                <td>2</td>
-                <td>-</td>
-                <td class="weekend">-</td>
-                <td class="weekend">-</td>
-                <td>-</td>
-                <td>8</td>
-                <td>8</td>
-                <td>8</td>
-                <td>-</td>
-                <td>156</td>
+            <tr>
+                <td>Total Hours</td>
+                <td th:each="day : ${workingTimeData['totalHours']}">
+                    <span th:text="${day != null ? day : ' '}" />
+                </td>
             </tr>
-
             <tr th:each="wti : ${wtis}">
                 <td th:text="${wti['work_type_num'] + '. ' + wti['work_type_name'] + ' - ' + wti['account_num']}"></td>
                 <td th:text="${wti['day1']}"></td>
@@ -466,10 +251,23 @@
                 <td th:text="${wti['day30']}"></td>
                 <td th:text="${wti['day31']}"></td>
             </tr>
+
+
+
             <!-- Add more work types... -->
             </tbody>
+        </table>
 
+        <table>
+            <thead>
+            <tr>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="wtuv : ${workingTimesUserView}">
 
+            </tr>
+            </tbody>
         </table>
     </div>
 </div>
@@ -497,10 +295,6 @@
             <label for="endShift" class="form-label">Završetak radnog vremena</label>
             <input type="datetime-local" class="form-control" id="endShift" name="endShift" required step="3600">
         </div>
-        <div class="mb-3 text-center text-danger">
-            <p id="errorMessage"></p>
-        </div>
-        <!-- mjesec i godina u hidden polju -->
         <button type="submit" class="btn btn-dark w-100">Spremi</button>
     </form>
 </div>
@@ -508,9 +302,230 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<script type="module" th:src="@{/scripts/calendarDisplay.js}"></script>
-<script type="module" th:src="@{/scripts/employeeWorkHoursFormDisplay.js}"></script>
-<script type="module" th:src="@{/scripts/employeeWorkHoursFormRules.js}"></script>
+<script>
+
+    document.getElementById("monthSelect").addEventListener("change", function() {
+    generateCalendar(parseInt(this.value));
+  });
+
+  function generateCalendar(selectedMonth) {
+    const calendarRow = document.getElementById("calendarRow");
+    calendarRow.innerHTML = ""; // Očisti tablicu prije generiranja
+
+
+    const currentYear = new Date().getFullYear(); // Trenutna godina
+    const daysInMonth = new Date(currentYear, selectedMonth, 0).getDate(); // Broj dana u mjesecu
+
+    // Dodaj prvi stupac "Vrsta rada"
+    const typeTh = document.createElement("th");
+    typeTh.textContent = "Vrsta rada";
+    typeTh.style.cursor = "default";
+    calendarRow.appendChild(typeTh);
+
+    // Generiraj dane
+    for (let day = 1; day <= daysInMonth; day++) {
+        const th = document.createElement("th");
+        th.textContent = day;
+        th.onclick = function() { openForm(day, this); }; // Zadrži funkcionalnost otvaranja forme
+        calendarRow.appendChild(th);
+    }
+
+    // Dodaj zadnji stupac "Ukupno"
+    const totalTh = document.createElement("th");
+    totalTh.textContent = "Ukupno";
+    totalTh.style.cursor = "default";
+    calendarRow.appendChild(totalTh);
+  }
+
+  // Pozovi funkciju da inicijalno postavi trenutni mjesec
+  const today = new Date();
+  document.getElementById("monthSelect").value = today.getMonth() + 1; // Postavi trenutni mjesec
+  generateCalendar(today.getMonth() + 1);
+
+
+    function openForm(day, element) {
+
+    const formContainer = document.getElementById("workTimeFormContainer");
+    const workDateInput = document.getElementById("workDate");
+    const overlay = document.getElementById("overlay");
+    const startTimeInput = document.getElementById("startShift");
+    const endTimeInput = document.getElementById("endShift");
+
+    // Prvo forsiramo da forma dobije pravu širinu
+    formContainer.style.display = "block";
+    formContainer.style.visibility = "hidden"; // Ne vidi se dok ne dobijemo dimenzije
+
+    // Sada možemo dobiti pravu širinu forme
+    const formWidth = formContainer.offsetWidth;
+
+    // Resetiraj formu dok se ne postavi ispravna pozicija
+    formContainer.style.display = "none";
+    formContainer.style.visibility = "visible"; // Sad se vidi kad je otvoriš
+
+    startTimeInput.value = "";
+    endTimeInput.value = "";
+
+    // Postavi datum u input[type="date"]
+    const selectedMonth = document.getElementById("monthSelect").value; // Dohvati odabrani mjesec
+    const currentYear = new Date().getFullYear(); // Dohvati trenutnu godinu
+    const selectedDate = `${currentYear}-${String(selectedMonth).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+    workDateInput.value = selectedDate;
+
+    // Resetiraj prethodno istaknuti datum
+    document.querySelectorAll(".highlighted-date").forEach(el => el.classList.remove("highlighted-date"));
+
+    // Istakni kliknuti datum
+    element.classList.add("highlighted-date");
+
+    // Pronađi poziciju kliknutog elementa
+    const rect = element.getBoundingClientRect();
+    const windowWidth = window.innerWidth;
+
+    let leftPosition;
+
+    // Ako je dan 1-15, probaj desno, ako nema mjesta -> lijevo
+    if (day <= 15) {
+        if (rect.right + formWidth < windowWidth) {
+            leftPosition = rect.right + window.scrollX + 10; // Otvara desno
+            console.log("Otvara se DESNO");
+        } else {
+            leftPosition = rect.left + window.scrollX - formWidth - 10; // Ako nema mjesta, otvori lijevo
+            console.log("Nema mjesta desno, otvara se LIJEVO");
+        }
+    } else {
+        // Ako je dan 16-31, probaj lijevo, ako nema mjesta -> desno
+        if (rect.left - formWidth > 0) {
+            leftPosition = rect.left + window.scrollX - formWidth - 10; // Otvara lijevo
+            console.log("Otvara se LIJEVO");
+        } else {
+            leftPosition = rect.right + window.scrollX + 10; // Ako nema mjesta, otvori desno
+            console.log("Nema mjesta lijevo, otvara se DESNO");
+        }
+    }
+
+    // Sigurnosne provjere da ne pobjegne van ekrana
+    if (leftPosition + formWidth > windowWidth) {
+        leftPosition = windowWidth - formWidth - 20; // Spriječava izlazak iz ekrana desno
+        console.log("Forma bi pobjegla desno - Korigiram!");
+    }
+    if (leftPosition < 0) {
+        leftPosition = 10; // Spriječava izlazak iz ekrana lijevo
+        console.log("Forma bi pobjegla lijevo - Korigiram!");
+    }
+
+    // Postavi poziciju forme blizu datuma
+    formContainer.style.top = `${rect.bottom + window.scrollY + 5}px`;
+    formContainer.style.left = `${leftPosition}px`;
+
+    // Prikaži overlay i formu
+    formContainer.style.display = "block";
+    overlay.style.display = "block";
+
+    console.log(`Forma otvorena na X: ${leftPosition}`);
+
+    // Klik izvan forme zatvara formu i uklanja istaknuti datum
+    overlay.onclick = function () {
+        formContainer.style.display = "none";
+        overlay.style.display = "none";
+        element.classList.remove("highlighted-date");
+        console.log("Forma zatvorena.");
+    };
+  }
+
+
+    // Pravila u formi
+    document.addEventListener("DOMContentLoaded", function () {
+
+            const btnDnevna = document.getElementById('btnDnevna');
+            const btnNocna = document.getElementById('btnNocna');
+            const startTimeInput = document.getElementById('startShift');
+            const endTimeInput = document.getElementById('endShift');
+            const workDateInput = document.getElementById('workDate');
+
+            function setDateTime(dateString, hours, minutes) {
+                const [year, month, day] = dateString.split('-');
+                const date = new Date(year, month - 1, day, hours, minutes);
+
+                // Formatiranje u lokalno vrijeme
+                const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+                const formattedTime = `${String(date.getHours()).padStart(2, '0')}:00`; // Uvijek 00 minute
+
+                return `${formattedDate}T${formattedTime}`;
+            }
+
+             function adjustMinutesToZero(input) {
+                if(!input.value) return;
+
+                const [datePart, timePart] = input.value.split('T');
+                let [hours, minutes] = timePart.split(':');
+
+                if(minutes !== '00') {
+                    input.value = `${datePart}T${hours}:00`;
+                }
+            }
+
+            // Dodajemo event listenere za automatsku korekciju
+            startTimeInput.addEventListener('change', function() {
+                adjustMinutesToZero(this);
+            });
+
+            endTimeInput.addEventListener('change', function() {
+                adjustMinutesToZero(this);
+            });
+
+
+            btnDnevna.addEventListener('click', function() {
+                const selectedDate = workDateInput.value;
+                startTimeInput.value = setDateTime(selectedDate, 7, 0);
+                endTimeInput.value = setDateTime(selectedDate, 19, 0);
+            });
+
+            btnNocna.addEventListener('click', function() {
+                const selectedDate = workDateInput.value;
+                const nextDay = new Date(selectedDate);
+                nextDay.setDate(nextDay.getDate() + 1);
+
+                startTimeInput.value = setDateTime(selectedDate, 19, 0);
+                endTimeInput.value = setDateTime(nextDay.toISOString().split("T")[0], 7, 0);
+            });
+
+            const workTimeForm = document.getElementById('workTimeForm');
+
+        workTimeForm.addEventListener('submit', function(event) {
+            const start = startTimeInput.value;
+            const end = endTimeInput.value;
+
+            const startDate = new Date(start);
+            const endDate = new Date(end);
+
+            // Provjera da kraj nije prije početka
+            if(endDate <= startDate) {
+                alert('Kraj radnog vremena mora biti nakon početka rada!');
+                event.preventDefault();
+                return;
+            }
+
+            // Provjera trajanja smjene
+            const diffMs = endDate - startDate;
+            const diffHours = diffMs / (1000 * 60 * 60);
+
+            if(diffHours < 1) {
+                alert('Minimalno trajanje radnog vremena je 1 sat!');
+                event.preventDefault();
+                return;
+            }
+
+            if(diffHours > 24) {
+                alert('Maksimalno trajanje radnog vremena je 24 sata!');
+                event.preventDefault();
+                return;
+            }
+        });
+    });
+
+
+</script>
 
 </body>
 </html>

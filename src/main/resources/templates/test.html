@@ -1,92 +1,38 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Testing</title>
+    <title>Working Time</title>
 </head>
 <body>
-    <h1>Testing</h1>
+<h1>Working Time for Employee (ID: <span th:text="${appUserId}"></span>) - <span th:text="${month}"></span>/<span th:text="${year}"></span></h1>
 
-    <table border="1">
-        <thead>
-        <tr>
-            <th>Work Type Name</th>
-            <th>Work Type Num</th>
-            <th>Account Num</th>
-            <th>Day 1</th>
-            <th>Day 2</th>
-            <th>Day 3</th>
-            <th>Day 4</th>
-            <th>Day 5</th>
-            <th>Day 6</th>
-            <th>Day 7</th>
-            <th>Day 8</th>
-            <th>Day 9</th>
-            <th>Day 10</th>
-            <th>Day 11</th>
-            <th>Day 12</th>
-            <th>Day 13</th>
-            <th>Day 14</th>
-            <th>Day 15</th>
-            <th>Day 16</th>
-            <th>Day 17</th>
-            <th>Day 18</th>
-            <th>Day 19</th>
-            <th>Day 20</th>
-            <th>Day 21</th>
-            <th>Day 22</th>
-            <th>Day 23</th>
-            <th>Day 24</th>
-            <th>Day 25</th>
-            <th>Day 26</th>
-            <th>Day 27</th>
-            <th>Day 28</th>
-            <th>Day 29</th>
-            <th>Day 30</th>
-            <th>Day 31</th>
-            <!-- Add more days as needed -->
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Loop over the workTimeItems list passed from the controller -->
-        <tr th:each="item : ${wti}">
-            <td th:text="${item['work_type_name']}"></td>
-            <td th:text="${item['work_type_num']}"></td>
-            <td th:text="${item['account_num']}"></td>
-            <td th:text="${item['day1']}"></td>
-            <td th:text="${item['day2']}"></td>
-            <td th:text="${item['day3']}"></td>
-            <td th:text="${item['day4']}"></td>
-            <td th:text="${item['day5']}"></td>
-            <td th:text="${item['day6']}"></td>
-            <td th:text="${item['day7']}"></td>
-            <td th:text="${item['day8']}"></td>
-            <td th:text="${item['day9']}"></td>
-            <td th:text="${item['day10']}"></td>
-            <td th:text="${item['day11']}"></td>
-            <td th:text="${item['day12']}"></td>
-            <td th:text="${item['day13']}"></td>
-            <td th:text="${item['day14']}"></td>
-            <td th:text="${item['day15']}"></td>
-            <td th:text="${item['day16']}"></td>
-            <td th:text="${item['day17']}"></td>
-            <td th:text="${item['day18']}"></td>
-            <td th:text="${item['day19']}"></td>
-            <td th:text="${item['day20']}"></td>
-            <td th:text="${item['day21']}"></td>
-            <td th:text="${item['day22']}"></td>
-            <td th:text="${item['day23']}"></td>
-            <td th:text="${item['day24']}"></td>
-            <td th:text="${item['day25']}"></td>
-            <td th:text="${item['day26']}"></td>
-            <td th:text="${item['day27']}"></td>
-            <td th:text="${item['day28']}"></td>
-            <td th:text="${item['day29']}"></td>
-            <td th:text="${item['day30']}"></td>
-            <td th:text="${item['day31']}"></td>
-            <!-- Add more days as needed -->
-        </tr>
-        </tbody>
-    </table>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Empty</th>
+        <th th:each="i : ${#numbers.sequence(1, 31)}">Day <span th:text="${i}"></span></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Hours From</td>
+        <td th:each="day : ${workingTimeData['hoursFrom']}">
+            <span th:text="${day != null ? day : ' '}" />
+        </td>
+    </tr>
+    <tr>
+        <td>Hours To</td>
+        <td th:each="day : ${workingTimeData['hoursTo']}">
+            <span th:text="${day != null ? day : ' '}" />
+        </td>
+    </tr>
+    <tr>
+        <td>Total Hours</td>
+        <td th:each="day : ${workingTimeData['totalHours']}">
+            <span th:text="${day != null ? day : ' '}" />
+        </td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

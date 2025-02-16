@@ -20,9 +20,17 @@ public class TestController {
     @GetMapping("/test")
     public String test(Model model) {
 
-        List<Map<String, Object>> workingTimeItems = service.getWorkingTimeItemByDays(1,2,2025);
+        int month = 2;
+        int year = 2025;
 
-        model.addAttribute("wti", workingTimeItems);
+        Map<String, List<Integer>> workingTimeData = service.getFormattedWorkingTimeData(20, 2, 2025);
+        model.addAttribute("workingTimeData", workingTimeData);
+        model.addAttribute("month", month);
+        model.addAttribute("year", year);
+
+//        List<Map<String, Object>> workingTimeItems = service.getWorkingTimeItemByDays(1,2,2025);
+//
+//        model.addAttribute("wti", workingTimeItems);
 
         return "test";
     }

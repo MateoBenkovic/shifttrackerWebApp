@@ -1,13 +1,12 @@
 package com.hita.shifttracker.service;
 
 import com.hita.shifttracker.dto.WorkingTimeItemDTO;
+import com.hita.shifttracker.dto.WorkingTimeItemTotalHourDTO;
 import com.hita.shifttracker.repository.WorkingTimeItemRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class WorkingTimeItemService {
@@ -20,7 +19,7 @@ public class WorkingTimeItemService {
 
     public List<Map<String, Object>> getWorkingTimeItemByDays(int appUserId, int month, int year) {
 
-        List<WorkingTimeItemDTO> items = workingTimeItemRepository.findByEmployeeIdAndMonthAndYear(appUserId, month, year);
+        List<WorkingTimeItemDTO> items = workingTimeItemRepository.findItemByEmployeeIdAndMonthAndYear(appUserId, month, year);
         Map<String, Map<String, Object>> transposedData = new LinkedHashMap<>();
 
         for (WorkingTimeItemDTO item : items) {
@@ -30,16 +29,43 @@ public class WorkingTimeItemService {
             dayData.put("work_type_num", item.getWorkTypeNum());
             dayData.put("account_num", item.getAccountNum());
 
-            // Convert the date into day (1-31)
             int day = item.getDate().getDayOfMonth();
             dayData.put("day" + day, item.getTotalHours());
 
-            // Store the data back in the map
             transposedData.put(key, dayData);
         }
 
         // Convert the map into a list to send back as response
         return new ArrayList<>(transposedData.values());
     }
+
+    public Map<String, List<Integer>> getFormattedWorkingTimeData(int appUserId, int month, int year) {
+        List<WorkingTimeItemTotalHourDTO> items = workingTimeItemRepository.findTotalHoursByEmployeeIdAndMonthAndYear(appUserId, month, year);
+
+        // Prepare a map for the result
+        Map<String, List<Integer>> formattedData = new LinkedHashMap<>();
+        int daysInMonth = LocalDate.of(year, month, 1).lengthOfMonth();
+
+        // Initialize empty lists for the days in the month (for display)
+        List<Integer> hoursFrom = new ArrayList<>(Collections.nCopies(daysInMonth, null));
+        List<Integer> hoursTo = new ArrayList<>(Collections.nCopies(daysInMonth, null));
+        List<Integer> totalHours = new ArrayList<>(Collections.nCopies(daysInMonth, null));
+
+        // Populate the lists with the data
+        for (WorkingTimeItemTotalHourDTO item : items) {
+            int day = item.getDate().getDayOfMonth() - 1; // 0-based index for days
+            hoursFrom.set(day, item.getHoursFrom());
+            hoursTo.set(day, item.getHoursTo());
+            totalHours.set(day, item.getTotalHours());
+        }
+
+        // Add to the map in the desired format
+        formattedData.put("hoursFrom", hoursFrom);
+        formattedData.put("hoursTo", hoursTo);
+        formattedData.put("totalHours", totalHours);
+
+        return formattedData;
+    }
+
 
 }

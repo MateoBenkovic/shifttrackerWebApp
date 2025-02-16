@@ -13,6 +13,8 @@ public class WorkingTimeItemDTO {
     private String accountNum;
     private LocalDate date;
     private Integer workTypeCode;
+    private Integer hoursFrom;
+    private Integer hoursTo;
     private Integer totalHours;
 
 }
