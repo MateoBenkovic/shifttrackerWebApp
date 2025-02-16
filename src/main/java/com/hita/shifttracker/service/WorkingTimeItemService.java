@@ -22,6 +22,8 @@ public class WorkingTimeItemService {
         List<WorkingTimeItemDTO> items = workingTimeItemRepository.findItemByEmployeeIdAndMonthAndYear(appUserId, month, year);
         Map<String, Map<String, Object>> transposedData = new LinkedHashMap<>();
 
+        int daysInMonth = LocalDate.of(year, month, 1).lengthOfMonth();
+
         for (WorkingTimeItemDTO item : items) {
             String key = item.getWorkTypeNum() + "_" + item.getWorkTypeName() + "_" + item.getAccountNum();
             Map<String, Object> dayData = transposedData.getOrDefault(key, new LinkedHashMap<>());
@@ -35,16 +37,51 @@ public class WorkingTimeItemService {
             transposedData.put(key, dayData);
         }
 
+        for (Map<String, Object> dayData : transposedData.values()) {
+            for (int i = 1; i <= daysInMonth; i++) {
+                // If the day is not already present, add a null value (or 0, based on your preference)
+                dayData.putIfAbsent("day" + i, null);
+            }
+        }
+
         // Convert the map into a list to send back as response
         return new ArrayList<>(transposedData.values());
     }
 
-    public Map<String, List<Integer>> getFormattedWorkingTimeData(int appUserId, int month, int year) {
+//    public Map<String, List<Integer>> getFormattedWorkingTimeData(int appUserId, int month, int year) {
+//        List<WorkingTimeItemTotalHourDTO> items = workingTimeItemRepository.findTotalHoursByEmployeeIdAndMonthAndYear(appUserId, month, year);
+//
+//        // Prepare a map for the result
+//        Map<String, List<Integer>> formattedData = new LinkedHashMap<>();
+//        int daysInMonth = LocalDate.of(year, month, 1).lengthOfMonth();
+//
+//        // Initialize empty lists for the days in the month (for display)
+//        List<Integer> hoursFrom = new ArrayList<>(Collections.nCopies(daysInMonth, null));
+//        List<Integer> hoursTo = new ArrayList<>(Collections.nCopies(daysInMonth, null));
+//        List<Integer> totalHours = new ArrayList<>(Collections.nCopies(daysInMonth, null));
+//
+//        // Populate the lists with the data
+//        for (WorkingTimeItemTotalHourDTO item : items) {
+//            int day = item.getDate().getDayOfMonth() - 1; // 0-based index for days
+//            hoursFrom.set(day, item.getHoursFrom());
+//            hoursTo.set(day, item.getHoursTo());
+//            totalHours.set(day, item.getTotalHours());
+//        }
+//
+//        // Add to the map in the desired format
+//        formattedData.put("hoursFrom", hoursFrom);
+//        formattedData.put("hoursTo", hoursTo);
+//        formattedData.put("totalHours", totalHours);
+//
+//
+//        return formattedData;
+//    }
+
+    public Map<String, Object> getFormattedWorkingTimeData(int appUserId, int month, int year) {
         List<WorkingTimeItemTotalHourDTO> items = workingTimeItemRepository.findTotalHoursByEmployeeIdAndMonthAndYear(appUserId, month, year);
 
-        // Prepare a map for the result
-        Map<String, List<Integer>> formattedData = new LinkedHashMap<>();
-        int daysInMonth = LocalDate.of(year, month, 1).lengthOfMonth();
+        // Calculate the number of days in the given month
+        int daysInMonth = LocalDate.of(year, month, 1).lengthOfMonth(); // Will be 28, 29, 30, or 31 depending on the month
 
         // Initialize empty lists for the days in the month (for display)
         List<Integer> hoursFrom = new ArrayList<>(Collections.nCopies(daysInMonth, null));
@@ -59,10 +96,12 @@ public class WorkingTimeItemService {
             totalHours.set(day, item.getTotalHours());
         }
 
-        // Add to the map in the desired format
+        // Add the lists to the formatted data map
+        Map<String, Object> formattedData = new LinkedHashMap<>();
         formattedData.put("hoursFrom", hoursFrom);
         formattedData.put("hoursTo", hoursTo);
         formattedData.put("totalHours", totalHours);
+        formattedData.put("daysInMonth", daysInMonth); // Add days in month to handle display
 
         return formattedData;
     }

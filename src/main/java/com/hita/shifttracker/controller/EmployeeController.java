@@ -4,6 +4,7 @@ import com.hita.shifttracker.dto.AppUserDTO;
 import com.hita.shifttracker.model.Company;
 import com.hita.shifttracker.model.WorkingTime;
 import com.hita.shifttracker.service.CompanyService;
+import com.hita.shifttracker.service.DateService;
 import com.hita.shifttracker.service.WorkingTimeItemService;
 import com.hita.shifttracker.service.WorkingTimeService;
 import jakarta.servlet.http.HttpSession;
@@ -16,6 +17,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 @Controller
@@ -25,12 +28,14 @@ public class EmployeeController {
     private final CompanyService companyService;
     private final WorkingTimeService workingTimeService;
     private final WorkingTimeItemService workingTimeItemService;
+    private final DateService dateService;
 
     private EmployeeController(CompanyService companyService, WorkingTimeService workingTimeService,
-                               WorkingTimeItemService workingTimeItemService) {
+                               WorkingTimeItemService workingTimeItemService, DateService dateService) {
         this.companyService = companyService;
         this.workingTimeService = workingTimeService;
         this.workingTimeItemService = workingTimeItemService;
+        this.dateService = dateService;
     }
 
     @GetMapping("/employee/workhour/list")
@@ -38,21 +43,23 @@ public class EmployeeController {
 
         AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
         Company company = companyService.findWithData();
+        int month = dateService.getCurrentMonthFromDatabase();
+        int year = dateService.getCurrentYearFromDatabase();
 
         model.addAttribute("appUser", appUser);
         model.addAttribute("company", company);
 
-        // calendar service
+        model.addAttribute("currentMonth", month);
+        model.addAttribute("currentYear", year);
+
 
         // get all workhour by employee
-        List<Map<String, Object>> workingTimeItems = workingTimeItemService.getWorkingTimeItemByDays(appUser.getId(), 2,2025);
+        List<Map<String, Object>> workingTimeItems = workingTimeItemService.getWorkingTimeItemByDays(appUser.getId(), month,year);
         model.addAttribute("wtis", workingTimeItems);
 
 
-        int month = 2;
-        int year = 2025;
 
-        Map<String, List<Integer>> workingTimeData = workingTimeItemService.getFormattedWorkingTimeData(appUser.getId(), 2, 2025);
+        Map<String, Object> workingTimeData = workingTimeItemService.getFormattedWorkingTimeData(appUser.getId(), month, year);
         model.addAttribute("workingTimeData", workingTimeData);
         model.addAttribute("month", month);
         model.addAttribute("year", year);

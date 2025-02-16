@@ -23,7 +23,7 @@ public class TestController {
         int month = 2;
         int year = 2025;
 
-        Map<String, List<Integer>> workingTimeData = service.getFormattedWorkingTimeData(20, 2, 2025);
+        Map<String, Object> workingTimeData = service.getFormattedWorkingTimeData(20, 2, 2025);
         model.addAttribute("workingTimeData", workingTimeData);
         model.addAttribute("month", month);
         model.addAttribute("year", year);

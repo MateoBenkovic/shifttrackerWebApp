@@ -164,23 +164,23 @@
             <div class="col-md-6">
                 <div class="d-flex gap-3">
                     <select class="form-select" id="monthSelect">
-                        <option value="1">Siječanj</option>
-                        <option value="2">Veljača</option>
-                        <option value="3">Ožujak</option>
-                        <option value="4">Travanj</option>
-                        <option value="5">Svibanj</option>
-                        <option value="6">Lipanj</option>
-                        <option value="7">Srpanj</option>
-                        <option value="8">Kolovoz</option>
-                        <option value="9">Rujan</option>
-                        <option value="10">Listopad</option>
-                        <option value="11">Studeni</option>
-                        <option value="12">Prosinac</option>
+                        <option value="1" th:selected="${currentMonth == 1}">Siječanj</option>
+                        <option value="2" th:selected="${currentMonth == 2}">Veljača</option>
+                        <option value="3" th:selected="${currentMonth == 3}">Ožujak</option>
+                        <option value="4" th:selected="${currentMonth == 4}">Travanj</option>
+                        <option value="5" th:selected="${currentMonth == 5}">Svibanj</option>
+                        <option value="6" th:selected="${currentMonth == 6}">Lipanj</option>
+                        <option value="7" th:selected="${currentMonth == 7}">Srpanj</option>
+                        <option value="8" th:selected="${currentMonth == 8}">Kolovoz</option>
+                        <option value="9" th:selected="${currentMonth == 9}">Rujan</option>
+                        <option value="10" th:selected="${currentMonth == 10}">Listopad</option>
+                        <option value="11" th:selected="${currentMonth == 11}">Studeni</option>
+                        <option value="12" th:selected="${currentMonth == 12}">Prosinac</option>
                     </select>
                     <select class="form-select" id="yearSelect">
-                        <option value="2023">2023</option>
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
+                        <option value="2023" th:selected="${currentYear == 2023}">2023</option>
+                        <option value="2024" th:selected="${currentYear == 2024}">2024</option>
+                        <option value="2025" th:selected="${currentYear == 2025}">2025</option>
                     </select>
                 </div>
             </div>
@@ -199,74 +199,90 @@
             </tr>
             </thead>
             <tbody>
+
+
             <tr>
-                <td>Hours From</td>
+                <td class="work-type">Početak rada</td>
                 <td th:each="day : ${workingTimeData['hoursFrom']}">
                     <span th:text="${day != null ? day : ' '}" />
                 </td>
             </tr>
+
             <tr>
-                <td>Hours To</td>
+                <td class="work-type">Završetak rada</td>
                 <td th:each="day : ${workingTimeData['hoursTo']}">
                     <span th:text="${day != null ? day : ' '}" />
                 </td>
             </tr>
-            <tr>
-                <td>Total Hours</td>
+
+            <tr class="total-row">
+                <td class="work-type">UKUPNO RADNO VRIJEME</td>
                 <td th:each="day : ${workingTimeData['totalHours']}">
                     <span th:text="${day != null ? day : ' '}" />
                 </td>
             </tr>
+
+            <!-- This row will loop through all days (1 to 31) -->
             <tr th:each="wti : ${wtis}">
-                <td th:text="${wti['work_type_num'] + '. ' + wti['work_type_name'] + ' - ' + wti['account_num']}"></td>
-                <td th:text="${wti['day1']}"></td>
-                <td th:text="${wti['day2']}"></td>
-                <td th:text="${wti['day3']}"></td>
-                <td th:text="${wti['day4']}"></td>
-                <td th:text="${wti['day5']}"></td>
-                <td th:text="${wti['day6']}"></td>
-                <td th:text="${wti['day7']}"></td>
-                <td th:text="${wti['day8']}"></td>
-                <td th:text="${wti['day9']}"></td>
-                <td th:text="${wti['day10']}"></td>
-                <td th:text="${wti['day11']}"></td>
-                <td th:text="${wti['day12']}"></td>
-                <td th:text="${wti['day13']}"></td>
-                <td th:text="${wti['day14']}"></td>
-                <td th:text="${wti['day15']}"></td>
-                <td th:text="${wti['day16']}"></td>
-                <td th:text="${wti['day17']}"></td>
-                <td th:text="${wti['day18']}"></td>
-                <td th:text="${wti['day19']}"></td>
-                <td th:text="${wti['day20']}"></td>
-                <td th:text="${wti['day21']}"></td>
-                <td th:text="${wti['day22']}"></td>
-                <td th:text="${wti['day23']}"></td>
-                <td th:text="${wti['day24']}"></td>
-                <td th:text="${wti['day25']}"></td>
-                <td th:text="${wti['day26']}"></td>
-                <td th:text="${wti['day27']}"></td>
-                <td th:text="${wti['day28']}"></td>
-                <td th:text="${wti['day29']}"></td>
-                <td th:text="${wti['day30']}"></td>
-                <td th:text="${wti['day31']}"></td>
+                <td class="work-type" th:text="${wti['work_type_num'] + '. ' + wti['work_type_name'] + ' - ' + wti['account_num']}"></td>
+
+                <!-- Loop through all 31 days dynamically -->
+                <td th:each="i : ${#numbers.sequence(1, 31)}" th:text="${wti['day' + i] != null ? wti['day' + i] : ' '}" />
             </tr>
 
-
-
+<!--            <tr>-->
+<!--                <td class="work-type">Početak rada</td>-->
+<!--                <td th:each="day : ${workingTimeData['hoursFrom']}">-->
+<!--                    <span th:text="${day != null ? day : ' '}" />-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td class="work-type">Završetak rada</td>-->
+<!--                <td th:each="day : ${workingTimeData['hoursTo']}">-->
+<!--                    <span th:text="${day != null ? day : ' '}" />-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            <tr class="total-row">-->
+<!--                <td class="work-type">UKUPNO RADNO VRIJEME</td>-->
+<!--                <td th:each="day : ${workingTimeData['totalHours']}">-->
+<!--                    <span th:text="${day != null ? day : ' '}" />-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            <tr th:each="wti : ${wtis}">-->
+<!--                <td th:text="${wti['work_type_num'] + '. ' + wti['work_type_name'] + ' - ' + wti['account_num']}"></td>-->
+<!--                <td th:text="${wti['day1']}"></td>-->
+<!--                <td th:text="${wti['day2']}"></td>-->
+<!--                <td th:text="${wti['day3']}"></td>-->
+<!--                <td th:text="${wti['day4']}"></td>-->
+<!--                <td th:text="${wti['day5']}"></td>-->
+<!--                <td th:text="${wti['day6']}"></td>-->
+<!--                <td th:text="${wti['day7']}"></td>-->
+<!--                <td th:text="${wti['day8']}"></td>-->
+<!--                <td th:text="${wti['day9']}"></td>-->
+<!--                <td th:text="${wti['day10']}"></td>-->
+<!--                <td th:text="${wti['day11']}"></td>-->
+<!--                <td th:text="${wti['day12']}"></td>-->
+<!--                <td th:text="${wti['day13']}"></td>-->
+<!--                <td th:text="${wti['day14']}"></td>-->
+<!--                <td th:text="${wti['day15']}"></td>-->
+<!--                <td th:text="${wti['day16']}"></td>-->
+<!--                <td th:text="${wti['day17']}"></td>-->
+<!--                <td th:text="${wti['day18']}"></td>-->
+<!--                <td th:text="${wti['day19']}"></td>-->
+<!--                <td th:text="${wti['day20']}"></td>-->
+<!--                <td th:text="${wti['day21']}"></td>-->
+<!--                <td th:text="${wti['day22']}"></td>-->
+<!--                <td th:text="${wti['day23']}"></td>-->
+<!--                <td th:text="${wti['day24']}"></td>-->
+<!--                <td th:text="${wti['day25']}"></td>-->
+<!--                <td th:text="${wti['day26']}"></td>-->
+<!--                <td th:text="${wti['day27']}"></td>-->
+<!--                <td th:text="${wti['day28']}"></td>-->
+<!--                <td th:text="${wti['day29']}"></td>-->
+<!--                <td th:text="${wti['day30']}"></td>-->
+<!--                <td th:text="${wti['day31']}"></td>-->
+<!--            </tr>-->
             <!-- Add more work types... -->
-            </tbody>
-        </table>
-
-        <table>
-            <thead>
-            <tr>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="wtuv : ${workingTimesUserView}">
-
-            </tr>
             </tbody>
         </table>
     </div>
@@ -304,225 +320,225 @@
 
 <script>
 
-    document.getElementById("monthSelect").addEventListener("change", function() {
-    generateCalendar(parseInt(this.value));
-  });
+<!--    document.getElementById("monthSelect").addEventListener("change", function() {-->
+<!--    generateCalendar(parseInt(this.value));-->
+<!--  });-->
 
-  function generateCalendar(selectedMonth) {
-    const calendarRow = document.getElementById("calendarRow");
-    calendarRow.innerHTML = ""; // Očisti tablicu prije generiranja
-
-
-    const currentYear = new Date().getFullYear(); // Trenutna godina
-    const daysInMonth = new Date(currentYear, selectedMonth, 0).getDate(); // Broj dana u mjesecu
-
-    // Dodaj prvi stupac "Vrsta rada"
-    const typeTh = document.createElement("th");
-    typeTh.textContent = "Vrsta rada";
-    typeTh.style.cursor = "default";
-    calendarRow.appendChild(typeTh);
-
-    // Generiraj dane
-    for (let day = 1; day <= daysInMonth; day++) {
-        const th = document.createElement("th");
-        th.textContent = day;
-        th.onclick = function() { openForm(day, this); }; // Zadrži funkcionalnost otvaranja forme
-        calendarRow.appendChild(th);
-    }
-
-    // Dodaj zadnji stupac "Ukupno"
-    const totalTh = document.createElement("th");
-    totalTh.textContent = "Ukupno";
-    totalTh.style.cursor = "default";
-    calendarRow.appendChild(totalTh);
-  }
-
-  // Pozovi funkciju da inicijalno postavi trenutni mjesec
-  const today = new Date();
-  document.getElementById("monthSelect").value = today.getMonth() + 1; // Postavi trenutni mjesec
-  generateCalendar(today.getMonth() + 1);
+<!--  function generateCalendar(selectedMonth) {-->
+<!--    const calendarRow = document.getElementById("calendarRow");-->
+<!--    calendarRow.innerHTML = ""; // Očisti tablicu prije generiranja-->
 
 
-    function openForm(day, element) {
+<!--    const currentYear = new Date().getFullYear(); // Trenutna godina-->
+<!--    const daysInMonth = new Date(currentYear, selectedMonth, 0).getDate(); // Broj dana u mjesecu-->
 
-    const formContainer = document.getElementById("workTimeFormContainer");
-    const workDateInput = document.getElementById("workDate");
-    const overlay = document.getElementById("overlay");
-    const startTimeInput = document.getElementById("startShift");
-    const endTimeInput = document.getElementById("endShift");
+<!--    // Dodaj prvi stupac "Vrsta rada"-->
+<!--    const typeTh = document.createElement("th");-->
+<!--    typeTh.textContent = "Vrsta rada";-->
+<!--    typeTh.style.cursor = "default";-->
+<!--    calendarRow.appendChild(typeTh);-->
 
-    // Prvo forsiramo da forma dobije pravu širinu
-    formContainer.style.display = "block";
-    formContainer.style.visibility = "hidden"; // Ne vidi se dok ne dobijemo dimenzije
+<!--    // Generiraj dane-->
+<!--    for (let day = 1; day <= daysInMonth; day++) {-->
+<!--        const th = document.createElement("th");-->
+<!--        th.textContent = day;-->
+<!--        th.onclick = function() { openForm(day, this); }; // Zadrži funkcionalnost otvaranja forme-->
+<!--        calendarRow.appendChild(th);-->
+<!--    }-->
 
-    // Sada možemo dobiti pravu širinu forme
-    const formWidth = formContainer.offsetWidth;
+<!--    // Dodaj zadnji stupac "Ukupno"-->
+<!--    const totalTh = document.createElement("th");-->
+<!--    totalTh.textContent = "Ukupno";-->
+<!--    totalTh.style.cursor = "default";-->
+<!--    calendarRow.appendChild(totalTh);-->
+<!--  }-->
 
-    // Resetiraj formu dok se ne postavi ispravna pozicija
-    formContainer.style.display = "none";
-    formContainer.style.visibility = "visible"; // Sad se vidi kad je otvoriš
-
-    startTimeInput.value = "";
-    endTimeInput.value = "";
-
-    // Postavi datum u input[type="date"]
-    const selectedMonth = document.getElementById("monthSelect").value; // Dohvati odabrani mjesec
-    const currentYear = new Date().getFullYear(); // Dohvati trenutnu godinu
-    const selectedDate = `${currentYear}-${String(selectedMonth).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-
-    workDateInput.value = selectedDate;
-
-    // Resetiraj prethodno istaknuti datum
-    document.querySelectorAll(".highlighted-date").forEach(el => el.classList.remove("highlighted-date"));
-
-    // Istakni kliknuti datum
-    element.classList.add("highlighted-date");
-
-    // Pronađi poziciju kliknutog elementa
-    const rect = element.getBoundingClientRect();
-    const windowWidth = window.innerWidth;
-
-    let leftPosition;
-
-    // Ako je dan 1-15, probaj desno, ako nema mjesta -> lijevo
-    if (day <= 15) {
-        if (rect.right + formWidth < windowWidth) {
-            leftPosition = rect.right + window.scrollX + 10; // Otvara desno
-            console.log("Otvara se DESNO");
-        } else {
-            leftPosition = rect.left + window.scrollX - formWidth - 10; // Ako nema mjesta, otvori lijevo
-            console.log("Nema mjesta desno, otvara se LIJEVO");
-        }
-    } else {
-        // Ako je dan 16-31, probaj lijevo, ako nema mjesta -> desno
-        if (rect.left - formWidth > 0) {
-            leftPosition = rect.left + window.scrollX - formWidth - 10; // Otvara lijevo
-            console.log("Otvara se LIJEVO");
-        } else {
-            leftPosition = rect.right + window.scrollX + 10; // Ako nema mjesta, otvori desno
-            console.log("Nema mjesta lijevo, otvara se DESNO");
-        }
-    }
-
-    // Sigurnosne provjere da ne pobjegne van ekrana
-    if (leftPosition + formWidth > windowWidth) {
-        leftPosition = windowWidth - formWidth - 20; // Spriječava izlazak iz ekrana desno
-        console.log("Forma bi pobjegla desno - Korigiram!");
-    }
-    if (leftPosition < 0) {
-        leftPosition = 10; // Spriječava izlazak iz ekrana lijevo
-        console.log("Forma bi pobjegla lijevo - Korigiram!");
-    }
-
-    // Postavi poziciju forme blizu datuma
-    formContainer.style.top = `${rect.bottom + window.scrollY + 5}px`;
-    formContainer.style.left = `${leftPosition}px`;
-
-    // Prikaži overlay i formu
-    formContainer.style.display = "block";
-    overlay.style.display = "block";
-
-    console.log(`Forma otvorena na X: ${leftPosition}`);
-
-    // Klik izvan forme zatvara formu i uklanja istaknuti datum
-    overlay.onclick = function () {
-        formContainer.style.display = "none";
-        overlay.style.display = "none";
-        element.classList.remove("highlighted-date");
-        console.log("Forma zatvorena.");
-    };
-  }
+<!--  // Pozovi funkciju da inicijalno postavi trenutni mjesec-->
+<!--  const today = new Date();-->
+<!--  document.getElementById("monthSelect").value = today.getMonth() + 1; // Postavi trenutni mjesec-->
+<!--  generateCalendar(today.getMonth() + 1);-->
 
 
-    // Pravila u formi
-    document.addEventListener("DOMContentLoaded", function () {
+<!--    function openForm(day, element) {-->
 
-            const btnDnevna = document.getElementById('btnDnevna');
-            const btnNocna = document.getElementById('btnNocna');
-            const startTimeInput = document.getElementById('startShift');
-            const endTimeInput = document.getElementById('endShift');
-            const workDateInput = document.getElementById('workDate');
+<!--    const formContainer = document.getElementById("workTimeFormContainer");-->
+<!--    const workDateInput = document.getElementById("workDate");-->
+<!--    const overlay = document.getElementById("overlay");-->
+<!--    const startTimeInput = document.getElementById("startShift");-->
+<!--    const endTimeInput = document.getElementById("endShift");-->
 
-            function setDateTime(dateString, hours, minutes) {
-                const [year, month, day] = dateString.split('-');
-                const date = new Date(year, month - 1, day, hours, minutes);
+<!--    // Prvo forsiramo da forma dobije pravu širinu-->
+<!--    formContainer.style.display = "block";-->
+<!--    formContainer.style.visibility = "hidden"; // Ne vidi se dok ne dobijemo dimenzije-->
 
-                // Formatiranje u lokalno vrijeme
-                const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-                const formattedTime = `${String(date.getHours()).padStart(2, '0')}:00`; // Uvijek 00 minute
+<!--    // Sada možemo dobiti pravu širinu forme-->
+<!--    const formWidth = formContainer.offsetWidth;-->
 
-                return `${formattedDate}T${formattedTime}`;
-            }
+<!--    // Resetiraj formu dok se ne postavi ispravna pozicija-->
+<!--    formContainer.style.display = "none";-->
+<!--    formContainer.style.visibility = "visible"; // Sad se vidi kad je otvoriš-->
 
-             function adjustMinutesToZero(input) {
-                if(!input.value) return;
+<!--    startTimeInput.value = "";-->
+<!--    endTimeInput.value = "";-->
 
-                const [datePart, timePart] = input.value.split('T');
-                let [hours, minutes] = timePart.split(':');
+<!--    // Postavi datum u input[type="date"]-->
+<!--    const selectedMonth = document.getElementById("monthSelect").value; // Dohvati odabrani mjesec-->
+<!--    const currentYear = new Date().getFullYear(); // Dohvati trenutnu godinu-->
+<!--    const selectedDate = `${currentYear}-${String(selectedMonth).padStart(2, "0")}-${String(day).padStart(2, "0")}`;-->
 
-                if(minutes !== '00') {
-                    input.value = `${datePart}T${hours}:00`;
-                }
-            }
+<!--    workDateInput.value = selectedDate;-->
 
-            // Dodajemo event listenere za automatsku korekciju
-            startTimeInput.addEventListener('change', function() {
-                adjustMinutesToZero(this);
-            });
+<!--    // Resetiraj prethodno istaknuti datum-->
+<!--    document.querySelectorAll(".highlighted-date").forEach(el => el.classList.remove("highlighted-date"));-->
 
-            endTimeInput.addEventListener('change', function() {
-                adjustMinutesToZero(this);
-            });
+<!--    // Istakni kliknuti datum-->
+<!--    element.classList.add("highlighted-date");-->
+
+<!--    // Pronađi poziciju kliknutog elementa-->
+<!--    const rect = element.getBoundingClientRect();-->
+<!--    const windowWidth = window.innerWidth;-->
+
+<!--    let leftPosition;-->
+
+<!--    // Ako je dan 1-15, probaj desno, ako nema mjesta -> lijevo-->
+<!--    if (day <= 15) {-->
+<!--        if (rect.right + formWidth < windowWidth) {-->
+<!--            leftPosition = rect.right + window.scrollX + 10; // Otvara desno-->
+<!--            console.log("Otvara se DESNO");-->
+<!--        } else {-->
+<!--            leftPosition = rect.left + window.scrollX - formWidth - 10; // Ako nema mjesta, otvori lijevo-->
+<!--            console.log("Nema mjesta desno, otvara se LIJEVO");-->
+<!--        }-->
+<!--    } else {-->
+<!--        // Ako je dan 16-31, probaj lijevo, ako nema mjesta -> desno-->
+<!--        if (rect.left - formWidth > 0) {-->
+<!--            leftPosition = rect.left + window.scrollX - formWidth - 10; // Otvara lijevo-->
+<!--            console.log("Otvara se LIJEVO");-->
+<!--        } else {-->
+<!--            leftPosition = rect.right + window.scrollX + 10; // Ako nema mjesta, otvori desno-->
+<!--            console.log("Nema mjesta lijevo, otvara se DESNO");-->
+<!--        }-->
+<!--    }-->
+
+<!--    // Sigurnosne provjere da ne pobjegne van ekrana-->
+<!--    if (leftPosition + formWidth > windowWidth) {-->
+<!--        leftPosition = windowWidth - formWidth - 20; // Spriječava izlazak iz ekrana desno-->
+<!--        console.log("Forma bi pobjegla desno - Korigiram!");-->
+<!--    }-->
+<!--    if (leftPosition < 0) {-->
+<!--        leftPosition = 10; // Spriječava izlazak iz ekrana lijevo-->
+<!--        console.log("Forma bi pobjegla lijevo - Korigiram!");-->
+<!--    }-->
+
+<!--    // Postavi poziciju forme blizu datuma-->
+<!--    formContainer.style.top = `${rect.bottom + window.scrollY + 5}px`;-->
+<!--    formContainer.style.left = `${leftPosition}px`;-->
+
+<!--    // Prikaži overlay i formu-->
+<!--    formContainer.style.display = "block";-->
+<!--    overlay.style.display = "block";-->
+
+<!--    console.log(`Forma otvorena na X: ${leftPosition}`);-->
+
+<!--    // Klik izvan forme zatvara formu i uklanja istaknuti datum-->
+<!--    overlay.onclick = function () {-->
+<!--        formContainer.style.display = "none";-->
+<!--        overlay.style.display = "none";-->
+<!--        element.classList.remove("highlighted-date");-->
+<!--        console.log("Forma zatvorena.");-->
+<!--    };-->
+<!--  }-->
 
 
-            btnDnevna.addEventListener('click', function() {
-                const selectedDate = workDateInput.value;
-                startTimeInput.value = setDateTime(selectedDate, 7, 0);
-                endTimeInput.value = setDateTime(selectedDate, 19, 0);
-            });
+<!--    // Pravila u formi-->
+<!--    document.addEventListener("DOMContentLoaded", function () {-->
 
-            btnNocna.addEventListener('click', function() {
-                const selectedDate = workDateInput.value;
-                const nextDay = new Date(selectedDate);
-                nextDay.setDate(nextDay.getDate() + 1);
+<!--            const btnDnevna = document.getElementById('btnDnevna');-->
+<!--            const btnNocna = document.getElementById('btnNocna');-->
+<!--            const startTimeInput = document.getElementById('startShift');-->
+<!--            const endTimeInput = document.getElementById('endShift');-->
+<!--            const workDateInput = document.getElementById('workDate');-->
 
-                startTimeInput.value = setDateTime(selectedDate, 19, 0);
-                endTimeInput.value = setDateTime(nextDay.toISOString().split("T")[0], 7, 0);
-            });
+<!--            function setDateTime(dateString, hours, minutes) {-->
+<!--                const [year, month, day] = dateString.split('-');-->
+<!--                const date = new Date(year, month - 1, day, hours, minutes);-->
 
-            const workTimeForm = document.getElementById('workTimeForm');
+<!--                // Formatiranje u lokalno vrijeme-->
+<!--                const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;-->
+<!--                const formattedTime = `${String(date.getHours()).padStart(2, '0')}:00`; // Uvijek 00 minute-->
 
-        workTimeForm.addEventListener('submit', function(event) {
-            const start = startTimeInput.value;
-            const end = endTimeInput.value;
+<!--                return `${formattedDate}T${formattedTime}`;-->
+<!--            }-->
 
-            const startDate = new Date(start);
-            const endDate = new Date(end);
+<!--             function adjustMinutesToZero(input) {-->
+<!--                if(!input.value) return;-->
 
-            // Provjera da kraj nije prije početka
-            if(endDate <= startDate) {
-                alert('Kraj radnog vremena mora biti nakon početka rada!');
-                event.preventDefault();
-                return;
-            }
+<!--                const [datePart, timePart] = input.value.split('T');-->
+<!--                let [hours, minutes] = timePart.split(':');-->
 
-            // Provjera trajanja smjene
-            const diffMs = endDate - startDate;
-            const diffHours = diffMs / (1000 * 60 * 60);
+<!--                if(minutes !== '00') {-->
+<!--                    input.value = `${datePart}T${hours}:00`;-->
+<!--                }-->
+<!--            }-->
 
-            if(diffHours < 1) {
-                alert('Minimalno trajanje radnog vremena je 1 sat!');
-                event.preventDefault();
-                return;
-            }
+<!--            // Dodajemo event listenere za automatsku korekciju-->
+<!--            startTimeInput.addEventListener('change', function() {-->
+<!--                adjustMinutesToZero(this);-->
+<!--            });-->
 
-            if(diffHours > 24) {
-                alert('Maksimalno trajanje radnog vremena je 24 sata!');
-                event.preventDefault();
-                return;
-            }
-        });
-    });
+<!--            endTimeInput.addEventListener('change', function() {-->
+<!--                adjustMinutesToZero(this);-->
+<!--            });-->
+
+
+<!--            btnDnevna.addEventListener('click', function() {-->
+<!--                const selectedDate = workDateInput.value;-->
+<!--                startTimeInput.value = setDateTime(selectedDate, 7, 0);-->
+<!--                endTimeInput.value = setDateTime(selectedDate, 19, 0);-->
+<!--            });-->
+
+<!--            btnNocna.addEventListener('click', function() {-->
+<!--                const selectedDate = workDateInput.value;-->
+<!--                const nextDay = new Date(selectedDate);-->
+<!--                nextDay.setDate(nextDay.getDate() + 1);-->
+
+<!--                startTimeInput.value = setDateTime(selectedDate, 19, 0);-->
+<!--                endTimeInput.value = setDateTime(nextDay.toISOString().split("T")[0], 7, 0);-->
+<!--            });-->
+
+<!--            const workTimeForm = document.getElementById('workTimeForm');-->
+
+<!--        workTimeForm.addEventListener('submit', function(event) {-->
+<!--            const start = startTimeInput.value;-->
+<!--            const end = endTimeInput.value;-->
+
+<!--            const startDate = new Date(start);-->
+<!--            const endDate = new Date(end);-->
+
+<!--            // Provjera da kraj nije prije početka-->
+<!--            if(endDate <= startDate) {-->
+<!--                alert('Kraj radnog vremena mora biti nakon početka rada!');-->
+<!--                event.preventDefault();-->
+<!--                return;-->
+<!--            }-->
+
+<!--            // Provjera trajanja smjene-->
+<!--            const diffMs = endDate - startDate;-->
+<!--            const diffHours = diffMs / (1000 * 60 * 60);-->
+
+<!--            if(diffHours < 1) {-->
+<!--                alert('Minimalno trajanje radnog vremena je 1 sat!');-->
+<!--                event.preventDefault();-->
+<!--                return;-->
+<!--            }-->
+
+<!--            if(diffHours > 24) {-->
+<!--                alert('Maksimalno trajanje radnog vremena je 24 sata!');-->
+<!--                event.preventDefault();-->
+<!--                return;-->
+<!--            }-->
+<!--        });-->
+<!--    });-->
 
 
 </script>

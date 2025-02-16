@@ -1,8 +1,6 @@
 package com.hita.shifttracker.controller;
 
 import com.hita.shifttracker.dto.AppUserDTO;
-import com.hita.shifttracker.model.AppUser;
-import com.hita.shifttracker.repository.AppUserRepository;
 import com.hita.shifttracker.service.AppUserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
