@@ -1,6 +1,6 @@
 package com.hita.shifttracker.model;
 
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -8,7 +8,10 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.LocalDate;
 
 @Table(name = "working_time")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class WorkingTime {
 
     @Id
@@ -39,5 +42,9 @@ public class WorkingTime {
 
     @Column("shift_id")
     private int shiftId;
+
+    public WorkingTime(LocalDate dateFrom) {
+        this.dateFrom = dateFrom;
+    }
 
 }

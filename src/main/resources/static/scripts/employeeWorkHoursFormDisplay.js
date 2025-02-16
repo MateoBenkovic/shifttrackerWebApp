@@ -1,4 +1,4 @@
-export function openForm(day, element, year, month) {
+function openForm(day, element, year, month) {
     const formContainer = document.getElementById("workTimeFormContainer");
     const workDateInput = document.getElementById("workDate");
     const overlay = document.getElementById("overlay");

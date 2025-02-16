@@ -2,6 +2,8 @@ package com.hita.shifttracker.service;
 
 import com.hita.shifttracker.dto.WorkingTimeItemDTO;
 import com.hita.shifttracker.dto.WorkingTimeItemTotalHourDTO;
+import com.hita.shifttracker.model.AppUser;
+import com.hita.shifttracker.model.WorkingTimeItemView;
 import com.hita.shifttracker.repository.WorkingTimeItemRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ public class WorkingTimeItemService {
         this.workingTimeItemRepository = workingTimeItemRepository;
     }
 
+    @Deprecated
     public List<Map<String, Object>> getWorkingTimeItemByDays(int appUserId, int month, int year) {
 
         List<WorkingTimeItemDTO> items = workingTimeItemRepository.findItemByEmployeeIdAndMonthAndYear(appUserId, month, year);
@@ -77,6 +80,7 @@ public class WorkingTimeItemService {
 //        return formattedData;
 //    }
 
+    @Deprecated
     public Map<String, Object> getFormattedWorkingTimeData(int appUserId, int month, int year) {
         List<WorkingTimeItemTotalHourDTO> items = workingTimeItemRepository.findTotalHoursByEmployeeIdAndMonthAndYear(appUserId, month, year);
 
@@ -106,5 +110,8 @@ public class WorkingTimeItemService {
         return formattedData;
     }
 
+    public List<WorkingTimeItemView> getWorkingTimeItemViewByAppUser(AppUser appUser, int month, int year) {
+        return workingTimeItemRepository.findAllWorkingTimeItemViewByAppUser(appUser, month, year);
+    }
 
 }

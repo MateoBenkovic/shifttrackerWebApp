@@ -1,24 +1,28 @@
 package com.hita.shifttracker.controller;
 
 import com.hita.shifttracker.dto.AppUserDTO;
+import com.hita.shifttracker.model.AppUser;
 import com.hita.shifttracker.model.Company;
 import com.hita.shifttracker.model.WorkingTime;
+import com.hita.shifttracker.model.WorkingTimeItemView;
 import com.hita.shifttracker.service.CompanyService;
 import com.hita.shifttracker.service.DateService;
 import com.hita.shifttracker.service.WorkingTimeItemService;
 import com.hita.shifttracker.service.WorkingTimeService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.HashMap;
 
 
 @Controller
@@ -49,23 +53,32 @@ public class EmployeeController {
         model.addAttribute("appUser", appUser);
         model.addAttribute("company", company);
 
-        model.addAttribute("currentMonth", month);
-        model.addAttribute("currentYear", year);
-
-
-        // get all workhour by employee
-        List<Map<String, Object>> workingTimeItems = workingTimeItemService.getWorkingTimeItemByDays(appUser.getId(), month,year);
-        model.addAttribute("wtis", workingTimeItems);
-
-
-
-        Map<String, Object> workingTimeData = workingTimeItemService.getFormattedWorkingTimeData(appUser.getId(), month, year);
-        model.addAttribute("workingTimeData", workingTimeData);
-        model.addAttribute("month", month);
-        model.addAttribute("year", year);
 
         return "employee_workhour_list";
     }
+
+    @GetMapping("/employee/workhour/data")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getEmployeeWorkHours(HttpSession session,
+                                                                    @RequestParam int month,
+                                                                    @RequestParam int year) {
+
+        AppUser appUser = (AppUser) session.getAttribute("appUser");
+
+        if (appUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        List<WorkingTimeItemView> workingTimeItemsView = workingTimeItemService.getWorkingTimeItemViewByAppUser(appUser, month, year);
+        Map<LocalDate, WorkingTime> workingTimeMap = workingTimeService.getWorkingTimeForMonth(appUser, year, month);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("workHours", workingTimeItemsView);
+        response.put("workingTimes", workingTimeMap);
+
+        return ResponseEntity.ok(response);
+    }
+
 
     @GetMapping("/employee/workhour/process")
     public String employeeWorkHourProcess(@RequestParam("startShift") String startShift, @RequestParam("endShift") String endShift,
