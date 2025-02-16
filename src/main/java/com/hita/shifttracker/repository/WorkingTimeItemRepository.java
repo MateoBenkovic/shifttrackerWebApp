@@ -79,7 +79,7 @@ public class WorkingTimeItemRepository {
         }, appUserId, month, year);
     }
 
-    public List<WorkingTimeItemView> findAllWorkingTimeItemViewByAppUser(AppUser appUser, int month, int year) {
+    public List<WorkingTimeItemView> findAllWorkingTimeItemViewByAppUser(AppUserDTO appUser, int month, int year) {
         String sql = "SELECT * FROM vw_working_time_user_wt_cal wtuv " +
                      "WHERE wtuv.us_code = ? AND wtuv.mjesec = ? AND wtuv.godina = ?";
 
@@ -92,41 +92,41 @@ public class WorkingTimeItemRepository {
             workingTimeItemView.setIdWorkTypes(rs.getInt("id_v_r"));
             workingTimeItemView.setWorkTypeName(rs.getString("naziv_vr_rada"));
 
-            workingTimeItemView.setDay01(rs.getInt("1"));
-            workingTimeItemView.setDay02(rs.getInt("2"));
-            workingTimeItemView.setDay03(rs.getInt("3"));
-            workingTimeItemView.setDay04(rs.getInt("4"));
-            workingTimeItemView.setDay05(rs.getInt("5"));
-            workingTimeItemView.setDay06(rs.getInt("6"));
-            workingTimeItemView.setDay07(rs.getInt("7"));
-            workingTimeItemView.setDay08(rs.getInt("8"));
-            workingTimeItemView.setDay09(rs.getInt("9"));
-            workingTimeItemView.setDay10(rs.getInt("10"));
-            workingTimeItemView.setDay11(rs.getInt("11"));
-            workingTimeItemView.setDay12(rs.getInt("12"));
-            workingTimeItemView.setDay13(rs.getInt("13"));
-            workingTimeItemView.setDay14(rs.getInt("14"));
-            workingTimeItemView.setDay15(rs.getInt("15"));
-            workingTimeItemView.setDay16(rs.getInt("16"));
-            workingTimeItemView.setDay17(rs.getInt("17"));
-            workingTimeItemView.setDay18(rs.getInt("18"));
-            workingTimeItemView.setDay19(rs.getInt("19"));
-            workingTimeItemView.setDay20(rs.getInt("20"));
-            workingTimeItemView.setDay21(rs.getInt("21"));
-            workingTimeItemView.setDay22(rs.getInt("22"));
-            workingTimeItemView.setDay23(rs.getInt("23"));
-            workingTimeItemView.setDay24(rs.getInt("24"));
-            workingTimeItemView.setDay25(rs.getInt("25"));
-            workingTimeItemView.setDay26(rs.getInt("26"));
-            workingTimeItemView.setDay27(rs.getInt("27"));
-            workingTimeItemView.setDay28(rs.getInt("28"));
-            workingTimeItemView.setDay29(rs.getInt("29"));
-            workingTimeItemView.setDay30(rs.getInt("30"));
-            workingTimeItemView.setDay31(rs.getInt("31"));
+            workingTimeItemView.setDay01(rs.getString("1"));
+            workingTimeItemView.setDay02(rs.getString("2"));
+            workingTimeItemView.setDay03(rs.getString("3"));
+            workingTimeItemView.setDay04(rs.getString("4"));
+            workingTimeItemView.setDay05(rs.getString("5"));
+            workingTimeItemView.setDay06(rs.getString("6"));
+            workingTimeItemView.setDay07(rs.getString("7"));
+            workingTimeItemView.setDay08(rs.getString("8"));
+            workingTimeItemView.setDay09(rs.getString("9"));
+            workingTimeItemView.setDay10(rs.getString("10"));
+            workingTimeItemView.setDay11(rs.getString("11"));
+            workingTimeItemView.setDay12(rs.getString("12"));
+            workingTimeItemView.setDay13(rs.getString("13"));
+            workingTimeItemView.setDay14(rs.getString("14"));
+            workingTimeItemView.setDay15(rs.getString("15"));
+            workingTimeItemView.setDay16(rs.getString("16"));
+            workingTimeItemView.setDay17(rs.getString("17"));
+            workingTimeItemView.setDay18(rs.getString("18"));
+            workingTimeItemView.setDay19(rs.getString("19"));
+            workingTimeItemView.setDay20(rs.getString("20"));
+            workingTimeItemView.setDay21(rs.getString("21"));
+            workingTimeItemView.setDay22(rs.getString("22"));
+            workingTimeItemView.setDay23(rs.getString("23"));
+            workingTimeItemView.setDay24(rs.getString("24"));
+            workingTimeItemView.setDay25(rs.getString("25"));
+            workingTimeItemView.setDay26(rs.getString("26"));
+            workingTimeItemView.setDay27(rs.getString("27"));
+            workingTimeItemView.setDay28(rs.getString("28"));
+            workingTimeItemView.setDay29(rs.getString("29"));
+            workingTimeItemView.setDay30(rs.getString("30"));
+            workingTimeItemView.setDay31(rs.getString("31"));
 
             workingTimeItemView.setTotal(rs.getInt("Ukupno"));
 
             return workingTimeItemView;
-        }, appUser.getAppUserCode(), month, year);
+        }, appUser.getUserCode(), month, year);
     }
 }

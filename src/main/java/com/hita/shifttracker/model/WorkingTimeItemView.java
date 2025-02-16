@@ -21,67 +21,67 @@ public class WorkingTimeItemView {
     private String workTypeName;
 
     @Column ("1")
-    private Integer day01;
+    private String day01;
     @Column ("2")
-    private Integer day02;
+    private String day02;
     @Column ("3")
-    private Integer day03;
+    private String day03;
     @Column ("4")
-    private Integer day04;
+    private String day04;
     @Column ("5")
-    private Integer day05;
+    private String day05;
     @Column ("6")
-    private Integer day06;
+    private String day06;
     @Column ("7")
-    private Integer day07;
+    private String day07;
     @Column ("8")
-    private Integer day08;
+    private String day08;
     @Column ("9")
-    private Integer day09;
+    private String day09;
     @Column ("10")
-    private Integer day10;
+    private String day10;
     @Column ("11")
-    private Integer day11;
+    private String day11;
     @Column ("12")
-    private Integer day12;
+    private String day12;
     @Column ("13")
-    private Integer day13;
+    private String day13;
     @Column ("14")
-    private Integer day14;
+    private String day14;
     @Column ("15")
-    private Integer day15;
+    private String day15;
     @Column ("16")
-    private Integer day16;
+    private String day16;
     @Column ("17")
-    private Integer day17;
+    private String day17;
     @Column ("18")
-    private Integer day18;
+    private String day18;
     @Column ("19")
-    private Integer day19;
+    private String day19;
     @Column ("20")
-    private Integer day20;
+    private String day20;
     @Column ("21")
-    private Integer day21;
+    private String day21;
     @Column ("22")
-    private Integer day22;
+    private String day22;
     @Column ("23")
-    private Integer day23;
+    private String day23;
     @Column ("24")
-    private Integer day24;
+    private String day24;
     @Column ("25")
-    private Integer day25;
+    private String day25;
     @Column ("26")
-    private Integer day26;
+    private String day26;
     @Column ("27")
-    private Integer day27;
+    private String day27;
     @Column ("28")
-    private Integer day28;
+    private String day28;
     @Column ("29")
-    private Integer day29;
+    private String day29;
     @Column ("30")
-    private Integer day30;
+    private String day30;
     @Column ("31")
-    private Integer day31;
+    private String day31;
 
     @Column ("Ukupno")
     private int total;

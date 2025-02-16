@@ -8,10 +8,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.LocalDate;
 
 @Table(name = "working_time")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class WorkingTime {
 
     @Id
@@ -42,9 +39,5 @@ public class WorkingTime {
 
     @Column("shift_id")
     private int shiftId;
-
-    public WorkingTime(LocalDate dateFrom) {
-        this.dateFrom = dateFrom;
-    }
 
 }

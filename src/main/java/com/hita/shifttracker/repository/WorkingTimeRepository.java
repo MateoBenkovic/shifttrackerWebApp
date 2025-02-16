@@ -71,10 +71,10 @@ public class WorkingTimeRepository {
     }
 
     // find all by app user id, month and year
-    public List<WorkingTime> findAllByAppUserIdAndMonthAndYear(int appUserId, int month, int year) {
-        String sql = "SELECT wt.id_work_time, wt.app_user_id, wt.date_from, " +
-                "wt.hours_from, wt.date_to, wt.hours_to, wt.total_hours, wt.shift_id " +
-                "FROM working_time wt WHERE wt.app_user_id = ? AND MONTH(wt.date_from) = ? AND YEAR(wt.date_from) = ?";
+    public List<WorkingTime> findByAppUserIdAndMonthAndYear(int appUserId, int month, int year) {
+        String sql = "SELECT * FROM working_time WHERE app_user_id = ? " +
+                     "AND EXTRACT(MONTH FROM date_from) = ? " +
+                     "AND EXTRACT(YEAR FROM date_from) = ? ";
 
         return jdbcTemplate.query(sql, new Object[]{appUserId, month, year},
                 (rs,rowNum) -> {

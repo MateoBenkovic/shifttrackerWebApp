@@ -1,48 +1,100 @@
-document.getElementById("applyFilter").addEventListener("click", function() {
-    const selectedIspostava = document.querySelector('input[name="ispostava"]:checked')?.value || "";
-    const selectedUloga = document.querySelector('input[name="uloga"]:checked')?.value || "";
+window.onload = function () {
+    const monthPicker = document.getElementById("monthYearSelection");
 
-    const rows = document.querySelectorAll("table tbody tr");
+    // Dohvati trenutni mjesec i godinu
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = String(today.getMonth() + 1).padStart(2, "0"); // Dodaje nulu ako je potrebno (npr. 01, 02...)
 
-    rows.forEach(row => {
-        const uloga = row.cells[3].textContent.trim(); // Uloga (4. stupac, index 3)
-        const radnaJedinica = row.cells[1].textContent.trim(); // Radna jedinica (2. stupac, index 1)
+    // Postavi početnu vrijednost inputa
+    monthPicker.value = `${currentYear}-${currentMonth}`;
 
-        if ((selectedIspostava === "" || radnaJedinica === selectedIspostava) &&
-            (selectedUloga === "" || uloga === selectedUloga)) {
-            row.style.display = ""; // Prikazati red ako odgovara filterima
-        } else {
-            row.style.display = "none"; // Sakriti red ako ne odgovara
+    // Pozovi funkciju za učitavanje podataka odmah
+    loadWorkHours(currentYear, currentMonth);
+};
+
+document.getElementById("monthYearSelection").addEventListener("change", function () {
+    const selectedDate = this.value;
+    const [year, month] = selectedDate.split("-").map(Number);
+
+    loadWorkHours(year, month);
+});
+
+function loadWorkHours(year, month) {
+    fetch(`/employee/workhour/data?year=${year}&month=${month}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Greška: ${response.status} ${response.statusText}`);
         }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Primljeni podaci iz backend-a:", data);
+        updateTable(data.workHours, data.workingTimes, year, month);
+    })
+    .catch(error => console.error("Greška:", error));
+}
+
+function updateTable(workHours, workingTimes, year, month) {
+    const tableHead = document.querySelector("#workHoursTable thead");
+    const tableBody = document.querySelector("#workHoursTable tbody");
+
+    tableHead.innerHTML = "";
+    tableBody.innerHTML = "";
+
+    const daysInMonth = getDaysInMonth(year, month);
+
+    // Kreiranje header reda
+    let headerHTML = `<tr><th id="work-type">Vrsta rada</th>`;
+    for (let i = 1; i <= daysInMonth; i++) {
+        headerHTML += `<th onclick="openForm(${i}, this, ${year}, ${month})" class="calendar-day">${i}</th>`;
+    }
+    headerHTML += `<th id="work-type" style="text-align: center !important; font-weight: bold;">Ukupno</th></tr>`;
+    tableHead.innerHTML = headerHTML;
+
+    // Redovi za početak i zavrpetak rada prema rasporedu
+    let scheduleStart = `<tr><td id="work-type">Početak rada prema rasporedu</td>`;
+    let scheduleEnd = `<tr style="border-bottom: 2px solid black;"><td id="work-type" >Završetak rada prema rasporedu</td>`;
+
+    // Redovi za početak rada, završetak rada i ukupno radno vrijeme
+    let startRow = `<tr><td id="work-type">Početak rada</td>`;
+    let endRow = `<tr><td id="work-type">Završetak rada</td>`;
+    let totalRow = `<tr style="border-top: 2px solid black; border-bottom: 2px solid black; font-weight: bold;"><td id="work-type">UKUPNO RADNO VRIJEME</td>`;
+
+    for (let i = 1; i <= daysInMonth; i++) {
+        let dateKey = `${year}-${month.toString().padStart(2, "0")}-${i.toString().padStart(2, "0")}`;
+        let workTime = workingTimes[dateKey];
+
+        scheduleStart += `<td></td>`;
+        scheduleEnd += `<td></td>`;
+        startRow += `<td>${workTime ? workTime.startHour.toString().padStart(2, '0') : ""}</td>`;
+        endRow += `<td>${workTime ? workTime.endHour.toString().padStart(2, '0') : ""}</td>`;
+        totalRow += `<td>${workTime ? workTime.totalHours : ""}</td>`;
+    }
+
+    scheduleStart += `<td></td></tr>`;
+    scheduleEnd += `<td></td></tr>`;
+    startRow += `<td></td></tr>`;
+    endRow += `<td></td></tr>`;
+    totalRow += `<td></td></tr>`;
+
+    tableBody.innerHTML += scheduleStart + scheduleEnd + startRow + endRow + totalRow;
+
+    // Dodavanje radnih sati iz workHours
+    workHours.forEach(row => {
+        let tr = `<tr><td style="text-align: left;">${row.workTypeName}</td>`;
+
+        for (let i = 1; i <= daysInMonth; i++) {
+            let dayKey = `day${String(i).padStart(2, '0')}`;
+            tr += `<td>${row[dayKey] !== null ? row[dayKey] : ""}</td>`;
+        }
+
+        tr += `<td>${row.total}</td></tr>`;
+        tableBody.innerHTML += tr;
     });
-});
+}
 
-document.getElementById("clearFilter").addEventListener("click", function() {
-    document.querySelectorAll('input[name="ispostava"]:checked, input[name="uloga"]:checked')
-        .forEach(input => input.checked = false); // Poništi radio button odabire
-
-    document.querySelectorAll("table tbody tr").forEach(row => {
-        row.style.display = ""; // Prikazati sve redove
-    });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    const searchInput = document.getElementById("searchInput");
-
-    searchInput.addEventListener("input", function () {
-        const searchValue = searchInput.value.toLowerCase().trim();
-        const rows = document.querySelectorAll("table tbody tr");
-
-        rows.forEach(row => {
-            const imePrezimeCell = row.cells[0]; // 1. stupac (Ime i prezime)
-            if (imePrezimeCell) {
-                const imePrezime = imePrezimeCell.textContent.toLowerCase().trim();
-                if (imePrezime.includes(searchValue)) {
-                    row.style.display = ""; // Prikaži red ako odgovara pretrazi
-                } else {
-                    row.style.display = "none"; // Sakrij red ako ne odgovara
-                }
-            }
-        });
-    });
-});
+// Funkcija za dohvacanje broja dana u mjesecu
+function getDaysInMonth(year, month) {
+    return new Date(year, month, 0).getDate();
+}
