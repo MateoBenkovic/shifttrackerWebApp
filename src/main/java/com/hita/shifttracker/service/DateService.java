@@ -19,4 +19,6 @@ public class DateService {
     public int getCurrentMonthFromDatabase() {
         return dateRepository.getCurrentMonthFromDatabase();
     }
+
+    // get list of dates from backend for current month
 }

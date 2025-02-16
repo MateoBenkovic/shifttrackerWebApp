@@ -21,4 +21,10 @@ public class DateRepository {
         String sql = "SELECT EXTRACT(MONTH FROM CURRENT_DATE)";
         return jdbcTemplate.queryForObject(sql, Integer.class);
     }
+
+    // is saturday
+
+    // is sunday
+
+    // is holliday
 }

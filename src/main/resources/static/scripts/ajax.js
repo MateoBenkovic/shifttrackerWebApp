@@ -44,6 +44,11 @@ function updateTable(workHours, workingTimes, year, month) {
 
     const daysInMonth = getDaysInMonth(year, month);
 
+    // -- added by me --
+    const holidays = ["2025-01-01", "2025-01-06", "2025-04-20", "2025-04-21", "2025-05-01", "2025-05-30",
+                      "2025-06-19", "2025-06-22", "2025-08-05", "2025-08-15", "2025-11-01", "2025-11-18",
+                      "2025-12-25", "2025-12-26"];
+
     // Kreiranje header reda
     let headerHTML = `<tr><th id="work-type">Vrsta rada</th>`;
     for (let i = 1; i <= daysInMonth; i++) {
@@ -65,6 +70,14 @@ function updateTable(workHours, workingTimes, year, month) {
         let dateKey = `${year}-${month.toString().padStart(2, "0")}-${i.toString().padStart(2, "0")}`;
         let workTime = workingTimes[dateKey];
 
+        // Check if it's Saturday or Sunday
+        const date = new Date(`${year}-${month.toString().padStart(2, "0")}-${i.toString().padStart(2, "0")}`);
+        const isWeekend = (date.getDay() === 0 || date.getDay() === 6); // Sunday = 0, Saturday = 6
+        const isHoliday = holidays.includes(dateKey); // Check if the date is a holiday
+
+        // Add styles for weekends and holidays
+        const dayClass = isWeekend ? 'weekend' : isHoliday ? 'holiday' : '';
+
         scheduleStart += `<td></td>`;
         scheduleEnd += `<td></td>`;
         startRow += `<td>${workTime ? workTime.startHour.toString().padStart(2, '0') : ""}</td>`;
@@ -85,8 +98,18 @@ function updateTable(workHours, workingTimes, year, month) {
         let tr = `<tr><td style="text-align: left;">${row.workTypeName}</td>`;
 
         for (let i = 1; i <= daysInMonth; i++) {
-            let dayKey = `day${String(i).padStart(2, '0')}`;
-            tr += `<td>${row[dayKey] !== null ? row[dayKey] : ""}</td>`;
+                    let dayKey = `day${String(i).padStart(2, '0')}`;
+                    const dateKey = `${year}-${month.toString().padStart(2, "0")}-${i.toString().padStart(2, "0")}`;
+
+                    // Check if it's Saturday or Sunday
+                    const date = new Date(dateKey);
+                    const isWeekend = (date.getDay() === 0 || date.getDay() === 6); // Sunday = 0, Saturday = 6
+                    const isHoliday = holidays.includes(dateKey); // Check if the date is a holiday
+
+                    // Add styles for weekends and holidays
+                    const dayClass = isWeekend ? 'weekend' : isHoliday ? 'holiday' : '';
+
+                    tr += `<td class="${dayClass}">${row[dayKey] !== null ? row[dayKey] : ""}</td>`;
         }
 
         tr += `<td>${row.total}</td></tr>`;
