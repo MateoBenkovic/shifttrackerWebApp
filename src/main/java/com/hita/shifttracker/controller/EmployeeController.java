@@ -114,4 +114,12 @@ public class EmployeeController {
         return "redirect:/employee/workhour/list";
     }
 
+    @GetMapping("/employee/workhour/add")
+    public String getEmployeeWorkHourAdd(Model model, HttpSession session){
+        AppUserDTO appUserDTO = (AppUserDTO) session.getAttribute("appUser");
+        model.addAttribute("appUser", appUserDTO);
+
+        return "employee_workhour_add";
+    }
+
 }

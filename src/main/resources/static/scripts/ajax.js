@@ -58,7 +58,7 @@ function updateTable(workHours, workingTimes, year, month) {
     tableHead.innerHTML = headerHTML;
 
     // Redovi za početak i zavrpetak rada prema rasporedu
-    let scheduleStart = `<tr><td id="work-type">Početak rada prema rasporedu</td>`;
+    let scheduleStart = `<tr style="border-top: 2px solid black;"><td id="work-type">Početak rada prema rasporedu</td>`;
     let scheduleEnd = `<tr style="border-bottom: 2px solid black;"><td id="work-type" >Završetak rada prema rasporedu</td>`;
 
     // Redovi za početak rada, završetak rada i ukupno radno vrijeme

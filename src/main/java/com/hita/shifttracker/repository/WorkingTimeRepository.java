@@ -108,4 +108,8 @@ public class WorkingTimeRepository {
         String sql = "DELETE FROM working_time";
         jdbcTemplate.update(sql);
     }
+
+    public void deleteById(){
+
+    }
 }
