@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Working Time</title>
+</head>
+<body>
+<h1>Working Time for Employee (ID: <span th:text="${appUserId}"></span>) - <span th:text="${month}"></span>/<span th:text="${year}"></span></h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Empty</th>
+        <th th:each="i : ${#numbers.sequence(1, 31)}">Day <span th:text="${i}"></span></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Hours From</td>
+        <td th:each="day : ${workingTimeData['hoursFrom']}">
+            <span th:text="${day != null ? day : ' '}" />
+        </td>
+    </tr>
+    <tr>
+        <td>Hours To</td>
+        <td th:each="day : ${workingTimeData['hoursTo']}">
+            <span th:text="${day != null ? day : ' '}" />
+        </td>
+    </tr>
+    <tr>
+        <td>Total Hours</td>
+        <td th:each="day : ${workingTimeData['totalHours']}">
+            <span th:text="${day != null ? day : ' '}" />
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
