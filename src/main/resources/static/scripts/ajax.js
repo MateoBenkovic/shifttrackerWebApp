@@ -65,10 +65,12 @@ function updateTable(workHours, workingTimes, year, month) {
     let startRow = `<tr><td id="work-type">Početak rada</td>`;
     let endRow = `<tr><td id="work-type">Završetak rada</td>`;
     let totalRow = `<tr style="border-top: 2px solid black; border-bottom: 2px solid black; font-weight: bold;"><td id="work-type">UKUPNO RADNO VRIJEME</td>`;
+    let totalMonthWorkHours = 0;
 
     for (let i = 1; i <= daysInMonth; i++) {
         let dateKey = `${year}-${month.toString().padStart(2, "0")}-${i.toString().padStart(2, "0")}`;
         let workTime = workingTimes[dateKey];
+        totalMonthWorkHours += workTime ? workTime.totalHours : 0;
 
         // Check if it's Saturday or Sunday
         const date = new Date(`${year}-${month.toString().padStart(2, "0")}-${i.toString().padStart(2, "0")}`);
@@ -89,7 +91,7 @@ function updateTable(workHours, workingTimes, year, month) {
     scheduleEnd += `<td></td></tr>`;
     startRow += `<td></td></tr>`;
     endRow += `<td></td></tr>`;
-    totalRow += `<td></td></tr>`;
+    totalRow += `<td>${totalMonthWorkHours}</td></tr>`;
 
     tableBody.innerHTML += scheduleStart + scheduleEnd + startRow + endRow + totalRow;
 

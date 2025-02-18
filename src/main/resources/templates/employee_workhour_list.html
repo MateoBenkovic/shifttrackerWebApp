@@ -26,7 +26,6 @@
         .schedule-table {
         background-color: #ffffff;
         border-radius: 8px;
-        border: 3px solid #333333;
         overflow: hidden;
         }
         .schedule-table th {
@@ -97,13 +96,14 @@ td.holiday {
         /* Stilizacija forme */
 #workTimeFormContainer {
     background: white;
-    padding: 20px;
+    padding: 10px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
     z-index: 1002; /* Veći z-index da bude iznad overlay-a */
     position: absolute;
     display: none;
-    max-width: 320px;
+    max-width: 350px;
+    width: 100%;
 }
 
 /* Overlay koji zatamnjuje ostatak ekrana */
@@ -161,6 +161,33 @@ td.holiday {
             border: 2px solid #a3a3a3;
             border-radius: 5px;
             cursor: pointer;
+        }
+        .nav-tabs {
+            border-bottom: 2px solid #dee2e6;
+            display: flex;
+            justify-content: center;
+        }
+        .nav-tabs .nav-item {
+            flex: 1;
+            text-align: center;
+        }
+        .nav-tabs .nav-link {
+            border: none;
+            color: #495057;
+            font-weight: 500;
+            padding: 10px 0;
+            margin: 0;
+            width: 100%;
+        }
+        .nav-tabs .nav-link.active {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+        }
+        .tab-content {
+            padding-top: 20px;
+        }
+        .form-label {
+            font-weight: 500;
         }
 
     </style>
@@ -238,6 +265,10 @@ td.holiday {
                         <p class="card-text"><strong>OIB:</strong> <span th:text="${' ' + company.companyTaxId}">17813384799</span></p>
                         <p class="card-text"><strong>IBAN:</strong> <span th:text="${' ' + company.companyIBAN}">HR7223400091110492278</span></p>
                     </div>
+                </div>
+                <div class="d-flex justify-content-end mb-3">
+<!--                    <buton class="btn btn-info me-1">Posebne vrste rada</buton>-->
+                    <buton class="btn btn-warning">Predaj evidenciju</buton>
                 </div>
             </div>
         </div>
@@ -503,36 +534,80 @@ td.holiday {
     </div>
 </div>
 
-<div class="form-section col-md-6 col-lg-5" id="workTimeFormContainer" style="display: none; position: absolute;">
-    <h4 class="mb-4 text-center">Unos radnog vremena</h4>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div id="workTimeFormContainer">
+                <ul class="nav nav-tabs" id="workTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="regular-tab" data-bs-toggle="tab" data-bs-target="#regular" type="button" role="tab">Redovan rad</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="overtime-tab" data-bs-toggle="tab" data-bs-target="#overtime" type="button" role="tab">Prekovremeni rad</button>
+                    </li>
+                </ul>
 
-    <!-- Dodan dropdown za odabir datuma -->
-    <div class="mb-3 text-center">
-        <input type="date" class="form-control text-center" id="workDate" required>
+                <div class="tab-content" id="workTabContent">
+                    <div class="tab-pane fade show active" id="regular" role="tabpanel">
+                        <h4 class="mb-4 text-center">Unos redovnog rada</h4>
+
+                            <div class="mb-3">
+                                <input type="date" class="form-control text-center" id="workDate">
+                            </div>
+                            <div class="mb-4 text-center">
+                                <button id="btnDnevna" class="btn btn-outline-dark me-2">Dnevna</button>
+                                <button id="btnNocna" class="btn btn-outline-dark">Noćna</button>
+                            </div>
+                            <form id="workTimeForm" action="/employee/workhour/process">
+                            <div class="mb-3">
+                                <label for="startShift" class="form-label">Početak radnog vremena</label>
+                                <input type="datetime-local" class="form-control" id="startShift" name="startShift" required step="3600">
+                            </div>
+                            <div class="mb-3">
+                                <label for="endShift" class="form-label">Završetak radnog vremena</label>
+                                <input type="datetime-local" class="form-control" id="endShift" name="endShift" required step="3600">
+                            </div>
+                            <div class="mb-3 text-center text-danger">
+                                <p id="errorMessage"></p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-danger">Obriši</button>
+                                <button type="submit" class="btn btn-dark">Spremi</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="overtime" role="tabpanel">
+                        <h4 class="mb-4 text-center">Unos prekovremenog rada</h4>
+
+                            <div class="mb-3">
+                                <input type="date" class="form-control text-center" id="overtimeDate">
+                            </div>
+                            <div class="mb-4 text-center">
+                                <button id="btnDnevnaOvertime" class="btn btn-outline-dark me-2">Dnevna</button>
+                                <button id="btnNocnaOvertime" class="btn btn-outline-dark">Noćna</button>
+                            </div>
+                            <form id="overtimeForm" action="/employee/workhour/overtime">
+                            <div class="mb-3">
+                                <label for="overtimeStart" class="form-label">Početak prekovremenog rada</label>
+                                <input type="datetime-local" class="form-control" id="overtimeStart" name="overtimeStart" required step="3600">
+                            </div>
+                            <div class="mb-3">
+                                <label for="overtimeEnd" class="form-label">Završetak prekovremenog rada</label>
+                                <input type="datetime-local" class="form-control" id="overtimeEnd" name="overtimeEnd" required step="3600">
+                            </div>
+                            <div class="mb-3 text-center text-danger">
+                                <p id="errorOvertimeMessage"></p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-danger">Obriši</button>
+                                <button type="submit" class="btn btn-dark">Spremi</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <!-- Dugmad za Dnevna / Noćna smjena -->
-    <div class="mb-4 text-center">
-        <button id="btnDnevna" class="btn btn-outline-dark me-2">Dnevna</button>
-        <button id="btnNocna" class="btn btn-outline-dark">Noćna</button>
-    </div>
-
-    <form id="workTimeForm" action="/employee/workhour/process">
-        <div class="mb-3">
-            <label for="startShift" class="form-label">Početak radnog vremena</label>
-            <input type="datetime-local" class="form-control" id="startShift" name="startShift" required step="3600">
-        </div>
-        <div class="mb-3">
-            <label for="endShift" class="form-label">Završetak radnog vremena</label>
-            <input type="datetime-local" class="form-control" id="endShift" name="endShift" required step="3600">
-        </div>
-        <div class="mb-3 text-center text-danger">
-            <p id="errorMessage"></p>
-        </div>
-        <!-- mjesec i godina u hidden polju -->
-        <button type="submit" class="btn btn-dark w-100">Spremi</button>
-        <button type="" class="btn btn-danger w-100">Obriši smjenu</button>
-    </form>
 </div>
 
 
