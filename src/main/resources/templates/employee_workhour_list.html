@@ -571,7 +571,7 @@ td.holiday {
                                 <p id="errorMessage"></p>
                             </div>
                             <div class="d-flex justify-content-between">
-                                <button type="button" class="btn btn-danger">Obriši</button>
+                                <button type="button" class="btn btn-danger" id="btnDelete">Obriši</button>
                                 <button type="submit" class="btn btn-dark">Spremi</button>
                             </div>
                         </form>
@@ -610,6 +610,42 @@ td.holiday {
     </div>
 </div>
 
+<script>
+    document.getElementById("btnDelete").addEventListener("click", function() {
+        const workDate = document.getElementById("workDate").value;
+        const startShift = document.getElementById("startShift").value;
+        const endShift = document.getElementById("endShift").value;
+
+        // Make sure all values are filled in before calling the API
+        if (!workDate || !startShift || !endShift) {
+            document.getElementById("errorMessage").innerText = "Molimo unesite sva polja.";
+            return;
+        }
+
+        fetch(`/employee/workhour/remove?workDate=${workDate}&startShift=${startShift}&endShift=${endShift}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            // Include any other necessary data in the request body if needed
+        })
+        .then(response => {
+            if (response.ok) {
+                // Handle success (e.g., clear form or show success message)
+                document.getElementById("errorMessage").innerText = "Uspešno obrisano.";
+                // Optionally clear the form
+                document.getElementById("workTimeForm").reset();
+            } else {
+                // Handle failure (e.g., show error message)
+                document.getElementById("errorMessage").innerText = "Greška prilikom brisanja.";
+            }
+        })
+        .catch(error => {
+            document.getElementById("errorMessage").innerText = "Greška u konekciji.";
+        });
+    });
+
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 

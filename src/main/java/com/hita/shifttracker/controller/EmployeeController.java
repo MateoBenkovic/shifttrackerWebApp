@@ -15,9 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -122,14 +120,16 @@ public class EmployeeController {
         return "employee_workhour_add";
     }
 
-    @GetMapping("/employee/workhour/remove")
-    public String employeeWorkHourRemove(@RequestParam("shiftStart") String shiftStart, HttpSession session){
+    @DeleteMapping("/employee/workhour/remove")
+    @ResponseBody
+    public String employeeWorkHourRemove(@RequestParam String workDate,@RequestParam("shiftStart") String shiftStart,
+                                         @RequestParam ("shiftEnd") String shiftEnd, HttpSession session){
 
         AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
         LocalDate dateFrom = LocalDate.parse(shiftStart);
         workingTimeService.deleteWorkingTimeByAppUserIdAndDateFrom(appUser.getId(), dateFrom);
 
-        return "redirect:/employee/workhour/list";
+        return "";
     }
 
 }
