@@ -109,7 +109,8 @@ public class WorkingTimeRepository {
         jdbcTemplate.update(sql);
     }
 
-    public void deleteById(){
-
+    public void deleteByAppUserIdAndDateFrom(int appUserId, LocalDate dateFrom) {
+        String sql = "DELETE FROM working_time WHERE app_user_id = ? AND date_from = ?";
+        jdbcTemplate.update(sql, appUserId, dateFrom);
     }
 }

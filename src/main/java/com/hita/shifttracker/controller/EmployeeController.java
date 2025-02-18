@@ -122,4 +122,14 @@ public class EmployeeController {
         return "employee_workhour_add";
     }
 
+    @GetMapping("/employee/workhour/remove")
+    public String employeeWorkHourRemove(@RequestParam("shiftStart") String shiftStart, HttpSession session){
+
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+        LocalDate dateFrom = LocalDate.parse(shiftStart);
+        workingTimeService.deleteWorkingTimeByAppUserIdAndDateFrom(appUser.getId(), dateFrom);
+
+        return "redirect:/employee/workhour/list";
+    }
+
 }

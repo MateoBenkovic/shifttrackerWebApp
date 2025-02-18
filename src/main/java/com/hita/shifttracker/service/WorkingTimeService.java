@@ -30,6 +30,12 @@ public class WorkingTimeService {
         }
     }
 
+    public void deleteWorkingTimeByAppUserIdAndDateFrom(int appUserId, LocalDate dateFrom) {
+        if(workingTimeRepository.existsByAppUserIdAndDateFrom(appUserId, dateFrom)) {
+            workingTimeRepository.deleteByAppUserIdAndDateFrom(appUserId, dateFrom);
+        }
+    }
+
     public Map<LocalDate, WorkingTimeDTO> getWorkingHoursForMonth(int appUserId, int year, int month) {
         List<WorkingTime> workingTimes = workingTimeRepository.findByAppUserIdAndMonthAndYear(appUserId, month, year);
         Map<LocalDate, WorkingTimeDTO> workingHoursMap = new HashMap<>();
