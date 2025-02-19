@@ -1,5 +1,10 @@
 package com.hita.shifttracker.controller;
 
+import com.hita.shifttracker.model.Holiday;
+import com.hita.shifttracker.model.Period;
+import com.hita.shifttracker.repository.PeriodRepository;
+import com.hita.shifttracker.service.DateService;
+
 import com.hita.shifttracker.service.WorkingTimeItemService;
 import com.hita.shifttracker.service.WorkingTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +21,16 @@ import java.util.Objects;
 public class TestController {
 
     @Autowired
-    private WorkingTimeService service;
+    private PeriodRepository repository;
 
     @GetMapping("/test")
     public String test(Model model) {
 
-        LocalDate dateFrom = LocalDate.of(2025,2,24);
-        service.deleteWorkingTimeByAppUserIdAndDateFrom(20, dateFrom);
+        List<Period> periods = repository.findAll();
+
+        for (Period period : periods) {
+            System.out.println(period.toString());
+        }
 
         return "test";
     }

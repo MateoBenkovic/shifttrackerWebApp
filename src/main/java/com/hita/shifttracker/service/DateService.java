@@ -1,7 +1,10 @@
 package com.hita.shifttracker.service;
 
+import com.hita.shifttracker.model.Holiday;
 import com.hita.shifttracker.repository.DateRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class DateService {
@@ -21,4 +24,7 @@ public class DateService {
     }
 
     // get list of dates from backend for current month
+    public List<Holiday> getAllHolidays() {
+        return dateRepository.getAllHolidays();
+    }
 }

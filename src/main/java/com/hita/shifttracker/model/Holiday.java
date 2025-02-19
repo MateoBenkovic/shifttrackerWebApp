@@ -1,23 +1,23 @@
-//package com.hita.shifttracker.model;
-//
-//import jakarta.persistence.*;
-//import lombok.Data;
-//
-//import java.time.LocalDate;
-//
-//@Entity
-//@Table(name = "holiday")
-//@Data
-//public class Holiday {
-//
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "id")
-//    private int holidayId;
-//
-//    @Column(name = "name", length = 50)
-//    private String holidayName;
-//
-//    @Column(name = "date")
-//    private LocalDate holidayDate;
-//}
+package com.hita.shifttracker.model;
+
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
+import java.time.LocalDate;
+
+@Table(name = "holiday")
+@Data
+public class Holiday {
+
+    @Id
+    @Column("id")
+    private int holidayId;
+
+    @Column("name")
+    private String holidayName;
+
+    @Column("date")
+    private LocalDate holidayDate;
+}
