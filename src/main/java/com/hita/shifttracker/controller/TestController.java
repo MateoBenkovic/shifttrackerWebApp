@@ -1,6 +1,7 @@
 package com.hita.shifttracker.controller;
 
 import com.hita.shifttracker.service.WorkingTimeItemService;
+import com.hita.shifttracker.service.WorkingTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,22 +16,13 @@ import java.util.Objects;
 public class TestController {
 
     @Autowired
-    private WorkingTimeItemService service;
+    private WorkingTimeService service;
 
     @GetMapping("/test")
     public String test(Model model) {
 
-        int month = 2;
-        int year = 2025;
-
-        Map<String, Object> workingTimeData = service.getFormattedWorkingTimeData(20, 2, 2025);
-        model.addAttribute("workingTimeData", workingTimeData);
-        model.addAttribute("month", month);
-        model.addAttribute("year", year);
-
-//        List<Map<String, Object>> workingTimeItems = service.getWorkingTimeItemByDays(1,2,2025);
-//
-//        model.addAttribute("wti", workingTimeItems);
+        LocalDate dateFrom = LocalDate.of(2025,2,24);
+        service.deleteWorkingTimeByAppUserIdAndDateFrom(20, dateFrom);
 
         return "test";
     }
