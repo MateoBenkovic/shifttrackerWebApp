@@ -7,6 +7,7 @@ import com.hita.shifttracker.repository.WorkingTimeRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,9 +37,9 @@ public class WorkingTimeService {
         }
     }
 
-    public Map<LocalDate, WorkingTimeDTO> getWorkingHoursForMonth(int appUserId, int year, int month) {
+    public Map<LocalDate, List<WorkingTimeDTO>> getWorkingHoursForMonth(int appUserId, int year, int month) {
         List<WorkingTime> workingTimes = workingTimeRepository.findByAppUserIdAndMonthAndYear(appUserId, month, year);
-        Map<LocalDate, WorkingTimeDTO> workingHoursMap = new HashMap<>();
+        Map<LocalDate, List<WorkingTimeDTO>> workingHoursMap = new HashMap<>();
 
         for (WorkingTime wt : workingTimes) {
             LocalDate startDate = wt.getDateFrom();
@@ -48,38 +49,23 @@ public class WorkingTimeService {
 
             // Ako smjena prelazi u sljedeći dan
             if (!startDate.equals(endDate)) {
-                // Prvi dan (od startHour do 24:00)
-                if (!workingHoursMap.containsKey(startDate)) {
-                    workingHoursMap.put(startDate, new WorkingTimeDTO(startDate));
-                }
-                WorkingTimeDTO startDay = workingHoursMap.get(startDate);
-                startDay.setStartHour(startHour);
-                startDay.setEndHour(24); // Završava u 24:00
-                startDay.setTotalHours(24 - startHour); // Ukupni sati do kraja dana
+                // Dodaj prvi dan smjene
+                workingHoursMap.computeIfAbsent(startDate, k -> new ArrayList<>())
+                        .add(new WorkingTimeDTO(startDate, startHour, 24, 24 - startHour));
 
-                // Drugi dan (od 00:00 do endHour)
-                if (!workingHoursMap.containsKey(endDate)) {
-                    workingHoursMap.put(endDate, new WorkingTimeDTO(endDate));
-                }
-                WorkingTimeDTO nextDay = workingHoursMap.get(endDate);
-                nextDay.setStartHour(0);
-                nextDay.setEndHour(endHour);
-                nextDay.setTotalHours(endHour); // Ukupni sati od ponoći do završetka
-            }
-            // Ako smjena ne prelazi u sljedeći dan
-            else {
-                if (!workingHoursMap.containsKey(startDate)) {
-                    workingHoursMap.put(startDate, new WorkingTimeDTO(startDate));
-                }
-                WorkingTimeDTO sameDay = workingHoursMap.get(startDate);
-                sameDay.setStartHour(startHour);
-                sameDay.setEndHour(endHour);
-                sameDay.setTotalHours(endHour - startHour);
+                // Dodaj drugi dan smjene
+                workingHoursMap.computeIfAbsent(endDate, k -> new ArrayList<>())
+                        .add(new WorkingTimeDTO(endDate, 0, endHour, endHour));
+            } else {
+                // Ako smjena ne prelazi u drugi dan, dodaj direktno
+                workingHoursMap.computeIfAbsent(startDate, k -> new ArrayList<>())
+                        .add(new WorkingTimeDTO(startDate, startHour, endHour, endHour - startHour));
             }
         }
-
+        System.out.println(workingHoursMap);
         return workingHoursMap;
     }
+
 
 
 }

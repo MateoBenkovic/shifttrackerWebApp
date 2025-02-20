@@ -73,10 +73,14 @@ public class WorkingTimeRepository {
     // find all by app user id, month and year
     public List<WorkingTime> findByAppUserIdAndMonthAndYear(int appUserId, int month, int year) {
         String sql = "SELECT * FROM working_time WHERE app_user_id = ? " +
-                     "AND EXTRACT(MONTH FROM date_from) = ? " +
-                     "AND EXTRACT(YEAR FROM date_from) = ? ";
+                "AND (" +
+                "(EXTRACT(MONTH FROM date_to) = ? AND EXTRACT(YEAR FROM date_to) = ?) " +
+                "OR " +
+                "(EXTRACT(MONTH FROM date_from) = ? AND EXTRACT(YEAR FROM date_from) = ?) " +
+                ")";
 
-        return jdbcTemplate.query(sql, new Object[]{appUserId, month, year},
+
+        return jdbcTemplate.query(sql, new Object[]{appUserId, month, year, month, year},
                 (rs,rowNum) -> {
                     WorkingTime workingTime = new WorkingTime();
 

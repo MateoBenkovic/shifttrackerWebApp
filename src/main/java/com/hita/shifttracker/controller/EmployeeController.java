@@ -69,7 +69,7 @@ public class EmployeeController {
         }
 
         List<WorkingTimeItemView> workingTimeItemsView = workingTimeItemService.getWorkingTimeItemViewByAppUser(appUser, month, year);
-        Map<LocalDate, WorkingTimeDTO> workingTimeMap = workingTimeService.getWorkingHoursForMonth(appUser.getId(), year, month);
+        Map<LocalDate, List<WorkingTimeDTO>> workingTimeMap = workingTimeService.getWorkingHoursForMonth(appUser.getId(), year, month);
 
         Map<String, Object> response = new HashMap<>();
         response.put("workHours", workingTimeItemsView);
