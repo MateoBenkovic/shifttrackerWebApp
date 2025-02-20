@@ -29,7 +29,6 @@ function loadWorkHours(year, month) {
         return response.json();
     })
     .then(data => {
-        console.log("Primljeni podaci iz backend-a:", data);
         updateTable(data.workHours, data.workingTimes, year, month);
     })
     .catch(error => console.error("Greška:", error));
@@ -38,6 +37,8 @@ function loadWorkHours(year, month) {
 function updateTable(workHours, workingTimes, year, month) {
     const tableHead = document.querySelector("#workHoursTable thead");
     const tableBody = document.querySelector("#workHoursTable tbody");
+    console.log(workingTimes);
+    console.log(workHours);
 
     tableHead.innerHTML = "";
     tableBody.innerHTML = "";
@@ -52,7 +53,7 @@ function updateTable(workHours, workingTimes, year, month) {
     // Kreiranje header reda
     let headerHTML = `<tr><th id="work-type">Vrsta rada</th>`;
     for (let i = 1; i <= daysInMonth; i++) {
-        headerHTML += `<th onclick="openForm(${i}, this, ${year}, ${month})" class="calendar-day">${i}</th>`;
+        headerHTML += `<th data-day onclick="openForm(${i}, this, ${year}, ${month})" class="calendar-day">${i}</th>`;
     }
     headerHTML += `<th id="work-type" style="text-align: center !important; font-weight: bold;">Ukupno</th></tr>`;
     tableHead.innerHTML = headerHTML;
@@ -64,36 +65,67 @@ function updateTable(workHours, workingTimes, year, month) {
     // Redovi za početak rada, završetak rada i ukupno radno vrijeme
     let startRow = `<tr><td id="work-type">Početak rada</td>`;
     let endRow = `<tr><td id="work-type">Završetak rada</td>`;
+    let startRow2 = `<tr><td id="work-type">Početak rada 2</td>`;
+    let endRow2 = `<tr><td id="work-type">Završetak rada 2</td>`;
     let totalRow = `<tr style="border-top: 2px solid black; border-bottom: 2px solid black; font-weight: bold;"><td id="work-type">UKUPNO RADNO VRIJEME</td>`;
     let totalMonthWorkHours = 0;
 
     for (let i = 1; i <= daysInMonth; i++) {
         let dateKey = `${year}-${month.toString().padStart(2, "0")}-${i.toString().padStart(2, "0")}`;
-        let workTime = workingTimes[dateKey];
-        totalMonthWorkHours += workTime ? workTime.totalHours : 0;
+        let workTimes = workingTimes[dateKey] || [];
+
+        let totalHours = 0;
+
+        workTimes.sort((a, b) => a.startHour - b.startHour);
+
+        let firstShift = workTimes.length > 0 ? workTimes[0] : null;
+        let secondShift = workTimes.length > 1 ? workTimes[1] : null;
+
+        if (firstShift) totalHours += firstShift.totalHours;
+        if (secondShift) totalHours += secondShift.totalHours;
+
+        totalMonthWorkHours += totalHours;
 
         // Check if it's Saturday or Sunday
-        const date = new Date(`${year}-${month.toString().padStart(2, "0")}-${i.toString().padStart(2, "0")}`);
+        const date = new Date(dateKey);
         const isWeekend = (date.getDay() === 0 || date.getDay() === 6); // Sunday = 0, Saturday = 6
         const isHoliday = holidays.includes(dateKey); // Check if the date is a holiday
 
         // Add styles for weekends and holidays
-        const dayClass = isWeekend ? 'weekend' : isHoliday ? 'holiday' : '';
+        const dayClass = isHoliday ? 'holiday' : isWeekend ? 'weekend' : '';
 
         scheduleStart += `<td class="${dayClass}"></td>`;
         scheduleEnd += `<td class="${dayClass}"></td>`;
-        startRow += `<td class="${dayClass}">${workTime ? workTime.startHour.toString().padStart(2, '0') : ""}</td>`;
-        endRow += `<td class="${dayClass}">${workTime ? workTime.endHour.toString().padStart(2, '0') : ""}</td>`;
-        totalRow += `<td class="${dayClass}">${workTime ? workTime.totalHours : ""}</td>`;
+
+        if (firstShift) {
+            startRow += `<td class="${dayClass}">${firstShift.startHour.toString().padStart(2, '0')}</td>`;
+            endRow += `<td class="${dayClass}">${firstShift.endHour.toString().padStart(2, '0')}</td>`;
+        } else {
+            startRow += `<td class="${dayClass}"></td>`;
+            endRow += `<td class="${dayClass}"></td>`;
+        }
+
+        if (secondShift) {
+            startRow2 += `<td class="${dayClass}">${secondShift.startHour.toString().padStart(2, '0')}</td>`;
+            endRow2 += `<td class="${dayClass}">${secondShift.endHour.toString().padStart(2, '0')}</td>`;
+        } else {
+            startRow2 += `<td class="${dayClass}"></td>`;
+            endRow2 += `<td class="${dayClass}"></td>`;
+        }
+
+        totalRow += `<td class="${dayClass}">${totalHours > 0 ? totalHours : ""}</td>`;
     }
+
 
     scheduleStart += `<td></td></tr>`;
     scheduleEnd += `<td></td></tr>`;
     startRow += `<td></td></tr>`;
     endRow += `<td></td></tr>`;
+    startRow2 += `<td></td></tr>`;
+    endRow2 += `<td></td></tr>`;
     totalRow += `<td>${totalMonthWorkHours}</td></tr>`;
 
-    tableBody.innerHTML += scheduleStart + scheduleEnd + startRow + endRow + totalRow;
+    tableBody.innerHTML += scheduleStart + scheduleEnd + startRow + endRow + startRow2 + endRow2 + totalRow;
 
     // Dodavanje radnih sati iz workHours
     workHours.forEach(row => {
