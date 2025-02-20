@@ -1,45 +1,44 @@
 package com.hita.shifttracker.model;
 
-import jakarta.annotation.security.DenyAll;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
 
-@Entity
+
+
 @Table(name = "work_types")
 @Data
 public class WorkType {
 
     @Id
-    @Column(name = "id")
+    @Column("id")
     private int id;
 
-    @Column(name = "work_type_num", nullable = false, length = 3, unique = true)
+    @Column("work_type_num")
     private String workTypeNumber;
 
-    @Column(name = "work_type_name", nullable = false, length = 50)
+    @Column("work_type_name")
     private String workTypeName;
 
-    @Column(name = "day_indicator", nullable = false, length = 1)
+    @Column("day_indicator")
     private String dayIndicator;
 
-    @Column(name = "holiday_indicator", nullable = false, length = 1)
+    @Column("holiday_indicator")
     private String holidayIndicator;
 
-    @Column(name = "shift_indicator", nullable = false, length = 1)
+    @Column("shift_indicator")
     private String shiftIndicator;
 
-    @Column(name = "account_num", nullable = false, length = 6, unique = true)
+    @Column("account_num")
     private String accountNumber;
 
-    @Column(name = "coefficient", nullable = false)
+    @Column("coefficient")
     private BigDecimal coefficient;
 
-    @Column(name = "overtime_indicator", nullable = false, length = 1)
+    @Column("overtime_indicator")
     private String overtimeIndicator;
 
 }

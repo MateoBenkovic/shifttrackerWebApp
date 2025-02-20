@@ -1,26 +1,30 @@
 package com.hita.shifttracker.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Entity
+/*
+* Tim 1
+* Tim 2
+* Tim 3
+* */
+
 @Table(name = "team")
 @Data
 public class Team {
 
     @Id
-    @Column(name = "id")
+    @Column("id")
     private int teamId;
 
-    @Column(name = "name")
+    @Column("name")
     private String teamName;
 
-    @Column(name = "order_number")
+    @Column("order_number")
     private String teamOrderNumber;
 
-    @Column(name = "type")
+    @Column("type")
     private int teamType;
 }

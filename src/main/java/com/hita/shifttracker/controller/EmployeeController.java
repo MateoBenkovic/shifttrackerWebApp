@@ -1,69 +1,89 @@
 package com.hita.shifttracker.controller;
 
-import com.hita.shifttracker.model.*;
-//import com.hita.shifttracker.model.WorkingTimeUserWtCalView;
-//import com.hita.shifttracker.model.WorkingTimeUserWtCalViewDTO;
-import com.hita.shifttracker.repository.*;
-//import com.hita.shifttracker.repository.WorkingTimeUserWtCalViewRepository;
+import com.hita.shifttracker.dto.AppUserDTO;
+import com.hita.shifttracker.dto.WorkingTimeDTO;
+import com.hita.shifttracker.model.AppUser;
+import com.hita.shifttracker.model.Company;
+import com.hita.shifttracker.model.WorkingTime;
+import com.hita.shifttracker.model.WorkingTimeItemView;
+import com.hita.shifttracker.service.CompanyService;
+import com.hita.shifttracker.service.DateService;
+import com.hita.shifttracker.service.WorkingTimeItemService;
+import com.hita.shifttracker.service.WorkingTimeService;
 import jakarta.servlet.http.HttpSession;
-import org.apache.catalina.LifecycleState;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.net.http.HttpRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+
 
 @Controller
 public class EmployeeController {
 
-    private WorkingTimeRepository workingTimeRepository;
-    private AppUserRepository appUserRepository;
-    private WorkingTimeUserWtCalViewRepository workingTimeUserWtCalViewRepository;
-    private CompanyRepository companyRepository;
-    private WorkingTimeItemRepository workingTimeItemRepository;
 
+    private final CompanyService companyService;
+    private final WorkingTimeService workingTimeService;
+    private final WorkingTimeItemService workingTimeItemService;
+    private final DateService dateService;
 
-
-    @Autowired
-    public EmployeeController(WorkingTimeRepository workingTimeRepository, AppUserRepository appUserRepository,
-                              WorkingTimeUserWtCalViewRepository workingTimeUserWtCalViewRepository, CompanyRepository companyRepository,
-                              WorkingTimeItemRepository workingTimeItemRepository) {
-        this.companyRepository = companyRepository;
-        this.workingTimeRepository = workingTimeRepository;
-        this.appUserRepository = appUserRepository;
-        this.workingTimeUserWtCalViewRepository = workingTimeUserWtCalViewRepository;
-        this.workingTimeItemRepository = workingTimeItemRepository;
+    private EmployeeController(CompanyService companyService, WorkingTimeService workingTimeService,
+                               WorkingTimeItemService workingTimeItemService, DateService dateService) {
+        this.companyService = companyService;
+        this.workingTimeService = workingTimeService;
+        this.workingTimeItemService = workingTimeItemService;
+        this.dateService = dateService;
     }
 
-    // employee workhour list
-    @GetMapping("/employee/dashboard")
-    public String getDashboard(HttpSession session) {
-        AppUser appUser = (AppUser) session.getAttribute("appUser");
-        return "redirect:/employee/workhour/list";
-    }
+    @GetMapping("/employee/workhour/list")
+    public String getEmployeeWorkHourList(Model model, HttpSession session) {
 
-    @GetMapping("/employee/workhour/add")
-    public String getEmployeeWorkHourAdd(Model model, HttpSession session){
-        AppUser appUser = (AppUser) session.getAttribute("appUser");
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+        Company company = companyService.findWithData();
+        int month = dateService.getCurrentMonthFromDatabase();
+        int year = dateService.getCurrentYearFromDatabase();
+
         model.addAttribute("appUser", appUser);
+        model.addAttribute("company", company);
 
-        return "employee_workhour_add";
+
+        return "employee_workhour_list";
     }
+
+    @GetMapping("/employee/workhour/data")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getEmployeeWorkHours(HttpSession session,
+                                                                    @RequestParam int month,
+                                                                    @RequestParam int year) {
+
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+
+        if (appUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        List<WorkingTimeItemView> workingTimeItemsView = workingTimeItemService.getWorkingTimeItemViewByAppUser(appUser, month, year);
+        Map<LocalDate, WorkingTimeDTO> workingTimeMap = workingTimeService.getWorkingHoursForMonth(appUser.getId(), year, month);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("workHours", workingTimeItemsView);
+        response.put("workingTimes", workingTimeMap);
+
+        return ResponseEntity.ok(response);
+    }
+
 
     @GetMapping("/employee/workhour/process")
-    public String employeeWorkHourProcess(@RequestParam("startShift") String startShift, @RequestParam("endShift") String endShift, Model model, HttpSession session){
-        AppUser appUser = (AppUser) session.getAttribute("appUser");
-        model.addAttribute("appUser", appUser);
+    public String employeeWorkHourProcess(@RequestParam("startShift") String startShift, @RequestParam("endShift") String endShift,
+                                          Model model, HttpSession session){
 
-        System.out.println("startShift: " + startShift);
-        System.out.println("endShift: " + endShift);
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
 
         LocalDateTime startDateTime = LocalDateTime.parse(startShift);
         LocalDateTime endDateTime = LocalDateTime.parse(endShift);
@@ -73,70 +93,45 @@ public class EmployeeController {
         LocalDate dateTo = endDateTime.toLocalDate();
         int hoursTo = endDateTime.toLocalTime().getHour();
 
-        int shift = 2;
-        if(dateFrom.equals(dateTo)){
-            shift = 1;
+        int shiftType = 2;
+        if(dateFrom.equals(dateTo)) {
+            shiftType = 1;
         }
-
-        int totalHours = Math.abs(hoursFrom - hoursTo);
-
-        System.out.println("dateFrom: " + dateFrom);
-        System.out.println("hoursFrom: " + hoursFrom);
-        System.out.println("dateTo: " + dateTo);
-        System.out.println("hoursTo: " + hoursTo);
-        System.out.println("totalHours: " + totalHours);
-        System.out.println("appUserId: " + appUser.getId());
-        System.out.println("appUser: " + appUser.getFirstName() + " " + appUser.getLastName());
 
         WorkingTime workingTime = new WorkingTime();
         workingTime.setDateFrom(dateFrom);
         workingTime.setHoursFrom(hoursFrom);
         workingTime.setDateTo(dateTo);
         workingTime.setHoursTo(hoursTo);
-        workingTime.setTotalHours(totalHours);
-        workingTime.setAppUser(appUser);
-        workingTime.setShiftId(shift);
+        workingTime.setAppUserId(appUser.getId());
+        workingTime.setShiftId(shiftType);
+        workingTime.setSchedId(1);
 
-
-        // if exist dont save
-
-            // update logic
-
-            workingTimeRepository.save(workingTime);
-
-
-
+        workingTimeService.addWorkingTime(workingTime);
 
         return "redirect:/employee/workhour/list";
     }
 
-    @GetMapping("/employee/workhour/list")
-    public String getEmployeeWorkHourList(Model model, HttpSession session){
-        AppUser appUser = (AppUser) session.getAttribute("appUser");
-        model.addAttribute("appUser", appUser);
+    @GetMapping("/employee/workhour/add")
+    public String getEmployeeWorkHourAdd(Model model, HttpSession session){
+        AppUserDTO appUserDTO = (AppUserDTO) session.getAttribute("appUser");
+        model.addAttribute("appUser", appUserDTO);
 
-        Company company = companyRepository.findById(1).get();
-        model.addAttribute("company", company);
-
-        String appUserCode = appUserRepository.findAppUserCodeById(appUser.getId());
-        System.out.println("appUserCode: " + appUserCode);
-
-        // work time item
-        // get all work time ithem where mont equals 2 and app user id
-
-        // posalji mi vrste rada po useru
-
-
-        // wiew by app user code
-        List<WorkingTimeUserWtCalViewDTO> workingTimesUserView = workingTimeUserWtCalViewRepository.findAllRecords(appUserCode, 2, 2025);
-        for(WorkingTimeUserWtCalViewDTO wt : workingTimesUserView) {
-            System.out.println(wt.toString());
-        }
-        model.addAttribute("workingTimesUserView", workingTimesUserView);
-
-        return "employee_workhour_list";
+        return "employee_workhour_add";
     }
 
+    @DeleteMapping("/employee/workhour/remove")
+    @ResponseBody
+    public String employeeWorkHourRemove(@RequestParam("workDate") String workDate,
+                                         @RequestParam("startShift") String startShift,
+                                         @RequestParam("endShift") String endShift, HttpSession session){
 
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+        System.out.println("in delete");
+        LocalDate dateFrom = LocalDate.parse(startShift);
+        workingTimeService.deleteWorkingTimeByAppUserIdAndDateFrom(appUser.getId(), dateFrom);
+
+        return "redirect:/employee/workhour/list";
+    }
 
 }

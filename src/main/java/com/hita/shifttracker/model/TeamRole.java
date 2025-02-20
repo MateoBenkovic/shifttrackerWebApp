@@ -1,21 +1,26 @@
 package com.hita.shifttracker.model;
 
-import jakarta.persistence.*;
 import lombok.Data;
-// doktor sestra vozac
-@Entity
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
+/*
+* doktor
+* sestra
+* vozac
+ */
 @Table(name = "team_role")
 @Data
 public class TeamRole {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column("id")
     private int teamRoleId;
 
-    @Column(name = "name")
+    @Column("name")
     private String teamRoleName;
 
-    @Column(name = "order_number")
+    @Column("order_number")
     private int teamRoleOrderNumber;
 }

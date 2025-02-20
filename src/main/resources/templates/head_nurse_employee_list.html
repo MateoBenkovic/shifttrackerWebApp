@@ -1,36 +1,80 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="hr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pregled Smjena</title>
+    <title>Pregled Zaposlenika</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <style>
         body {
             background-color: #f8f9fa;
         }
         .navbar {
-            background-color: white !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background-color: #ffffff !important;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         .nav-link.active {
-            border-bottom: 2px solid #000;
+            border-bottom: 3px solid #000000;
+            font-weight: bold;
         }
-        .table {
-            background-color: white;
-            border-radius: 4px;
+        .info-section {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #dee2e6;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        .table th {
-            color: #666;
-            font-weight: normal;
+        .employee-table th {
+            background-color: #f1f3f5;
+            font-weight: bold;
+            text-align: left;
+            border-bottom: 2px solid #dee2e6;
+            padding: 12px;
+        }
+        .employee-table td {
+            padding: 12px;
             border-bottom: 1px solid #dee2e6;
-            white-space: nowrap;
         }
-        .table td {
-            border-bottom: 1px solid #dee2e6;
-        }
-        .table tr:last-child td {
+        .employee-table tr:last-child td {
             border-bottom: none;
+        }
+        .section-title {
+            background-color: #6c757d;
+            color: #ffffff;
+            padding: 10px;
+            margin: -20px -20px 15px -20px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .search-container {
+            position: relative;
+            width: 400px;
+        }
+        .search-container .bi-search {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        .search-input {
+            padding-left: 35px;
+            border: 2px solid #dee2e6;
+            border-radius: 20px;
+        }
+        .filter-header {
+            cursor: pointer;
+        }
+        .filter-header:hover {
+            background-color: #f8f9fa;
+        }
+        .filter-section {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
         }
         .modal-header {
             border-bottom: none;
@@ -42,55 +86,38 @@
             height: 35px;
             font-size: 14px;
         }
-        .btn {
-            height: 35px;
-            font-size: 14px;
-            padding: 0 15px;
+        .employeeName {
+            color: black;
+            transition: color 0.3s, text-shadow 0.3s;
         }
-        .sort-icon {
-            font-size: 12px;
-            color: #999;
-        }
-        .dropdown-menu {
-            padding: 8px 0;
-            min-width: 200px;
-        }
-        .dropdown-item {
-            padding: 8px 16px;
-        }
-        .dropdown-item i {
-            margin-right: 10px;
-            color: #666;
+        .employeeName:hover {
+            color: #555;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
         }
     </style>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-
-
 </head>
 <body>
-
-<nav class="navbar navbar-expand-lg">
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg mb-4">
     <div class="container-fluid">
         <div class="navbar-nav">
-            <img src="/logo.png" style="height: 50px; width:100px" class="me-5">
-            <a class="nav-link active me-4" href="">Zaposlenici</a>
+            <img src="/logo.png" style="height: 50px; width:100px" class="me-5" alt="Logo">
+            <a class="nav-link active me-4" href="/head_nurse/employee/list">Zaposlenici</a>
+            <a class="nav-link me-4" href="#">Raspored</a>
+            <a class="nav-link me-4" href="#">Izvještaj</a>
         </div>
-
         <div class="navbar-nav ms-auto d-flex align-items-center">
             <div class="d-flex align-items-center me-3">
-                <span th:text="${session.appUser.firstName + ' ' + session.appUser.lastName}">ime korisnika</span>
+                <span th:text="${appUser.firstName + ' ' + appUser.lastName}">ime korisnika</span>
             </div>
-
             <div class="dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                    <i class="bi bi-person-circle fs-4"></i> <!-- Dodano fs-4 za veći font-size -->
+                    <i class="bi bi-person-circle fs-4"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li class="px-3 py-1 text-muted" th:text="${session.appUser.appRole.roleName}">Admin</li>
-                    <li class="px-3 pb-2 text-muted small" th:text="${session.appUser.email}">admin@example.com</li>
-<!--                    <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profil</a></li>-->
-<!--                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Postavke</a></li>-->
+                    <li class="px-3 py-1 text-muted" th:text="${appUser.roleName}">Admin</li>
+                    <li class="px-3 pb-2 text-muted small" th:text="${appUser.email}">admin@example.com</li>
                     <li><button class="dropdown-item" onclick="location.href = '/logout'"><i class="bi bi-box-arrow-right"></i> Odjava</button></li>
                 </ul>
             </div>
@@ -98,52 +125,220 @@
     </div>
 </nav>
 
-<div class="container-fluid mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4>Zaposlenici</h4>
-        <div class="d-flex gap-3">
-            <input type="search" class="form-control me-2" placeholder="Pretraži zaposlenike..." style="width: 400px;">
+<div class="container-fluid">
+    <!-- Employee List Section -->
+    <div class="info-section mb-4">
+        <h5 class="section-title">Zaposlenici</h5>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="search-container">
+                <i class="bi bi-search"></i>
+                <input type="search" id="searchInput" class="form-control search-input" placeholder="Pretraži zaposlenike...">
+            </div>
+            <div>
+                <button class="btn btn-warning" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterDrawer" aria-controls="filterDrawer">
+                    <i class="bi bi-funnel"></i> Filtriraj
+                </button>
+                <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+                    + Dodaj Zaposlenika
+                </button>
+            </div>
+        </div>
 
+        <!-- Employee Table -->
+        <div class="table-responsive">
+            <table class="table employee-table table-hover w-100 mb-0">
+
+                <colgroup>
+                    <col style="width: 22%;">  <!-- Ime i prezime -->
+                    <col style="width: 22%;">  <!-- Uloga -->
+                    <col style="width: 22%;">  <!-- Tim -->
+                    <col style="width: 22%;">  <!-- Radna jedinica -->
+                    <col style="width: 12%;">    <!-- Upravljanje (minimalna širina) -->
+                </colgroup>
+
+                <thead>
+                <tr>
+                    <th>Ime i prezime</th>
+                    <th>Radna jedinica</th>
+                    <th>Tim</th>
+                    <th>Uloga</th>
+                    <th>Upravljanje</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="employee : ${employees}">
+                    <td>
+                        <a th:text="${employee.firstName} + ' ' + ${employee.lastName}" th:href="@{/head_nurse/workhour/list(id=${employee.id})}" class="employeeName"></a>
+                    </td>
+                    <td th:text="${employee.orgUnitName}"></td>
+                    <td th:text="${employee.teamName}">Tim 1</td>
+                    <td th:text="${employee.teamRoleName}">Vozač</td>
+                    <td>
+                        <a th:href="@{/head_nurse/workhour/list(id=${employee.id})}" class="btn btn-outline-dark">Pregled</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 
-    <table class="table table-hover w-100">
-        <thead>
-        <colgroup>
-            <col style="width: 22%;">  <!-- Ime i prezime -->
-            <col style="width: 22%;">  <!-- Uloga -->
-            <col style="width: 22%;">  <!-- Tim -->
-            <col style="width: 22%;">  <!-- Radna jedinica -->
-            <col style="width: 12%;">    <!-- Upravljanje (minimalna širina) -->
-        </colgroup>
+<div class="modal fade" id="addEmployeeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title">Dodaj novog zaposlenika</h5>
+                    <p class="text-muted mb-0">Ispunite podatke o novom zaposleniku</p>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
 
-        <tr>
-            <th>Ime i prezime<i class="bi bi-funnel sort-icon"></i></th>
-            <th>Uloga <i class="bi bi-funnel sort-icon"></i></th>
-            <th>Tim <i class="bi bi-funnel sort-icon"></i></th>
-            <th>Radna jedinica<i class="bi bi-funnel sort-icon"></i></th>
-            <th>Upravljanje</th>
-        </tr>
-        </thead>
+            <div class="modal-body">
+                <form action="/head_nurse/add/employee">
+                    <div class="mb-3">
+                        <label class="form-label">Ime</label>
+                        <input type="text" class="form-control" name="firstName">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Prezime</label>
+                        <input type="text" class="form-control" name="lastName">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">OIB</label>
+                        <input type="number" class="form-control" name="oib" placeholder="12345678910">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Kontakt</label>
+                        <input type="number" class="form-control" name="telephone" placeholder="Npr.: 0991234567">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" placeholder="primjer@primjer.com">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Lozinka</label>
+                        <input type="text" class="form-control" name="password">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Uloga</label>
+                        <select class="form-select" name="teamRole">
+                            <option value="1">Doktor</option>
+                            <option value="2">Sestra</option>
+                            <option value="3">Vozač</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Radna jedinica</label>
+                        <select class="form-select" name="orgUnit">
+                            <option value="1">Krapina</option>
+                            <option value="2">Zabok</option>
+                            <option value="3">Pregrada</option>
+                            <option value="4">Donja Stubica</option>
+                            <option value="5">Zlatar</option>
+                            <option value="6">Klanjec</option>
+                            <option value="7">Konjščina</option>
+                            <option value="8">Marija Bistrica</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tim</label>
+                        <select class="form-select" name="team">
+                            <option value="1">Tim 1</option>
+                            <option value="2">Tim 2</option>
+                        </select>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Odustani</button>
+                <button type="submit" class="btn btn-dark">Spremi</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-        <tbody>
-        <!-- Iteracija kroz korisnike -->
-        <tr th:each="employee : ${employees}">
-            <td>
-                <a th:text="${employee.firstName} + ' ' + ${employee.lastName}"></a>
-            </td>
-            <td th:text="${employee.teamRole.teamRoleName}"></td>
-            <td th:text="${employee.team.teamName}"></td>
-            <td th:text="${employee.organizationUnit.organizationUnitName}"></td>
-            <td>
-               <a th:href="@{/head_nurse/workhour/list(id=${employee.id})}" class="btn btn-dark pt-1">Pregled</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+<!-- Filter Drawer -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="filterDrawer" aria-labelledby="filterDrawerLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="filterDrawerLabel">Filter</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <form id="filterForm">
+
+            <!-- Ispostava -->
+            <div class="filter-section">
+                <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#ispostavaCollapse" aria-expanded="false">
+                    Ispostava
+                </div>
+                <div id="ispostavaCollapse" class="collapse">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="ispostava" id="krapina" value="Krapina">
+                        <label class="form-check-label" for="krapina">Krapina</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="ispostava" id="donjaStubica" value="Donja Stubica">
+                        <label class="form-check-label" for="donjaStubica">Donja Stubica</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="ispostava" id="zabok" value="Zabok">
+                        <label class="form-check-label" for="zabok">Zabok</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="ispostava" id="zlatar" value="Zlatar">
+                        <label class="form-check-label" for="zlatar">Zlatar</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="ispostava" id="klanjec" value="Klanjec">
+                        <label class="form-check-label" for="klanjec">Klanjec</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="ispostava" id="konjscina" value="Konjščina">
+                        <label class="form-check-label" for="konjscina">Konjščina</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="ispostava" id="marijaBistrica" value="Marija Bistrica">
+                        <label class="form-check-label" for="marijaBistrica">Marija Bistrica</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="ispostava" id="pregrada" value="Pregrada">
+                        <label class="form-check-label" for="pregrada">Pregrada</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Uloga -->
+            <div class="filter-section">
+                <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#ulogaCollapse" aria-expanded="false">
+                    Uloga
+                </div>
+                <div id="ulogaCollapse" class="collapse">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="uloga" id="sestra" value="Sestra">
+                        <label class="form-check-label" for="sestra">Sestra</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="uloga" id="doktor" value="Doktor">
+                        <label class="form-check-label" for="doktor">Doktor</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="uloga" id="vozac" value="Vozač">
+                        <label class="form-check-label" for="vozac">Vozač</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Akcijske tipke -->
+            <div class="d-flex justify-content-between mt-4">
+                <button type="button" class="btn btn-primary" id="applyFilter">Filtriraj</button>
+                <button type="reset" class="btn btn-secondary" id="clearFilter">Obriši filter</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" th:src="@{/scripts/filters.js}"></script>
 </body>
 </html>
-
