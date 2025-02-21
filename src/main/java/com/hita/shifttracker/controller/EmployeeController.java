@@ -2,10 +2,7 @@ package com.hita.shifttracker.controller;
 
 import com.hita.shifttracker.dto.AppUserDTO;
 import com.hita.shifttracker.dto.WorkingTimeDTO;
-import com.hita.shifttracker.model.AppUser;
-import com.hita.shifttracker.model.Company;
-import com.hita.shifttracker.model.WorkingTime;
-import com.hita.shifttracker.model.WorkingTimeItemView;
+import com.hita.shifttracker.model.*;
 import com.hita.shifttracker.service.CompanyService;
 import com.hita.shifttracker.service.DateService;
 import com.hita.shifttracker.service.WorkingTimeItemService;
@@ -70,10 +67,13 @@ public class EmployeeController {
 
         List<WorkingTimeItemView> workingTimeItemsView = workingTimeItemService.getWorkingTimeItemViewByAppUser(appUser, month, year);
         Map<LocalDate, List<WorkingTimeDTO>> workingTimeMap = workingTimeService.getWorkingHoursForMonth(appUser.getId(), year, month);
+        Period period = workingTimeService.getByMonthAndYear(month, year);
+        System.out.println(period);
 
         Map<String, Object> response = new HashMap<>();
         response.put("workHours", workingTimeItemsView);
         response.put("workingTimes", workingTimeMap);
+        response.put("period", period);
 
         return ResponseEntity.ok(response);
     }
