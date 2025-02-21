@@ -36,4 +36,28 @@ public class PeriodRepository {
             return period;
         });
     }
+
+    // select by month
+
+    // select by month and year
+    public Period findByMonthAndYear(int month, int year) {
+        String sql = "SELECT year, month, month_name, total_hours, working_days FROM period WHERE month = ? AND year = ?";
+
+        return jdbcTemplate.queryForObject(sql, new Object[]{month, year}, (rs, rowNum) -> {
+            Period period = new Period();
+
+            period.setYear(rs.getInt("year"));
+            period.setMonth(rs.getInt("month"));
+            period.setMonthName(rs.getString("month_name"));
+            //period.setClosingDate(rs.getDate("closing_date") != null ? rs.getDate("closing_date").toLocalDate() : null);
+            //period.setStartDate(rs.getDate("start_date") != null ? rs.getDate("start_date").toLocalDate() : null);
+            //period.setEndDate(rs.getDate("end_date") != null ? rs.getDate("end_date").toLocalDate() : null);
+            period.setTotalHours(rs.getInt("total_hours"));
+            //period.setPayrollBaseMonthly(rs.getBigDecimal("payroll_base_monthly"));
+            //period.setPayrollBaseHourly(rs.getBigDecimal("payroll_base_hourly"));
+            period.setWorkingDays(rs.getInt("working_days"));
+
+            return period;
+        });
+    }
 }

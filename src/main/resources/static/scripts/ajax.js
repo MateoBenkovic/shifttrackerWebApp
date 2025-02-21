@@ -13,6 +13,8 @@ window.onload = function () {
     loadWorkHours(currentYear, currentMonth);
 };
 
+// const monthYearSelection = document.getElementById('monthYearSelection');
+
 document.getElementById("monthYearSelection").addEventListener("change", function () {
     const selectedDate = this.value;
     const [year, month] = selectedDate.split("-").map(Number);
@@ -20,6 +22,7 @@ document.getElementById("monthYearSelection").addEventListener("change", functio
     loadWorkHours(year, month);
 });
 
+// tu treba fetchati i period
 function loadWorkHours(year, month) {
     fetch(`/employee/workhour/data?year=${year}&month=${month}`)
     .then(response => {
@@ -30,6 +33,8 @@ function loadWorkHours(year, month) {
     })
     .then(data => {
         updateTable(data.workHours, data.workingTimes, year, month);
+        const prescribedHours = data.period;
+        document.getElementById('prescribed-hours').textContent = `${prescribedHours.totalHours}`;
     })
     .catch(error => console.error("Greška:", error));
 }
