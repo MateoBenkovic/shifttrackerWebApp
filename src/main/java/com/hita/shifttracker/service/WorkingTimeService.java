@@ -46,6 +46,7 @@ public class WorkingTimeService {
         Map<LocalDate, List<WorkingTimeDTO>> workingHoursMap = new HashMap<>();
 
         for (WorkingTime wt : workingTimes) {
+            int id = wt.getIdWorkTime();
             LocalDate startDate = wt.getDateFrom();
             LocalDate endDate = wt.getDateTo();
             int startHour = wt.getHoursFrom();
@@ -55,15 +56,15 @@ public class WorkingTimeService {
             if (!startDate.equals(endDate)) {
                 // Dodaj prvi dan smjene
                 workingHoursMap.computeIfAbsent(startDate, k -> new ArrayList<>())
-                        .add(new WorkingTimeDTO(startDate, startHour, 24, 24 - startHour));
+                        .add(new WorkingTimeDTO(id, startDate, startHour, 24, 24 - startHour));
 
                 // Dodaj drugi dan smjene
                 workingHoursMap.computeIfAbsent(endDate, k -> new ArrayList<>())
-                        .add(new WorkingTimeDTO(endDate, 0, endHour, endHour));
+                        .add(new WorkingTimeDTO(id, endDate, 0, endHour, endHour));
             } else {
                 // Ako smjena ne prelazi u drugi dan, dodaj direktno
                 workingHoursMap.computeIfAbsent(startDate, k -> new ArrayList<>())
-                        .add(new WorkingTimeDTO(startDate, startHour, endHour, endHour - startHour));
+                        .add(new WorkingTimeDTO(id, startDate, startHour, endHour, endHour - startHour));
             }
         }
         System.out.println(workingHoursMap);

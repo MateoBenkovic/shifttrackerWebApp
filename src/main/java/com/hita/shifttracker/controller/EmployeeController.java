@@ -120,15 +120,10 @@ public class EmployeeController {
         return "employee_workhour_add";
     }
 
-    @GetMapping("/employee/workhour/remove")
-    public String employeeWorkHourRemove(@RequestParam("startShift") String startShift,
-                                         @RequestParam("endShift") String endShift, HttpSession session){
+    @GetMapping("/employee/workhour/delete")
+    public String employeeWorkHourDelete(@RequestParam("workingTimeToDelete") int workingTimeToDelete, HttpSession session){
 
-        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
-        System.out.println("in delete");
-        LocalDateTime startDateTime = LocalDateTime.parse(startShift);
-        LocalDate dateFrom = startDateTime.toLocalDate();
-        workingTimeService.deleteWorkingTimeByAppUserIdAndDateFrom(appUser.getId(), dateFrom);
+        System.out.println(workingTimeToDelete);
 
         return "redirect:/employee/workhour/list";
     }
