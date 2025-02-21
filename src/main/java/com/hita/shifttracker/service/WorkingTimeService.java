@@ -37,6 +37,7 @@ public class WorkingTimeService {
 
     public void deleteWorkingTimeByAppUserIdAndDateFrom(int appUserId, LocalDate dateFrom) {
         if(workingTimeRepository.existsByAppUserIdAndDateFrom(appUserId, dateFrom)) {
+            // po trazi id work time
             workingTimeRepository.deleteByAppUserIdAndDateFrom(appUserId, dateFrom);
         }
     }

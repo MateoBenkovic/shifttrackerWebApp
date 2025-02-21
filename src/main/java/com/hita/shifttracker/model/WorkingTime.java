@@ -40,8 +40,4 @@ public class WorkingTime {
     @Column("shift_id")
     private int shiftId;
 
-    @Column(name = "shift_id")
-    private int shiftId;
-
-
 }
