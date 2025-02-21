@@ -80,7 +80,7 @@ public class WorkingTimeItemRepository {
     }
 
     public List<WorkingTimeItemView> findAllWorkingTimeItemViewByAppUser(AppUserDTO appUser, int month, int year) {
-        String sql = "SELECT * FROM vw_working_time_user_wt_cal wtuv " +
+        String sql = "SELECT * FROM vw_working_tim_user_all_wt_cal wtuv " +
                      "WHERE wtuv.us_code = ? AND wtuv.mjesec = ? AND wtuv.godina = ?";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
@@ -124,7 +124,9 @@ public class WorkingTimeItemRepository {
             workingTimeItemView.setDay30(rs.getString("30"));
             workingTimeItemView.setDay31(rs.getString("31"));
 
-            workingTimeItemView.setTotal(rs.getInt("Ukupno"));
+            workingTimeItemView.setTotal(rs.getBigDecimal("Ukupno"));
+
+            System.out.println(workingTimeItemView);
 
             return workingTimeItemView;
         }, appUser.getUserCode(), month, year);

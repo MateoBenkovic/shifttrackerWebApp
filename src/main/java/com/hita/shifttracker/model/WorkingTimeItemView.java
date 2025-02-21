@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.math.BigDecimal;
+
 @Table(name = "vw_working_time_user_wt_cal")
 @Data
 public class WorkingTimeItemView {
@@ -84,7 +86,7 @@ public class WorkingTimeItemView {
     private String day31;
 
     @Column ("Ukupno")
-    private int total;
+    private BigDecimal total;
 
 
 }

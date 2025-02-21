@@ -133,4 +133,14 @@ public class EmployeeController {
         return "redirect:/employee/workhour/list";
     }
 
+
+    @GetMapping("/employee/workhour/overtime")
+    public String employeeWorkHourOvertimeProcess() {
+
+        // ispisati datume i sate koje je korisnik unio u prekovremene
+
+        return "redirect:/employee/workhour/list";
+    }
+
+
 }
