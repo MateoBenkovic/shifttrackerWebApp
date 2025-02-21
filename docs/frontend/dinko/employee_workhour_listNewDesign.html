@@ -104,6 +104,9 @@
         padding: 5px;
         transition: all 0.3s ease-in-out;
     }
+    #reportContainer {
+        display: none;
+    }
   </style>
 </head>
 <body>
@@ -115,6 +118,7 @@
       <img src="/logo.png" style="height: 50px; width:100px" class="me-5">
       <a class="nav-link me-4" href="/employee/workhour/add">Unos radnog vremena</a>
       <a class="nav-link active me-4" href="/employee/workhour/list">Pregled rada</a>
+      <a class="nav-link me-4" href="#" id="reportLink">Izvještaj</a>
     </div>
 
     <div class="navbar-nav ms-auto d-flex align-items-center">
@@ -191,7 +195,7 @@
   </div>
 
   <!-- Schedule Table -->
-  <div class="table-responsive">
+  <div class="table-responsive" id="scheduleContainer">
     <table class="table schedule-table">
       <thead>
       <tr id="calendarRow">
@@ -365,6 +369,13 @@
         <td>-</td>
         <td>-</td>
         <td>-</td>
+        <td class="weekend">-</td>
+        <td class="weekend">-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
         <td>29</td>
       </tr>
       <tr>
@@ -437,21 +448,58 @@
         <td>-</td>
         <td>8</td>
       </tr>
-      <!-- Add more work types... -->
       </tbody>
     </table>
+  </div>
 
-    <table>
-      <thead>
-      <tr>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="wtuv : ${workingTimesUserView}">
-
-      </tr>
-      </tbody>
-    </table>
+  <!-- Report Container -->
+  <div id="reportContainer" class="mt-4">
+    <h2 class="mb-4">Izvještaj radnih sati</h2>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="info-section">
+          <h5 class="section-title">Predaja izvještaja</h5>
+          <form id="reportForm">
+            <div class="mb-3">
+              <label for="reportMonth" class="form-label">Mjesec</label>
+              <select class="form-select" id="reportMonth" required>
+                <option value="">Odaberite mjesec</option>
+                <option value="1">Siječanj</option>
+                <option value="2">Veljača</option>
+                <option value="3">Ožujak</option>
+                <option value="4">Travanj</option>
+                <option value="5">Svibanj</option>
+                <option value="6">Lipanj</option>
+                <option value="7">Srpanj</option>
+                <option value="8">Kolovoz</option>
+                <option value="9">Rujan</option>
+                <option value="10">Listopad</option>
+                <option value="11">Studeni</option>
+                <option value="12">Prosinac</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="reportYear" class="form-label">Godina</label>
+              <select class="form-select" id="reportYear" required>
+                <option value="">Odaberite godinu</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Predaj izvještaj</button>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="info-section">
+          <h5 class="section-title">Pregled radnih sati</h5>
+          <div id="monthlyReport">
+            <!-- Monthly report will be dynamically inserted here -->
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -482,232 +530,266 @@
   </form>
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-
   document.getElementById("monthSelect").addEventListener("change", function() {
-  generateCalendar(parseInt(this.value));
-});
+    generateCalendar(parseInt(this.value));
+  });
 
-function generateCalendar(selectedMonth) {
-  const calendarRow = document.getElementById("calendarRow");
-  calendarRow.innerHTML = ""; // Očisti tablicu prije generiranja
+  function generateCalendar(selectedMonth) {
+    const calendarRow = document.getElementById("calendarRow");
+    calendarRow.innerHTML = ""; // Očisti tablicu prije generiranja
 
+    const currentYear = new Date().getFullYear(); // Trenutna godina
+    const daysInMonth = new Date(currentYear, selectedMonth, 0).getDate(); // Broj dana u mjesecu
 
-  const currentYear = new Date().getFullYear(); // Trenutna godina
-  const daysInMonth = new Date(currentYear, selectedMonth, 0).getDate(); // Broj dana u mjesecu
+    // Dodaj prvi stupac "Vrsta rada"
+    const typeTh = document.createElement("th");
+    typeTh.textContent = "Vrsta rada";
+    typeTh.style.cursor = "default";
+    calendarRow.appendChild(typeTh);
 
-  // Dodaj prvi stupac "Vrsta rada"
-  const typeTh = document.createElement("th");
-  typeTh.textContent = "Vrsta rada";
-  typeTh.style.cursor = "default";
-  calendarRow.appendChild(typeTh);
-
-  // Generiraj dane
-  for (let day = 1; day <= daysInMonth; day++) {
+    // Generiraj dane
+    for (let day = 1; day <= daysInMonth; day++) {
       const th = document.createElement("th");
       th.textContent = day;
       th.onclick = function() { openForm(day, this); }; // Zadrži funkcionalnost otvaranja forme
       calendarRow.appendChild(th);
+    }
+
+    // Dodaj zadnji stupac "Ukupno"
+    const totalTh = document.createElement("th");
+    totalTh.textContent = "Ukupno";
+    totalTh.style.cursor = "default";
+    calendarRow.appendChild(totalTh);
   }
 
-  // Dodaj zadnji stupac "Ukupno"
-  const totalTh = document.createElement("th");
-  totalTh.textContent = "Ukupno";
-  totalTh.style.cursor = "default";
-  calendarRow.appendChild(totalTh);
-}
-
-// Pozovi funkciju da inicijalno postavi trenutni mjesec
-const today = new Date();
-document.getElementById("monthSelect").value = today.getMonth() + 1; // Postavi trenutni mjesec
-generateCalendar(today.getMonth() + 1);
-
+  // Pozovi funkciju da inicijalno postavi trenutni mjesec
+  const today = new Date();
+  document.getElementById("monthSelect").value = today.getMonth() + 1; // Postavi trenutni mjesec
+  generateCalendar(today.getMonth() + 1);
 
   function openForm(day, element) {
+    const formContainer = document.getElementById("workTimeFormContainer");
+    const workDateInput = document.getElementById("workDate");
+    const overlay = document.getElementById("overlay");
+    const startTimeInput = document.getElementById("startShift");
+    const endTimeInput = document.getElementById("endShift");
 
-  const formContainer = document.getElementById("workTimeFormContainer");
-  const workDateInput = document.getElementById("workDate");
-  const overlay = document.getElementById("overlay");
-  const startTimeInput = document.getElementById("startShift");
-  const endTimeInput = document.getElementById("endShift");
+    // Prvo forsiramo da forma dobije pravu širinu
+    formContainer.style.display = "block";
+    formContainer.style.visibility = "hidden"; // Ne vidi se dok ne dobijemo dimenzije
 
-  // Prvo forsiramo da forma dobije pravu širinu
-  formContainer.style.display = "block";
-  formContainer.style.visibility = "hidden"; // Ne vidi se dok ne dobijemo dimenzije
+    // Sada možemo dobiti pravu širinu forme
+    const formWidth = formContainer.offsetWidth;
 
-  // Sada možemo dobiti pravu širinu forme
-  const formWidth = formContainer.offsetWidth;
+    // Resetiraj formu dok se ne postavi ispravna pozicija
+    formContainer.style.display = "none";
+    formContainer.style.visibility = "visible"; // Sad se vidi kad je otvoriš
 
-  // Resetiraj formu dok se ne postavi ispravna pozicija
-  formContainer.style.display = "none";
-  formContainer.style.visibility = "visible"; // Sad se vidi kad je otvoriš
+    startTimeInput.value = "";
+    endTimeInput.value = "";
 
-  startTimeInput.value = "";
-  endTimeInput.value = "";
+    // Postavi datum u input[type="date"]
+    const selectedMonth = document.getElementById("monthSelect").value; // Dohvati odabrani mjesec
+    const currentYear = new Date().getFullYear(); // Dohvati trenutnu godinu
+    const selectedDate = `${currentYear}-${String(selectedMonth).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
-  // Postavi datum u input[type="date"]
-  const selectedMonth = document.getElementById("monthSelect").value; // Dohvati odabrani mjesec
-  const currentYear = new Date().getFullYear(); // Dohvati trenutnu godinu
-  const selectedDate = `${currentYear}-${String(selectedMonth).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    workDateInput.value = selectedDate;
 
-  workDateInput.value = selectedDate;
+    // Resetiraj prethodno istaknuti datum
+    document.querySelectorAll(".highlighted-date").forEach(el => el.classList.remove("highlighted-date"));
 
-  // Resetiraj prethodno istaknuti datum
-  document.querySelectorAll(".highlighted-date").forEach(el => el.classList.remove("highlighted-date"));
+    // Istakni kliknuti datum
+    element.classList.add("highlighted-date");
 
-  // Istakni kliknuti datum
-  element.classList.add("highlighted-date");
+    // Pronađi poziciju kliknutog elementa
+    const rect = element.getBoundingClientRect();
+    const windowWidth = window.innerWidth;
 
-  // Pronađi poziciju kliknutog elementa
-  const rect = element.getBoundingClientRect();
-  const windowWidth = window.innerWidth;
+    let leftPosition;
 
-  let leftPosition;
-
-  // Ako je dan 1-15, probaj desno, ako nema mjesta -> lijevo
-  if (day <= 15) {
+    // Ako je dan 1-15, probaj desno, ako nema mjesta -> lijevo
+    if (day <= 15) {
       if (rect.right + formWidth < windowWidth) {
-          leftPosition = rect.right + window.scrollX + 10; // Otvara desno
-          console.log("Otvara se DESNO");
+        leftPosition = rect.right + window.scrollX + 10; // Otvara desno
+        console.log("Otvara se DESNO");
       } else {
-          leftPosition = rect.left + window.scrollX - formWidth - 10; // Ako nema mjesta, otvori lijevo
-          console.log("Nema mjesta desno, otvara se LIJEVO");
+        leftPosition = rect.left + window.scrollX - formWidth - 10; // Ako nema mjesta, otvori lijevo
+        console.log("Nema mjesta desno, otvara se LIJEVO");
       }
-  } else {
+    } else {
       // Ako je dan 16-31, probaj lijevo, ako nema mjesta -> desno
       if (rect.left - formWidth > 0) {
-          leftPosition = rect.left + window.scrollX - formWidth - 10; // Otvara lijevo
-          console.log("Otvara se LIJEVO");
+        leftPosition = rect.left + window.scrollX - formWidth - 10; // Otvara lijevo
+        console.log("Otvara se LIJEVO");
       } else {
-          leftPosition = rect.right + window.scrollX + 10; // Ako nema mjesta, otvori desno
-          console.log("Nema mjesta lijevo, otvara se DESNO");
+        leftPosition = rect.right + window.scrollX + 10; // Ako nema mjesta, otvori desno
+        console.log("Nema mjesta lijevo, otvara se DESNO");
       }
-  }
+    }
 
-  // Sigurnosne provjere da ne pobjegne van ekrana
-  if (leftPosition + formWidth > windowWidth) {
+    // Sigurnosne provjere da ne pobjegne van ekrana
+    if (leftPosition + formWidth > windowWidth) {
       leftPosition = windowWidth - formWidth - 20; // Spriječava izlazak iz ekrana desno
       console.log("Forma bi pobjegla desno - Korigiram!");
-  }
-  if (leftPosition < 0) {
+    }
+    if (leftPosition < 0) {
       leftPosition = 10; // Spriječava izlazak iz ekrana lijevo
       console.log("Forma bi pobjegla lijevo - Korigiram!");
-  }
+    }
 
-  // Postavi poziciju forme blizu datuma
-  formContainer.style.top = `${rect.bottom + window.scrollY + 5}px`;
-  formContainer.style.left = `${leftPosition}px`;
+    // Postavi poziciju forme blizu datuma
+    formContainer.style.top = `${rect.bottom + window.scrollY + 5}px`;
+    formContainer.style.left = `${leftPosition}px`;
 
-  // Prikaži overlay i formu
-  formContainer.style.display = "block";
-  overlay.style.display = "block";
+    // Prikaži overlay i formu
+    formContainer.style.display = "block";
+    overlay.style.display = "block";
 
-  console.log(`Forma otvorena na X: ${leftPosition}`);
+    console.log(`Forma otvorena na X: ${leftPosition}`);
 
-  // Klik izvan forme zatvara formu i uklanja istaknuti datum
-  overlay.onclick = function () {
+    // Klik izvan forme zatvara formu i uklanja istaknuti datum
+    overlay.onclick = function () {
       formContainer.style.display = "none";
       overlay.style.display = "none";
       element.classList.remove("highlighted-date");
       console.log("Forma zatvorena.");
-  };
-}
-
+    };
+  }
 
   // Pravila u formi
   document.addEventListener("DOMContentLoaded", function () {
+    const btnDnevna = document.getElementById('btnDnevna');
+    const btnNocna = document.getElementById('btnNocna');
+    const startTimeInput = document.getElementById('startShift');
+    const endTimeInput = document.getElementById('endShift');
+    const workDateInput = document.getElementById('workDate');
 
-          const btnDnevna = document.getElementById('btnDnevna');
-          const btnNocna = document.getElementById('btnNocna');
-          const startTimeInput = document.getElementById('startShift');
-          const endTimeInput = document.getElementById('endShift');
-          const workDateInput = document.getElementById('workDate');
+    function setDateTime(dateString, hours, minutes) {
+      const [year, month, day] = dateString.split('-');
+      const date = new Date(year, month - 1, day, hours, minutes);
 
-          function setDateTime(dateString, hours, minutes) {
-              const [year, month, day] = dateString.split('-');
-              const date = new Date(year, month - 1, day, hours, minutes);
+      // Formatiranje u lokalno vrijeme
+      const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+      const formattedTime = `${String(date.getHours()).padStart(2, '0')}:00`; // Uvijek 00 minute
 
-              // Formatiranje u lokalno vrijeme
-              const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-              const formattedTime = `${String(date.getHours()).padStart(2, '0')}:00`; // Uvijek 00 minute
+      return `${formattedDate}T${formattedTime}`;
+    }
 
-              return `${formattedDate}T${formattedTime}`;
-          }
+    function adjustMinutesToZero(input) {
+      if(!input.value) return;
 
-           function adjustMinutesToZero(input) {
-              if(!input.value) return;
+      const [datePart, timePart] = input.value.split('T');
+      let [hours, minutes] = timePart.split(':');
 
-              const [datePart, timePart] = input.value.split('T');
-              let [hours, minutes] = timePart.split(':');
+      if(minutes !== '00') {
+        input.value = `${datePart}T${hours}:00`;
+      }
+    }
 
-              if(minutes !== '00') {
-                  input.value = `${datePart}T${hours}:00`;
-              }
-          }
+    // Dodajemo event listenere za automatsku korekciju
+    startTimeInput.addEventListener('change', function() {
+      adjustMinutesToZero(this);
+    });
 
-          // Dodajemo event listenere za automatsku korekciju
-          startTimeInput.addEventListener('change', function() {
-              adjustMinutesToZero(this);
-          });
+    endTimeInput.addEventListener('change', function() {
+      adjustMinutesToZero(this);
+    });
 
-          endTimeInput.addEventListener('change', function() {
-              adjustMinutesToZero(this);
-          });
+    btnDnevna.addEventListener('click', function() {
+      const selectedDate = workDateInput.value;
+      startTimeInput.value = setDateTime(selectedDate, 7, 0);
+      endTimeInput.value = setDateTime(selectedDate, 19, 0);
+    });
 
+    btnNocna.addEventListener('click', function() {
+      const selectedDate = workDateInput.value;
+      const nextDay = new Date(selectedDate);
+      nextDay.setDate(nextDay.getDate() + 1);
 
-          btnDnevna.addEventListener('click', function() {
-              const selectedDate = workDateInput.value;
-              startTimeInput.value = setDateTime(selectedDate, 7, 0);
-              endTimeInput.value = setDateTime(selectedDate, 19, 0);
-          });
+      startTimeInput.value = setDateTime(selectedDate, 19, 0);
+      endTimeInput.value = setDateTime(nextDay.toISOString().split("T")[0], 7, 0);
+    });
 
-          btnNocna.addEventListener('click', function() {
-              const selectedDate = workDateInput.value;
-              const nextDay = new Date(selectedDate);
-              nextDay.setDate(nextDay.getDate() + 1);
+    const workTimeForm = document.getElementById('workTimeForm');
 
-              startTimeInput.value = setDateTime(selectedDate, 19, 0);
-              endTimeInput.value = setDateTime(nextDay.toISOString().split("T")[0], 7, 0);
-          });
+    workTimeForm.addEventListener('submit', function(event) {
+      const start = startTimeInput.value;
+      const end = endTimeInput.value;
 
-          const workTimeForm = document.getElementById('workTimeForm');
+      const startDate = new Date(start);
+      const endDate = new Date(end);
 
-      workTimeForm.addEventListener('submit', function(event) {
-          const start = startTimeInput.value;
-          const end = endTimeInput.value;
+      // Provjera da kraj nije prije početka
+      if(endDate <= startDate) {
+        alert('Kraj radnog vremena mora biti nakon početka rada!');
+        event.preventDefault();
+        return;
+      }
 
-          const startDate = new Date(start);
-          const endDate = new Date(end);
+      // Provjera trajanja smjene
+      const diffMs = endDate - startDate;
+      const diffHours = diffMs / (1000 * 60 * 60);
 
-          // Provjera da kraj nije prije početka
-          if(endDate <= startDate) {
-              alert('Kraj radnog vremena mora biti nakon početka rada!');
-              event.preventDefault();
-              return;
-          }
+      if(diffHours < 1) {
+        alert('Minimalno trajanje radnog vremena je 1 sat!');
+        event.preventDefault();
+        return;
+      }
 
-          // Provjera trajanja smjene
-          const diffMs = endDate - startDate;
-          const diffHours = diffMs / (1000 * 60 * 60);
-
-          if(diffHours < 1) {
-              alert('Minimalno trajanje radnog vremena je 1 sat!');
-              event.preventDefault();
-              return;
-          }
-
-          if(diffHours > 24) {
-              alert('Maksimalno trajanje radnog vremena je 24 sata!');
-              event.preventDefault();
-              return;
-          }
-      });
+      if(diffHours > 24) {
+        alert('Maksimalno trajanje radnog vremena je 24 sata!');
+        event.preventDefault();
+        return;
+      }
+    });
   });
 
+  // Funkcionalnost za izvještaj
+  document.addEventListener("DOMContentLoaded", function() {
+    const reportLink = document.getElementById("reportLink");
+    const scheduleContainer = document.getElementById("scheduleContainer");
+    const reportContainer = document.getElementById("reportContainer");
+    const reportForm = document.getElementById("reportForm");
 
+    reportLink.addEventListener("click", function(e) {
+      e.preventDefault();
+      scheduleContainer.style.display = "none";
+      reportContainer.style.display = "block";
+    });
+
+    reportForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const month = document.getElementById("reportMonth").value;
+      const year = document.getElementById("reportYear").value;
+
+      // Simulacija dohvata podataka s servera
+      const mockData = {
+        totalHours: 160,
+        regularHours: 120,
+        overtimeHours: 20,
+        nightHours: 15,
+        weekendHours: 5
+      };
+
+      displayMonthlyReport(mockData, month, year);
+    });
+
+    function displayMonthlyReport(data, month, year) {
+      const monthNames = ["Siječanj", "Veljača", "Ožujak", "Travanj", "Svibanj", "Lipanj", "Srpanj", "Kolovoz", "Rujan", "Listopad", "Studeni", "Prosinac"];
+      const reportHTML = `
+        <h4>Izvještaj za ${monthNames[month - 1]} ${year}</h4>
+        <p><strong>Ukupno radnih sati:</strong> ${data.totalHours}</p>
+        <p><strong>Redovni sati:</strong> ${data.regularHours}</p>
+        <p><strong>Prekovremeni sati:</strong> ${data.overtimeHours}</p>
+        <p><strong>Noćni sati:</strong> ${data.nightHours}</p>
+        <p><strong>Vikend sati:</strong> ${data.weekendHours}</p>
+      `;
+      document.getElementById("monthlyReport").innerHTML = reportHTML;
+    }
+  });
 </script>
 
 </body>
