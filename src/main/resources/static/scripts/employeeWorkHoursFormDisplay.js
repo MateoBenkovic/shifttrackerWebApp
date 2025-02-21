@@ -34,28 +34,22 @@ function openForm(day, element, year, month) {
     if (day <= 15) {
         if (rect.right + formWidth < windowWidth) {
             leftPosition = rect.right + window.scrollX + 10;
-            console.log("Otvara se DESNO");
         } else {
             leftPosition = rect.left + window.scrollX - formWidth - 10;
-            console.log("Nema mjesta desno, otvara se LIJEVO");
         }
     } else {
         if (rect.left - formWidth > 0) {
             leftPosition = rect.left + window.scrollX - formWidth - 10;
-            console.log("Otvara se LIJEVO");
         } else {
             leftPosition = rect.right + window.scrollX + 10;
-            console.log("Nema mjesta lijevo, otvara se DESNO");
         }
     }
 
     if (leftPosition + formWidth > windowWidth) {
         leftPosition = windowWidth - formWidth - 20;
-        console.log("Forma bi pobjegla desno - Korigiram!");
     }
     if (leftPosition < 0) {
         leftPosition = 10;
-        console.log("Forma bi pobjegla lijevo - Korigiram!");
     }
 
     formContainer.style.top = `${rect.bottom + window.scrollY + 5}px`;
@@ -64,12 +58,9 @@ function openForm(day, element, year, month) {
     formContainer.style.display = "block";
     overlay.style.display = "block";
 
-    console.log(`Forma otvorena na X: ${leftPosition}`);
-
     overlay.onclick = function () {
         formContainer.style.display = "none";
         overlay.style.display = "none";
         element.classList.remove("highlighted-date");
-        console.log("Forma zatvorena.");
     };
 }

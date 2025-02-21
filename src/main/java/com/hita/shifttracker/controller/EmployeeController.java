@@ -69,7 +69,7 @@ public class EmployeeController {
         }
 
         List<WorkingTimeItemView> workingTimeItemsView = workingTimeItemService.getWorkingTimeItemViewByAppUser(appUser, month, year);
-        Map<LocalDate, WorkingTimeDTO> workingTimeMap = workingTimeService.getWorkingHoursForMonth(appUser.getId(), year, month);
+        Map<LocalDate, List<WorkingTimeDTO>> workingTimeMap = workingTimeService.getWorkingHoursForMonth(appUser.getId(), year, month);
 
         Map<String, Object> response = new HashMap<>();
         response.put("workHours", workingTimeItemsView);
@@ -120,15 +120,14 @@ public class EmployeeController {
         return "employee_workhour_add";
     }
 
-    @DeleteMapping("/employee/workhour/remove")
-    @ResponseBody
-    public String employeeWorkHourRemove(@RequestParam("workDate") String workDate,
-                                         @RequestParam("startShift") String startShift,
+    @GetMapping("/employee/workhour/remove")
+    public String employeeWorkHourRemove(@RequestParam("startShift") String startShift,
                                          @RequestParam("endShift") String endShift, HttpSession session){
 
         AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
         System.out.println("in delete");
-        LocalDate dateFrom = LocalDate.parse(startShift);
+        LocalDateTime startDateTime = LocalDateTime.parse(startShift);
+        LocalDate dateFrom = startDateTime.toLocalDate();
         workingTimeService.deleteWorkingTimeByAppUserIdAndDateFrom(appUser.getId(), dateFrom);
 
         return "redirect:/employee/workhour/list";

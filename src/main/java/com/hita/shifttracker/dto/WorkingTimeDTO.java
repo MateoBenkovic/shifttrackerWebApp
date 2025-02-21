@@ -11,10 +11,10 @@ public class WorkingTimeDTO {
     private Integer endHour;
     private Integer totalHours;
 
-    public WorkingTimeDTO(LocalDate date) {
+    public WorkingTimeDTO(LocalDate date, int startHour, int endHour, int totalHours) {
         this.date = date;
-        this.startHour = null;
-        this.endHour = null;
-        this.totalHours = 0;
+        this.startHour = startHour;
+        this.endHour = endHour;
+        this.totalHours = totalHours;
     }
 }
