@@ -32,14 +32,14 @@ function loadWorkHours(year, month) {
         return response.json();
     })
     .then(data => {
-        updateTable(data.workHours, data.workingTimes, year, month);
+        updateTable(data.workHours, data.workingTimes, year, month, data.schedule);
         const prescribedHours = data.period;
         document.getElementById('prescribed-hours').textContent = `${prescribedHours.totalHours}`;
     })
     .catch(error => console.error("Greška:", error));
 }
 
-function updateTable(workHours, workingTimes, year, month) {
+function updateTable(workHours, workingTimes, year, month, schedule) {
     const tableHead = document.querySelector("#workHoursTable thead");
     const tableBody = document.querySelector("#workHoursTable tbody");
     console.log(workingTimes);
@@ -108,8 +108,15 @@ function updateTable(workHours, workingTimes, year, month) {
         // Add styles for weekends and holidays
         const dayClass = isHoliday ? 'holiday' : isWeekend ? 'weekend' : '';
 
-        scheduleStart += `<td class="${dayClass}"></td>`;
-        scheduleEnd += `<td class="${dayClass}"></td>`;
+        let hoursFromEntry = schedule.find(entry => entry.category === "hours_from");
+        let hoursToEntry = schedule.find(entry => entry.category === "hours_to");
+
+        let hoursFrom = hoursFromEntry ? hoursFromEntry[`day${i.toString().padStart(2, "0")}`] : null;
+        let hoursTo = hoursToEntry ? hoursToEntry[`day${i.toString().padStart(2, "0")}`] : null;
+
+        scheduleStart += `<td class="${dayClass}">${hoursFrom !== null ? hoursFrom.toString().padStart(2, "0") : ""}</td>`;
+        scheduleEnd += `<td class="${dayClass}">${hoursTo !== null ? hoursTo.toString().padStart(2, "0") : ""}</td>`;
+
 
         if (firstShift) {
             startRow += `<td class="${dayClass}">${firstShift.startHour.toString().padStart(2, '0')}</td>`;
