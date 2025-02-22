@@ -126,7 +126,7 @@ public class EmployeeController {
         return "employee_workhour_add";
     }
 
-    @GetMapping("/employee/workhour/remove")
+    @GetMapping("/employee/workhour/delete")
     public String employeeWorkHourRemove(@RequestParam("startShift") String startShift,
                                          @RequestParam("endShift") String endShift, HttpSession session){
 
@@ -134,7 +134,12 @@ public class EmployeeController {
         System.out.println("in delete");
         LocalDateTime startDateTime = LocalDateTime.parse(startShift);
         LocalDate dateFrom = startDateTime.toLocalDate();
-        workingTimeService.deleteWorkingTimeByAppUserIdAndDateFrom(appUser.getId(), dateFrom);
+
+        // int work time delete
+
+        // stavi stavku na s
+
+        //workingTimeService.deleteWorkingTimeByAppUserIdAndDateFrom(appUser.getId(), dateFrom);
 
         return "redirect:/employee/workhour/list";
     }
