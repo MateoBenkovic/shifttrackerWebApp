@@ -3,10 +3,7 @@ package com.hita.shifttracker.controller;
 import com.hita.shifttracker.dto.AppUserDTO;
 import com.hita.shifttracker.dto.WorkingTimeDTO;
 import com.hita.shifttracker.model.*;
-import com.hita.shifttracker.service.CompanyService;
-import com.hita.shifttracker.service.DateService;
-import com.hita.shifttracker.service.WorkingTimeItemService;
-import com.hita.shifttracker.service.WorkingTimeService;
+import com.hita.shifttracker.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,13 +26,16 @@ public class EmployeeController {
     private final WorkingTimeService workingTimeService;
     private final WorkingTimeItemService workingTimeItemService;
     private final DateService dateService;
+    private final TempSchedulePerEmployeeService tempSchedulePerEmployeeService;
 
     private EmployeeController(CompanyService companyService, WorkingTimeService workingTimeService,
-                               WorkingTimeItemService workingTimeItemService, DateService dateService) {
+                               WorkingTimeItemService workingTimeItemService, DateService dateService,
+                               TempSchedulePerEmployeeService tempSchedulePerEmployeeService) {
         this.companyService = companyService;
         this.workingTimeService = workingTimeService;
         this.workingTimeItemService = workingTimeItemService;
         this.dateService = dateService;
+        this.tempSchedulePerEmployeeService = tempSchedulePerEmployeeService;
     }
 
     @GetMapping("/employee/workhour/list")
@@ -68,12 +68,18 @@ public class EmployeeController {
         List<WorkingTimeItemView> workingTimeItemsView = workingTimeItemService.getWorkingTimeItemViewByAppUser(appUser, month, year);
         Map<LocalDate, List<WorkingTimeDTO>> workingTimeMap = workingTimeService.getWorkingHoursForMonth(appUser.getId(), year, month);
         Period period = workingTimeService.getByMonthAndYear(month, year);
-        System.out.println(period);
+        // return schedule data;
+        List<TempSchedulePerEmployeeView> tempSchedulePerEmployees = tempSchedulePerEmployeeService.findAllByAppUserIdAndMonthAndYearPivot(appUser.getId(), month, year);
+
+        for (TempSchedulePerEmployeeView tempSchedulePerEmployee : tempSchedulePerEmployees) {
+            System.out.println(tempSchedulePerEmployee.toString());
+        }
 
         Map<String, Object> response = new HashMap<>();
         response.put("workHours", workingTimeItemsView);
         response.put("workingTimes", workingTimeMap);
         response.put("period", period);
+        response.put("schedule", tempSchedulePerEmployees);
 
         return ResponseEntity.ok(response);
     }
