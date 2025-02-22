@@ -2,7 +2,9 @@ package com.hita.shifttracker.service;
 
 import com.hita.shifttracker.dto.WorkingTimeDTO;
 import com.hita.shifttracker.model.AppUser;
+import com.hita.shifttracker.model.Period;
 import com.hita.shifttracker.model.WorkingTime;
+import com.hita.shifttracker.repository.PeriodRepository;
 import com.hita.shifttracker.repository.WorkingTimeRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,11 @@ import java.util.Map;
 public class WorkingTimeService {
 
     private final WorkingTimeRepository workingTimeRepository;
+    private final PeriodRepository periodRepository;
 
-    public WorkingTimeService(WorkingTimeRepository workingTimeRepository) {
+    public WorkingTimeService(WorkingTimeRepository workingTimeRepository, PeriodRepository periodRepository) {
         this.workingTimeRepository = workingTimeRepository;
+        this.periodRepository = periodRepository;
     }
 
     // add workhour
@@ -33,10 +37,10 @@ public class WorkingTimeService {
 
     public void deleteWorkingTimeByAppUserIdAndDateFrom(int appUserId, LocalDate dateFrom) {
         if(workingTimeRepository.existsByAppUserIdAndDateFrom(appUserId, dateFrom)) {
+            // po trazi id work time
             workingTimeRepository.deleteByAppUserIdAndDateFrom(appUserId, dateFrom);
         }
     }
-
     public Map<LocalDate, List<WorkingTimeDTO>> getWorkingHoursForMonth(int appUserId, int year, int month) {
         List<WorkingTime> workingTimes = workingTimeRepository.findByAppUserIdAndMonthAndYear(appUserId, month, year);
         Map<LocalDate, List<WorkingTimeDTO>> workingHoursMap = new HashMap<>();
@@ -65,6 +69,14 @@ public class WorkingTimeService {
         System.out.println(workingHoursMap);
         return workingHoursMap;
     }
+
+    // get period by month and year
+    public Period getByMonthAndYear(int month, int year) {
+        return periodRepository.findByMonthAndYear(month, year);
+    }
+
+
+    // get period by month
 
 
 
