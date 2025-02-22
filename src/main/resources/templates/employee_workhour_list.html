@@ -324,7 +324,7 @@ td.holiday {
                                 <p id="errorMessage"></p>
                             </div>
                             <div class="d-flex justify-content-between">
-                                <button type="button" class="btn btn-danger" id="obrisiButton">Obriši</button>
+                                <button type="button" class="btn btn-danger" style="display: none;" id="deleteShiftButton">Obriši</button>
                                 <button type="submit" class="btn btn-dark" id="spremiButton">Spremi</button>
                             </div>
                         </form>
@@ -359,16 +359,11 @@ td.holiday {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    document.getElementById('obrisiButton').addEventListener('click', function(event) {
-        event.preventDefault();
-        document.getElementById('workTimeForm').action = '/employee/workhour/remove';
-        document.getElementById('workTimeForm').submit();
-    });
-
-    document.getElementById('spremiButton').addEventListener('click', function(event) {
-        // No need to change the action attribute, the default action will be used
-        // You can add additional logic here if needed
-    });
+<!--    document.getElementById('obrisiButton').addEventListener('click', function(event) {-->
+<!--        event.preventDefault();-->
+<!--        document.getElementById('workTimeForm').action = '/employee/workhour/remove';-->
+<!--        document.getElementById('workTimeForm').submit();-->
+<!--    });-->
 </script>
 
 <script type="module" th:src="@{/scripts/calendarDisplay.js}"></script>
