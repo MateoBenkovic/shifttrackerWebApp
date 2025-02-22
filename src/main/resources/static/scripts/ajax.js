@@ -58,8 +58,17 @@ function updateTable(workHours, workingTimes, year, month) {
     // Kreiranje header reda
     let headerHTML = `<tr><th id="work-type">Vrsta rada</th>`;
     for (let i = 1; i <= daysInMonth; i++) {
-        headerHTML += `<th data-day onclick="openForm(${i}, this, ${year}, ${month})" class="calendar-day">${i}</th>`;
-    }
+            const dateString = `${year}-${String(month).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+            const workEntry = workingTimes[dateString] || [];
+
+            let workDataAttr = "";
+            if (workEntry.length > 0) {
+                workDataAttr = `data-shift='${JSON.stringify(workEntry)}'`;
+            }
+
+            headerHTML += `<th data-day ${workDataAttr} onclick="openForm(${i}, this, ${year}, ${month})" class="calendar-day">${i}</th>`;
+        }
+
     headerHTML += `<th id="work-type" style="text-align: center !important; font-weight: bold;">Ukupno</th></tr>`;
     tableHead.innerHTML = headerHTML;
 
