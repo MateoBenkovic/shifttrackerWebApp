@@ -117,21 +117,32 @@ function updateTable(workHours, workingTimes, year, month, schedule) {
         scheduleStart += `<td class="${dayClass}">${hoursFrom !== null ? hoursFrom.toString().padStart(2, "0") : ""}</td>`;
         scheduleEnd += `<td class="${dayClass}">${hoursTo !== null ? hoursTo.toString().padStart(2, "0") : ""}</td>`;
 
+        let deviationIdStart = (firstShift && (hoursFrom === null || firstShift.startHour.toString().padStart(2, '0') !== hoursFrom.toString().padStart(2, "0"))) ? 'id="deviation"' : '';
+        let deviationIdEnd = (firstShift && (hoursTo === null || firstShift.endHour.toString().padStart(2, "0") !== hoursTo.toString().padStart(2, "0"))) ? 'id="deviation"' : '';
+        let deviationIdStart2 = (secondShift && (hoursFrom === null || secondShift.startHour.toString().padStart(2, "0") !== hoursFrom.toString().padStart(2, "0"))) ? 'id="deviation"' : '';
+        let deviationIdEnd2 = (secondShift && (hoursTo === null || secondShift.endHour.toString().padStart(2, "0") !== hoursTo.toString().padStart(2, "0"))) ? 'id="deviation"' : '';
+
 
         if (firstShift) {
-            startRow += `<td class="${dayClass}">${firstShift.startHour.toString().padStart(2, '0')}</td>`;
-            endRow += `<td class="${dayClass}">${firstShift.endHour.toString().padStart(2, '0')}</td>`;
+            startRow += `<td class="${dayClass}" ${deviationIdStart}>${firstShift.startHour.toString().padStart(2, '0')}</td>`;
+            endRow += `<td class="${dayClass}" ${deviationIdEnd}>${firstShift.endHour.toString().padStart(2, '0')}</td>`;
         } else {
             startRow += `<td class="${dayClass}"></td>`;
             endRow += `<td class="${dayClass}"></td>`;
         }
 
         if (secondShift) {
-            startRow2 += `<td class="${dayClass}">${secondShift.startHour.toString().padStart(2, '0')}</td>`;
-            endRow2 += `<td class="${dayClass}">${secondShift.endHour.toString().padStart(2, '0')}</td>`;
+            startRow2 += `<td class="${dayClass} secondShift" ${deviationIdStart2} onclick="openForm(${i}, this, ${year}, ${month})" style="cursor: pointer; hover: background: rgba(255, 193, 7, 0.8) !important;">${secondShift.startHour.toString().padStart(2, '0')}</td>`;
+            endRow2 += `<td class="${dayClass} secondShift" ${deviationIdEnd2} onclick="openForm(${i}, this, ${year}, ${month})" style="cursor: pointer; hover: background: rgba(255, 193, 7, 0.8) !important;">${secondShift.endHour.toString().padStart(2, '0')}</td>`;
         } else {
-            startRow2 += `<td class="${dayClass}"></td>`;
-            endRow2 += `<td class="${dayClass}"></td>`;
+            if (firstShift) {
+                startRow2 += `<td class="${dayClass} secondShift" onclick="openForm(${i}, this, ${year}, ${month})" style="cursor: pointer; hover: background: rgba(255, 193, 7, 0.8) !important;"></td>`;
+                endRow2 += `<td class="${dayClass} secondShift" onclick="openForm(${i}, this, ${year}, ${month})" style="cursor: pointer; hover: background: rgba(255, 193, 7, 0.8) !important;"></td>`;
+            } else {
+                startRow2 += `<td class="${dayClass}"></td>`;
+                endRow2 += `<td class="${dayClass}"></td>`;
+            }
+
         }
 
         totalRow += `<td class="${dayClass}">${totalHours > 0 ? totalHours : ""}</td>`;
@@ -153,18 +164,18 @@ function updateTable(workHours, workingTimes, year, month, schedule) {
         let tr = `<tr><td style="text-align: left;">${row.workTypeName}</td>`;
 
         for (let i = 1; i <= daysInMonth; i++) {
-                    let dayKey = `day${String(i).padStart(2, '0')}`;
-                    const dateKey = `${year}-${month.toString().padStart(2, "0")}-${i.toString().padStart(2, "0")}`;
+            let dayKey = `day${String(i).padStart(2, '0')}`;
+            const dateKey = `${year}-${month.toString().padStart(2, "0")}-${i.toString().padStart(2, "0")}`;
 
-                    // Check if it's Saturday or Sunday
-                    const date = new Date(dateKey);
-                    const isWeekend = (date.getDay() === 0 || date.getDay() === 6); // Sunday = 0, Saturday = 6
-                    const isHoliday = holidays.includes(dateKey); // Check if the date is a holiday
+            // Check if it's Saturday or Sunday
+            const date = new Date(dateKey);
+            const isWeekend = (date.getDay() === 0 || date.getDay() === 6); // Sunday = 0, Saturday = 6
+            const isHoliday = holidays.includes(dateKey); // Check if the date is a holiday
 
-                    // Add styles for weekends and holidays
-                    const dayClass = isWeekend ? 'weekend' : isHoliday ? 'holiday' : '';
+            // Add styles for weekends and holidays
+            const dayClass = isWeekend ? 'weekend' : isHoliday ? 'holiday' : '';
 
-                    tr += `<td class="${dayClass}">${row[dayKey] !== null ? row[dayKey] : ""}</td>`;
+            tr += `<td class="${dayClass}">${row[dayKey] !== null ? row[dayKey] : ""}</td>`;
         }
 
         tr += `<td>${row.total}</td></tr>`;
