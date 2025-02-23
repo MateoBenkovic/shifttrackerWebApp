@@ -78,7 +78,7 @@ function highlightColumn(index) {
     }
 
     cells.forEach(cell => {
-        cell.style.backgroundColor = "#ffc107"; // Postavi boju
+        cell.style.backgroundColor = "#FFA500"; // Postavi boju
         cell.style.transition = "background-color 0.5s ease-in-out"; // Dodaj glatku tranziciju
         setTimeout(() => {
             cell.style.backgroundColor = ""; // Ukloni boju nakon 3 sekunde
@@ -91,7 +91,7 @@ function highlightColumn(index) {
         let nextCells = document.querySelectorAll(`#workHoursTable tbody tr td:nth-child(${parseInt(nextColumnIndex) + 1})`);
 
         nextCells.forEach(cell => {
-            cell.style.backgroundColor = "#ffc107"; // Postavi boju
+            cell.style.backgroundColor = "#FFA500"; // Postavi boju
             cell.style.transition = "background-color 0.5s ease-in-out"; // Dodaj glatku tranziciju
             setTimeout(() => {
                 cell.style.backgroundColor = ""; // Ukloni boju nakon 3 sekunde
