@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="hr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raspored Zaposlenika i Izvještaji</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .navbar {
+        background-color: #ffffff !important;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        margin-bottom: 1.5rem;
+        padding: 0.5rem 1.5rem;
+    }
+    .nav-link.active {
+        border-bottom: 3px solid #333333;
+        font-weight: bold;
+    }
+    .info-section {
+        background-color: #ffffff;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 2px solid #333333;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .schedule-table {
+        background-color: #ffffff;
+        border-radius: 8px;
+        border: 2px solid #333333;
+        overflow: hidden;
+        margin-bottom: 0;
+    }
+    .schedule-table th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        text-align: center;
+        padding: 12px 8px;
+        border: 1px solid #dee2e6;
+        min-width: 40px;
+    }
+    .schedule-table th {
+        border-bottom: 2px solid #333333;
+    }
+    .schedule-table td {
+        text-align: center;
+        padding: 12px 8px;
+        border: 1px solid #dee2e6;
+    }
+    td.weekend {
+        background-color: #f0f0f0;
+    }
+    .work-type {
+        text-align: left !important;
+        font-weight: bold;
+        background-color: #ffffff !important;
+        border-right: 1px solid #dee2e6 !important;
+    }
+    .total-row {
+        background-color: #f8f9fa;
+        border-top: 2px solid #333333;
+        border-bottom: 2px solid #333333;
+        font-weight: 500;
+    }
+    .info-section p {
+        margin-bottom: 4px;
+    }
+    .table-responsive {
+        border: 2px solid #333333;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-top: 1rem;
+    }
+    .section-title {
+        background-color: #333333;
+        color: #ffffff;
+        padding: 10px;
+        margin: -20px -20px 15px -20px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+    #workTimeFormContainer {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        z-index: 1002;
+        position: absolute;
+        display: none;
+        max-width: 320px;
+    }
+    #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        display: none;
+    }
+    .highlighted-date {
+        background: rgba(255, 193, 7, 0.8) !important;
+        color: black !important;
+        box-shadow: 0px 0px 10px rgba(255, 193, 7, 1);
+        border-radius: 5px;
+        padding: 5px;
+        transition: all 0.3s ease-in-out;
+    }
+    .card {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        box-shadow: none;
+        background-color: #ffffff;
+        margin-bottom: 1rem;
+    }
+    .card-header {
+        background-color: #333333 !important;
+        color: #ffffff;
+        border-bottom: none;
+        border-top-left-radius: 8px !important;
+        border-top-right-radius: 8px !important;
+        padding: 0.75rem 1.25rem;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+    .card-body {
+        padding: 1.25rem;
+    }
+    .card-body div:not(:last-child) {
+        margin-bottom: 0.5rem;
+    }
+    .card-body strong {
+        font-weight: 500;
+        margin-right: 0.5rem;
+        display: inline-block;
+    }
+    .card.mb-4 {
+        margin-bottom: 0 !important;
+    }
+    .form-select {
+        border: 1px solid #dee2e6;
+        padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+        border-radius: 4px;
+        background-color: #ffffff;
+    }
+    .row.mb-4 {
+        margin-bottom: 1rem !important;
+    }
+    .container-fluid {
+        padding: 0 1.5rem;
+    }
+    .col-md-6 .card {
+        height: 100%;
+    }
+    .schedule-table tbody tr:nth-child(3) {
+        border-bottom: 2px solid #333333;
+    }
+    .schedule-table tbody tr:nth-child(3) td {
+        border-top: 2px solid #333333;
+    }
+    .report-controls {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .report-section {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .report-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+  </style>
+</head>
+<body>
+<div id="overlay"></div>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg mb-4">
+  <div class="container-fluid">
+    <div class="navbar-nav">
+      <img src="/logo.png" style="height: 50px; width:100px" class="me-5">
+      <a class="nav-link me-4" href="/employee/workhour/add">Unos radnog vremena</a>
+      <a class="nav-link me-4" onclick="showSection('workReview')">Pregled rada</a>
+      <a class="nav-link me-4" onclick="showSection('reports')">Izvještaji</a>
+    </div>
+
+    <div class="navbar-nav ms-auto d-flex align-items-center">
+      <div class="d-flex align-items-center me-3">
+        <span th:text="${appUser.firstName + ' ' + appUser.lastName}">ime korisnika</span>
+      </div>
+
+      <div class="dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+          <i class="bi bi-person-circle fs-4"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li class="px-3 py-1 text-muted" th:text="${appUser.appRole.roleName}">Admin</li>
+          <li class="px-3 pb-2 text-muted small" th:text="${appUser.email}">admin@example.com</li>
+          <li><button class="dropdown-item" onclick="location.href = '/logout'"><i class="bi bi-box-arrow-right"></i> Odjava</button></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container-fluid">
+  <!-- Work Review Section -->
+  <div id="workReviewSection">
+    <!-- Employee and Employer Info Cards -->
+    <div class="row mb-4">
+      <!-- Employee Info Card -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">Podaci o zaposleniku</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-2">
+              <strong>Ime i Prezime:</strong>
+              <span id="employeeName" th:text="${appUser.firstName + ' ' + appUser.lastName}">Ivan Horvat</span>
+            </div>
+            <div class="mb-2">
+              <strong>Radna jedinica:</strong>
+              <span id="employeeUnit" th:text="${appUser.team.teamName + ' ' + appUser.organizationUnit.organizationUnitName}">Tim 1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Employer Info Card -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">Podaci o poslodavcu</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-2">
+              <strong>Naziv:</strong>
+              <span th:text="${company.companyName}">Hitna KZŽ</span>
+            </div>
+            <div class="mb-2">
+              <strong>Adresa:</strong>
+              <span th:text="${company.companyAddress + ', ' + company.postalCode + ', ' + company.companyCity}">Ulica Mirka Crkvenca 1, 49000, Krapina</span>
+            </div>
+            <div class="mb-2">
+              <strong>OIB:</strong>
+              <span th:text="${company.companyTaxId}">17813384799</span>
+            </div>
+            <div class="mb-2">
+              <strong>IBAN:</strong>
+              <span th:text="${company.companyIBAN}">HR7223400091110492278</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Schedule Controls -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">Kontrole rasporeda</h5>
+      </div>
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-md-2">
+            <select class="form-select" id="monthSelectOld">
+              <option value="1">Siječanj</option>
+              <option value="2">Veljača</option>
+              <option value="3">Ožujak</option>
+              <option value="4">Travanj</option>
+              <option value="5">Svibanj</option>
+              <option value="6">Lipanj</option>
+              <option value="7">Srpanj</option>
+              <option value="8">Kolovoz</option>
+              <option value="9">Rujan</option>
+              <option value="10">Listopad</option>
+              <option value="11">Studeni</option>
+              <option value="12">Prosinac</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <select class="form-select" id="yearSelectOld">
+              <option value="2023">2023</option>
+              <option value="2024">2024</option>
+              <option value="2025">2025</option>
+            </select>
+          </div>
+          <div class="col-md-8">
+            <p class="mb-0"><strong>Propisani mjesečni fond sati:</strong> 184</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Schedule Table -->
+    <div class="table-responsive">
+      <table class="table schedule-table">
+        <thead>
+        <tr id="calendarRow">
+          <!-- Calendar headers will be dynamically generated -->
+        </tr>
+        </thead>
+        <tbody id="scheduleBody">
+        <!-- Schedule data will be dynamically generated -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Reports Section -->
+  <div id="reportsSection" style="display: none;">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">Izvještaj radnih sati</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Ispostava</label>
+            <select class="form-select" id="branchSelect">
+              <option value="">Odaberite ispostavu</option>
+              <option value="1">Krapina</option>
+              <option value="2">Zabok</option>
+              <option value="3">Pregrada</option>
+              <option value="4">Klanjec</option>
+              <option value="5">Zlatar</option>
+            </select>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Zaposlenik</label>
+            <select class="form-select" id="employeeSelect" disabled>
+              <option value="">Prvo odaberite ispostavu</option>
+            </select>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Mjesec</label>
+            <select class="form-select" id="monthSelect">
+              <option value="1">Siječanj</option>
+              <option value  id="monthSelect">
+              <option value="1">Siječanj</option>
+              <option value="2">Veljača</option>
+              <option value="3">Ožujak</option>
+              <option value="4">Travanj</option>
+              <option value="5">Svibanj</option>
+              <option value="6">Lipanj</option>
+              <option value="7">Srpanj</option>
+              <option value="8">Kolovoz</option>
+              <option value="9">Rujan</option>
+              <option value="10">Listopad</option>
+              <option value="11">Studeni</option>
+              <option value="12">Prosinac</option>
+            </select>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Godina</label>
+            <select class="form-select" id="yearSelect">
+              <option value="2023">2023</option>
+              <option value="2024">2024</option>
+              <option value="2025">2025</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <button class="btn btn-dark" onclick="generateReport()">Generiraj izvještaj</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Report Content -->
+    <div id="reportContent" style="display: none;">
+      <!-- Employee and Employer Info Cards -->
+      <div class="row mb-4">
+        <!-- Employee Info Card -->
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Podaci o zaposleniku</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-2">
+                <strong>Ime i Prezime:</strong>
+                <span id="reportEmployeeName">Odaberite zaposlenika</span>
+              </div>
+              <div class="mb-2">
+                <strong>Radna jedinica:</strong>
+                <span id="reportEmployeeUnit">-</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Employer Info Card -->
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Podaci o poslodavcu</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-2">
+                <strong>Naziv:</strong>
+                <span>Hitna KZŽ</span>
+              </div>
+              <div class="mb-2">
+                <strong>Adresa:</strong>
+                <span>Ulica Mirka Crkvenca 1, 49000, Krapina</span>
+              </div>
+              <div class="mb-2">
+                <strong>OIB:</strong>
+                <span>17813384799</span>
+              </div>
+              <div class="mb-2">
+                <strong>IBAN:</strong>
+                <span>HR7223400091110492278</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Report Table -->
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead class="table-light">
+          <tr>
+            <th>Vrsta rada</th>
+            <th>Ukupno sati</th>
+          </tr>
+          </thead>
+          <tbody id="reportTableBody">
+          <!-- Report data will be dynamically inserted here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="form-section col-md-6 col-lg-5" id="workTimeFormContainer" style="display: none; position: absolute;">
+  <h4 class="mb-4 text-center">Unos radnog vremena</h4>
+
+  <!-- Dodan dropdown za odabir datuma -->
+  <div class="mb-3 text-center">
+    <input type="date" class="form-control text-center" id="workDate" required>
+  </div>
+
+  <!-- Dugmad za Dnevna / Noćna smjena -->
+  <div class="mb-4 text-center">
+    <button id="btnDnevna" class="btn btn-outline-dark me-2">Dnevna</button>
+    <button id="btnNocna" class="btn btn-outline-dark">Noćna</button>
+  </div>
+
+  <form id="workTimeForm" action="/employee/workhour/process">
+    <div class="mb-3">
+      <label for="startShift" class="form-label">Početak radnog vremena</label>
+      <input type="datetime-local" class="form-control" id="startShift" name="startShift" required step="3600">
+    </div>
+    <div class="mb-3">
+      <label for="endShift" class="form-label">Završetak radnog vremena</label>
+      <input type="datetime-local" class="form-control" id="endShift" name="endShift" required step="3600">
+    </div>
+    <button type="submit" class="btn btn-dark w-100">Spremi</button>
+  </form>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // Simulirani podaci zaposlenika po ispostavama
+  const employeesByBranch = {
+      "1": [
+          { id: 1, name: "Ivan Horvat", unit: "Tim 1 Krapina" },
+          { id: 2, name: "Ana Kovač", unit: "Tim 2 Krapina" }
+      ],
+      "2": [
+          { id: 3, name: "Marko Novak", unit: "Tim 1 Zabok" },
+          { id: 4, name: "Petra Kralj", unit: "Tim 2 Zabok" }
+      ],
+      "3": [
+          { id: 5, name: "Josip Babić", unit: "Tim 1 Pregrada" },
+          { id: 6, name: "Marina Knežević", unit: "Tim 2 Pregrada" }
+      ],
+      "4": [
+          { id: 7, name: "Tomislav Horvat", unit: "Tim 1 Klanjec" },
+          { id: 8, name: "Ivana Kovačić", unit: "Tim 2 Klanjec" }
+      ],
+      "5": [
+          { id: 9, name: "Stjepan Novak", unit: "Tim 1 Zlatar" },
+          { id: 10, name: "Maja Pavlović", unit: "Tim 2 Zlatar" }
+      ]
+  };
+
+  // Event listener za promjenu ispostave
+  document.getElementById("branchSelect").addEventListener("change", function() {
+      const branchId = this.value;
+      const employeeSelect = document.getElementById("employeeSelect");
+      employeeSelect.innerHTML = "<option value=''>Odaberite zaposlenika</option>";
+
+      if (branchId) {
+          employeeSelect.removeAttribute("disabled");
+          const employees = employeesByBranch[branchId] || [];
+          employees.forEach(emp => {
+              const option = document.createElement("option");
+              option.value = emp.id;
+              option.textContent = emp.name;
+              employeeSelect.appendChild(option);
+          });
+      } else {
+          employeeSelect.setAttribute("disabled", "disabled");
+      }
+  });
+
+  // Event listener za promjenu zaposlenika
+  document.getElementById("employeeSelect").addEventListener("change", function() {
+      const branchId = document.getElementById("branchSelect").value;
+      const employeeId = this.value;
+
+      if (employeeId && branchId) {
+          const employee = employeesByBranch[branchId].find(emp => emp.id === parseInt(employeeId));
+          if (employee) {
+              document.getElementById("reportEmployeeName").textContent = employee.name;
+              document.getElementById("reportEmployeeUnit").textContent = employee.unit;
+          }
+      } else {
+          document.getElementById("reportEmployeeName").textContent = "Odaberite zaposlenika";
+          document.getElementById("reportEmployeeUnit").textContent = "-";
+      }
+  });
+
+  function generateCalendar(selectedMonth, selectedYear) {
+      const calendarRow = document.getElementById("calendarRow");
+      calendarRow.innerHTML = "";
+
+      const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+
+      const typeTh = document.createElement("th");
+      typeTh.textContent = "Vrsta rada";
+      typeTh.style.cursor = "default";
+      calendarRow.appendChild(typeTh);
+
+      for (let day = 1; day <= daysInMonth; day++) {
+          const th = document.createElement("th");
+          th.textContent = day;
+          th.onclick = function() { openForm(day, this); };
+          calendarRow.appendChild(th);
+      }
+
+      const totalTh = document.createElement("th");
+      totalTh.textContent = "Ukupno";
+      totalTh.style.cursor = "default";
+      calendarRow.appendChild(totalTh);
+
+      generateScheduleData(daysInMonth);
+  }
+
+  function generateScheduleData(daysInMonth) {
+      const scheduleBody = document.getElementById("scheduleBody");
+      scheduleBody.innerHTML = "";
+
+      const workTypes = [
+          "Početak rada",
+          "Završetak rada",
+          "UKUPNO RADNO VRIJEME",
+          "Redovan rad",
+          "Redovan rad II. smjena",
+          "Redovan rad noć",
+          "Redovan rad subota"
+      ];
+
+      workTypes.forEach((type, index) => {
+          const row = document.createElement("tr");
+          if (index === 2) row.classList.add("total-row");
+
+          const typeCell = document.createElement("td");
+          typeCell.className = "work-type";
+          typeCell.textContent = type;
+          row.appendChild(typeCell);
+
+          for (let day = 1; day <= daysInMonth; day++) {
+              const td = document.createElement("td");
+              td.textContent = "-";
+              row.appendChild(td);
+          }
+
+          const totalCell = document.createElement("td");
+          totalCell.textContent = index === 2 ? "156" : (index > 2 ? Math.floor(Math.random() * 40) : "-");
+          row.appendChild(totalCell);
+
+          scheduleBody.appendChild(row);
+      });
+  }
+
+  function showSection(sectionId) {
+      if (sectionId === 'workReview') {
+          document.getElementById('workReviewSection').style.display = 'block';
+          document.getElementById('reportsSection').style.display = 'none';
+      } else if (sectionId === 'reports') {
+          document.getElementById('workReviewSection').style.display = 'none';
+          document.getElementById('reportsSection').style.display = 'block';
+      }
+  }
+
+  function generateReport() {
+      const branchId = document.getElementById("branchSelect").value;
+      const employeeId = document.getElementById("employeeSelect").value;
+      const month = document.getElementById("monthSelect").value;
+      const year = document.getElementById("yearSelect").value;
+
+      if (!branchId || !employeeId) {
+          alert("Molimo odaberite ispostavu i zaposlenika");
+          return;
+      }
+
+      // Simulirani podaci izvještaja
+      const reportData = [
+          { type: "Redovan rad", hours: 160 },
+          { type: "Prekovremeni rad", hours: 10 },
+          { type: "Noćni rad", hours: 20 },
+          { type: "Rad vikendom", hours: 16 },
+          { type: "Rad blagdanom", hours: 8 }
+      ];
+
+      const reportTableBody = document.getElementById("reportTableBody");
+      reportTableBody.innerHTML = "";
+
+      reportData.forEach(item => {
+          const row = reportTableBody.insertRow();
+          const cellType = row.insertCell(0);
+          const cellHours = row.insertCell(1);
+          cellType.textContent = item.type;
+          cellHours.textContent = item.hours;
+      });
+
+      document.getElementById("reportContent").style.display = "block";
+  }
+
+  function openForm(day, element) {
+      const formContainer = document.getElementById("workTimeFormContainer");
+      const workDateInput = document.getElementById("workDate");
+      const overlay = document.getElementById("overlay");
+      const startTimeInput = document.getElementById("startShift");
+      const endTimeInput = document.getElementById("endShift");
+
+      formContainer.style.display = "block";
+      formContainer.style.visibility = "hidden";
+
+      const formWidth = formContainer.offsetWidth;
+
+      formContainer.style.display = "none";
+      formContainer.style.visibility = "visible";
+
+      startTimeInput.value = "";
+      endTimeInput.value = "";
+
+      const selectedMonth = document.getElementById("monthSelectOld").value;
+      const selectedYear = document.getElementById("yearSelectOld").value;
+      const selectedDate = `${selectedYear}-${String(selectedMonth).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+      workDateInput.value = selectedDate;
+
+      document.querySelectorAll(".highlighted-date").forEach(el => el.classList.remove("highlighted-date"));
+
+      element.classList.add("highlighted-date");
+
+      const rect = element.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+
+      let leftPosition;
+
+      if (day <= 15) {
+          if (rect.right + formWidth < windowWidth) {
+              leftPosition = rect.right + window.scrollX + 10;
+          } else {
+              leftPosition = rect.left + window.scrollX - formWidth - 10;
+          }
+      } else {
+          if (rect.left - formWidth > 0) {
+              leftPosition = rect.left + window.scrollX - formWidth - 10;
+          } else {
+              leftPosition = rect.right + window.scrollX + 10;
+          }
+      }
+
+      if (leftPosition + formWidth > windowWidth) {
+          leftPosition = windowWidth - formWidth - 20;
+      }
+      if (leftPosition < 0) {
+          leftPosition = 10;
+      }
+
+      formContainer.style.top = `${rect.bottom + window.scrollY + 5}px`;
+      formContainer.style.left = `${leftPosition}px`;
+
+      formContainer.style.display = "block";
+      overlay.style.display = "block";
+
+      overlay.onclick = function () {
+          formContainer.style.display = "none";
+          overlay.style.display = "none";
+          element.classList.remove("highlighted-date");
+      };
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+      const btnDnevna = document.getElementById('btnDnevna');
+      const btnNocna = document.getElementById('btnNocna');
+      const startTimeInput = document.getElementById('startShift');
+      const endTimeInput = document.getElementById('endShift');
+      const workDateInput = document.getElementById('workDate');
+
+      function setDateTime(dateString, hours, minutes) {
+          const [year, month, day] = dateString.split('-');
+          const date = new Date(year, month - 1, day, hours, minutes);
+
+          const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+          const formattedTime = `${String(date.getHours()).padStart(2, '0')}:00`;
+
+          return `${formattedDate}T${formattedTime}`;
+      }
+
+      function adjustMinutesToZero(input) {
+          if(!input.value) return;
+
+          const [datePart, timePart] = input.value.split('T');
+          let [hours, minutes] = timePart.split(':');
+
+          if(minutes !== '00') {
+              input.value = `${datePart}T${hours}:00`;
+          }
+      }
+
+      startTimeInput.addEventListener('change', function() {
+          adjustMinutesToZero(this);
+      });
+
+      endTimeInput.addEventListener('change', function() {
+          adjustMinutesToZero(this);
+      });
+
+      btnDnevna.addEventListener('click', function() {
+          const selectedDate = workDateInput.value;
+          startTimeInput.value = setDateTime(selectedDate, 7, 0);
+          endTimeInput.value = setDateTime(selectedDate, 19, 0);
+      });
+
+      btnNocna.addEventListener('click', function() {
+          const selectedDate = workDateInput.value;
+          const nextDay = new Date(selectedDate);
+          nextDay.setDate(nextDay.getDate() + 1);
+
+          startTimeInput.value = setDateTime(selectedDate, 19, 0);
+          endTimeInput.value = setDateTime(nextDay.toISOString().split("T")[0], 7, 0);
+      });
+
+      const workTimeForm = document.getElementById('workTimeForm');
+
+      workTimeForm.addEventListener('submit', function(event) {
+          const start = startTimeInput.value;
+          const end = endTimeInput.value;
+
+          const startDate = new Date(start);
+          const endDate = new Date(end);
+
+          if(endDate <= startDate) {
+              alert('Kraj radnog vremena mora biti nakon početka rada!');
+              event.preventDefault();
+              return;
+          }
+
+          const diffMs = endDate - startDate;
+          const diffHours = diffMs / (1000 * 60 * 60);
+
+          if(diffHours < 1) {
+              alert('Minimalno trajanje radnog vremena je 1 sat!');
+              event.preventDefault();
+              return;
+          }
+
+          if(diffHours > 24) {
+              alert('Maksimalno trajanje radnog vremena je 24 sata!');
+              event.preventDefault();
+              return;
+          }
+      });
+  });
+
+  // Inicijalno postavljanje kalendara
+  const today = new Date();
+  document.getElementById("monthSelectOld").value = today.getMonth() + 1;
+  document.getElementById("yearSelectOld").value = today.getFullYear();
+  generateCalendar(today.getMonth() + 1, today.getFullYear());
+
+  // Event listeneri za promjenu mjeseca i godine
+  document.getElementById("monthSelectOld").addEventListener("change", function() {
+      const selectedYear = parseInt(document.getElementById("yearSelectOld").value);
+      generateCalendar(parseInt(this.value), selectedYear);
+  });
+
+  document.getElementById("yearSelectOld").addEventListener("change", function() {
+      const selectedMonth = parseInt(document.getElementById("monthSelectOld").value);
+      generateCalendar(selectedMonth, parseInt(this.value));
+  });
+</script>
+
+</body>
+</html>
