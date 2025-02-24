@@ -36,6 +36,7 @@ public class WorkingTimeService {
         workingTime.setShiftId(shiftType);
 
         if(workingTimeRepository.existsByAppUserIdAndDateFromAndShiftId(workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getShiftId())) {
+            // working time id
             workingTimeRepository.updateWorkingTimeByAppUserId(workingTime);
         } else {
             workingTimeRepository.insertWorkingTimeByAppUserId(workingTime);
@@ -45,9 +46,15 @@ public class WorkingTimeService {
     public void deleteWorkingTimeByAppUserIdAndDateFrom(int appUserId, LocalDate dateFrom) {
         if(workingTimeRepository.existsByAppUserIdAndDateFrom(appUserId, dateFrom)) {
             // po trazi id work time
-            workingTimeRepository.deleteByAppUserIdAndDateFrom(appUserId, dateFrom);
+            //workingTimeRepository.deleteByAppUserIdAndDateFrom(appUserId, dateFrom);
         }
     }
+
+    public void deleteWorkingTimeById(int appUserId, int workingTimeId) {
+        // set status to z
+        workingTimeRepository.setStatusByAppUserIdAndWorkingTimeId(appUserId, workingTimeId);
+    }
+
     public Map<LocalDate, List<WorkingTimeDTO>> getWorkingHoursForMonth(int appUserId, int year, int month) {
         List<WorkingTime> workingTimes = workingTimeRepository.findByAppUserIdAndMonthAndYear(appUserId, month, year);
         Map<LocalDate, List<WorkingTimeDTO>> workingHoursMap = new HashMap<>();

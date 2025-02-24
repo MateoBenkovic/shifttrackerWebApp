@@ -136,15 +136,15 @@ public class WorkingTimeRepository {
         jdbcTemplate.update(sql);
     }
 
-    public void deleteByAppUserIdAndDateFrom(int appUserId, LocalDate dateFrom) {
+    public boolean existsByAppUserIdAndWorkingTimeId(int appUserId, int workingTimeId) {
+        String sql = "";
+        return false;
+    }
+
+    public void setStatusByAppUserIdAndWorkingTimeId(int appUserId, int workingTimeId) {
         // povuci id from work time
-        String sql = "DELETE FROM working_time WHERE app_user_id = ? AND date_from = ?";
+        String sql = "";
 
-        // set status to z
-        int rowsAffected = jdbcTemplate.update(sql, appUserId, dateFrom);
     }
 
-    public void setStatusByAppUserIdAndDateFrom(int appUserId, LocalDate dateFrom) {
-        // provjeriti
-    }
 }
