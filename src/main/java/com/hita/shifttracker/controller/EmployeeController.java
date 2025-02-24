@@ -140,6 +140,8 @@ public class EmployeeController {
 
         // ispisati datume i sate koje je korisnik unio u prekovremene
 
+        // vezati na stavke ?
+
         return "redirect:/employee/workhour/list";
     }
 

@@ -1,11 +1,9 @@
 package com.hita.shifttracker.controller;
 
-import com.hita.shifttracker.model.Holiday;
-import com.hita.shifttracker.model.Period;
-import com.hita.shifttracker.model.TempSchedulePerEmployee;
-import com.hita.shifttracker.model.TempSchedulePerEmployeeView;
+import com.hita.shifttracker.model.*;
 import com.hita.shifttracker.repository.PeriodRepository;
 import com.hita.shifttracker.repository.TempSchedulePerEmployeeRepository;
+import com.hita.shifttracker.repository.WorkingOvertimeRepository;
 import com.hita.shifttracker.service.DateService;
 
 import com.hita.shifttracker.service.TempSchedulePerEmployeeService;
@@ -25,15 +23,14 @@ import java.util.Objects;
 public class TestController {
 
     @Autowired
-    private TempSchedulePerEmployeeService repository;
+    private WorkingOvertimeRepository repo;
 
     @GetMapping("/test")
     public String test(Model model) {
 
-        List<TempSchedulePerEmployeeView> tempSchedulePerEmployees = repository.findAllByAppUserIdAndMonthAndYearPivot(21, 1, 2025);
-
-        for (TempSchedulePerEmployeeView tempSchedulePerEmployee : tempSchedulePerEmployees) {
-            System.out.println(tempSchedulePerEmployee.toString());
+        List<WorkingOvertime> workingOvertimes = repo.findAll();
+        for(WorkingOvertime wo : workingOvertimes) {
+            System.out.println(wo.toString());
         }
 
         return "test";
