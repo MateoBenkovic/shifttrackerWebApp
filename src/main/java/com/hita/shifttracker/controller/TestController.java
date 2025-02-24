@@ -4,6 +4,7 @@ import com.hita.shifttracker.model.*;
 import com.hita.shifttracker.repository.PeriodRepository;
 import com.hita.shifttracker.repository.TempSchedulePerEmployeeRepository;
 import com.hita.shifttracker.repository.WorkingOvertimeRepository;
+import com.hita.shifttracker.repository.WorkingTimeRepository;
 import com.hita.shifttracker.service.DateService;
 
 import com.hita.shifttracker.service.TempSchedulePerEmployeeService;
@@ -23,15 +24,16 @@ import java.util.Objects;
 public class TestController {
 
     @Autowired
-    private WorkingOvertimeRepository repo;
+    private WorkingTimeRepository repo;
 
     @GetMapping("/test")
     public String test(Model model) {
 
-        List<WorkingOvertime> workingOvertimes = repo.findAll();
-        for(WorkingOvertime wo : workingOvertimes) {
-            System.out.println(wo.toString());
-        }
+        WorkingTime wt = repo.findByAppUserIdAndDateFrom(22, LocalDate.of(2025,2,5));
+
+
+            System.out.println("working time: " + wt.toString());
+
 
         return "test";
     }

@@ -87,6 +87,7 @@ public class EmployeeController {
 
     @GetMapping("/employee/workhour/process")
     public String employeeWorkHourProcess(@RequestParam("startShift") String startShift, @RequestParam("endShift") String endShift,
+                                          @RequestParam("selectedColumn") String selectedColumn,
                                           Model model, HttpSession session){
 
         AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
@@ -94,15 +95,13 @@ public class EmployeeController {
         LocalDateTime startDateTime = LocalDateTime.parse(startShift);
         LocalDateTime endDateTime = LocalDateTime.parse(endShift);
 
+        //System.out.println("selected column: " + selectedColumn);
+
         LocalDate dateFrom = startDateTime.toLocalDate();
         int hoursFrom = startDateTime.toLocalTime().getHour();
         LocalDate dateTo = endDateTime.toLocalDate();
         int hoursTo = endDateTime.toLocalTime().getHour();
 
-        int shiftType = 2;
-        if(dateFrom.equals(dateTo)) {
-            shiftType = 1;
-        } // check shift type prebaciti u servis
 
         WorkingTime workingTime = new WorkingTime();
         workingTime.setDateFrom(dateFrom);
@@ -110,7 +109,6 @@ public class EmployeeController {
         workingTime.setDateTo(dateTo);
         workingTime.setHoursTo(hoursTo);
         workingTime.setAppUserId(appUser.getId());
-        workingTime.setShiftId(shiftType);
         workingTime.setSchedId(1);
 
         workingTimeService.addWorkingTime(workingTime);

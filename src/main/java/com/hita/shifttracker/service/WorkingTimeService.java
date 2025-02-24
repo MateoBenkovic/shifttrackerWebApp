@@ -28,7 +28,14 @@ public class WorkingTimeService {
     // add workhour
     public void addWorkingTime(WorkingTime workingTime){
         // check if exists
-        if(workingTimeRepository.existsByAppUserIdAndDateFrom(workingTime.getAppUserId(), workingTime.getDateFrom())) {
+
+        int shiftType = 2;
+        if(workingTime.getDateFrom().equals(workingTime.getDateTo())) {
+            shiftType = 1;
+        }
+        workingTime.setShiftId(shiftType);
+
+        if(workingTimeRepository.existsByAppUserIdAndDateFromAndShiftId(workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getShiftId())) {
             workingTimeRepository.updateWorkingTimeByAppUserId(workingTime);
         } else {
             workingTimeRepository.insertWorkingTimeByAppUserId(workingTime);

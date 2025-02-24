@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -31,8 +32,10 @@ public class WorkingTimeRepository {
                 "wt.hours_from, wt.date_to, wt.hours_to, wt.total_hours, wt.shift_id " +
                 "FROM working_time wt WHERE wt.app_user_id = ? AND wt.date_from = ?";
 
+
         return jdbcTemplate.queryForObject(sql, new Object[]{appUserId, dateFrom},
-                (rs,rowNum) -> {
+                (rs, rowNum) -> {
+
                     WorkingTime workingTime = new WorkingTime();
 
                     workingTime.setIdWorkTime(rs.getInt("id_work_time"));
@@ -46,7 +49,6 @@ public class WorkingTimeRepository {
 
                     return workingTime;
                 });
-
     }
 
     // exist by app user id and date from
@@ -55,6 +57,27 @@ public class WorkingTimeRepository {
 
         // Using query to fetch a list of results (if any)
         List<WorkingTime> resultList = jdbcTemplate.query(sql, new Object[]{appUserId, dateFrom},
+                (rs, rowNum) -> {
+                    WorkingTime workingTime = new WorkingTime();
+                    workingTime.setAppUserId(rs.getInt("app_user_id"));
+                    workingTime.setDateFrom(rs.getDate("date_from").toLocalDate());
+                    workingTime.setHoursFrom(rs.getInt("hours_from"));
+                    workingTime.setDateTo(rs.getDate("date_to").toLocalDate());
+                    workingTime.setHoursTo(rs.getInt("hours_to"));
+                    workingTime.setTotalHours(rs.getInt("total_hours"));
+                    workingTime.setShiftId(rs.getInt("shift_id"));
+                    return workingTime;
+                });
+
+        return !resultList.isEmpty();  // Returns true if list is not empty
+    }
+
+    // exist by app user id, date from and shift id
+    public boolean existsByAppUserIdAndDateFromAndShiftId(int appUserId, LocalDate dateFrom, int shiftId) {
+        String sql = "SELECT * FROM working_time WHERE app_user_id = ? AND date_from = ? AND shift_id = ?";
+
+        // Using query to fetch a list of results (if any)
+        List<WorkingTime> resultList = jdbcTemplate.query(sql, new Object[]{appUserId, dateFrom, shiftId},
                 (rs, rowNum) -> {
                     WorkingTime workingTime = new WorkingTime();
                     workingTime.setAppUserId(rs.getInt("app_user_id"));
