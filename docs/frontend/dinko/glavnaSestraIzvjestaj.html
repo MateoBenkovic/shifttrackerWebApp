@@ -343,14 +343,12 @@
           <div class="col-md-3 mb-3">
             <label class="form-label">Zaposlenik</label>
             <select class="form-select" id="employeeSelect" disabled>
-              <option value="">Prvo odaberite ispostavu</option>
+              <option value="">Svi zaposlenici</option>
             </select>
           </div>
           <div class="col-md-3 mb-3">
             <label class="form-label">Mjesec</label>
             <select class="form-select" id="monthSelect">
-              <option value="1">Siječanj</option>
-              <option value  id="monthSelect">
               <option value="1">Siječanj</option>
               <option value="2">Veljača</option>
               <option value="3">Ožujak</option>
@@ -384,51 +382,23 @@
 
     <!-- Report Content -->
     <div id="reportContent" style="display: none;">
-      <!-- Employee and Employer Info Cards -->
-      <div class="row mb-4">
-        <!-- Employee Info Card -->
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-header">
-              <h5 class="mb-0">Podaci o zaposleniku</h5>
-            </div>
-            <div class="card-body">
-              <div class="mb-2">
-                <strong>Ime i Prezime:</strong>
-                <span id="reportEmployeeName">Odaberite zaposlenika</span>
-              </div>
-              <div class="mb-2">
-                <strong>Radna jedinica:</strong>
-                <span id="reportEmployeeUnit">-</span>
-              </div>
-            </div>
-          </div>
+      <!-- Report Info Card -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Podaci o izvještaju</h5>
         </div>
-
-        <!-- Employer Info Card -->
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-header">
-              <h5 class="mb-0">Podaci o poslodavcu</h5>
-            </div>
-            <div class="card-body">
-              <div class="mb-2">
-                <strong>Naziv:</strong>
-                <span>Hitna KZŽ</span>
-              </div>
-              <div class="mb-2">
-                <strong>Adresa:</strong>
-                <span>Ulica Mirka Crkvenca 1, 49000, Krapina</span>
-              </div>
-              <div class="mb-2">
-                <strong>OIB:</strong>
-                <span>17813384799</span>
-              </div>
-              <div class="mb-2">
-                <strong>IBAN:</strong>
-                <span>HR7223400091110492278</span>
-              </div>
-            </div>
+        <div class="card-body">
+          <div class="mb-2">
+            <strong>Ispostava:</strong>
+            <span id="reportBranchName">-</span>
+          </div>
+          <div class="mb-2">
+            <strong>Zaposlenik:</strong>
+            <span id="reportEmployeeName">-</span>
+          </div>
+          <div class="mb-2">
+            <strong>Razdoblje:</strong>
+            <span id="reportPeriod">-</span>
           </div>
         </div>
       </div>
@@ -508,23 +478,22 @@
 
   // Event listener za promjenu ispostave
   document.getElementById("branchSelect").addEventListener("change", function() {
-      const branchId = this.value;
-      const employeeSelect = document.getElementById("employeeSelect");
-      employeeSelect.innerHTML = "<option value=''>Odaberite zaposlenika</option>";
+  const employeeSelect = document.getElementById("employeeSelect");
+  employeeSelect.innerHTML = "<option value=''>Svi zaposlenici</option>";
 
-      if (branchId) {
-          employeeSelect.removeAttribute("disabled");
-          const employees = employeesByBranch[branchId] || [];
-          employees.forEach(emp => {
-              const option = document.createElement("option");
-              option.value = emp.id;
-              option.textContent = emp.name;
-              employeeSelect.appendChild(option);
-          });
-      } else {
-          employeeSelect.setAttribute("disabled", "disabled");
-      }
-  });
+  if (this.value === "") {
+    employeeSelect.setAttribute("disabled", "disabled");
+  } else {
+    employeeSelect.removeAttribute("disabled");
+    const employees = employeesByBranch[this.value] || [];
+    employees.forEach(emp => {
+      const option = document.createElement("option");
+      option.value = emp.id;
+      option.textContent = emp.name;
+      employeeSelect.appendChild(option);
+    });
+  }
+});
 
   // Event listener za promjenu zaposlenika
   document.getElementById("employeeSelect").addEventListener("change", function() {
@@ -617,38 +586,124 @@
   }
 
   function generateReport() {
-      const branchId = document.getElementById("branchSelect").value;
-      const employeeId = document.getElementById("employeeSelect").value;
-      const month = document.getElementById("monthSelect").value;
-      const year = document.getElementById("yearSelect").value;
+  const branchId = document.getElementById("branchSelect").value;
+  const employeeId = document.getElementById("employeeSelect").value;
+  const month = document.getElementById("monthSelect").value;
+  const year = document.getElementById("yearSelect").value;
 
-      if (!branchId || !employeeId) {
-          alert("Molimo odaberite ispostavu i zaposlenika");
-          return;
-      }
-
-      // Simulirani podaci izvještaja
-      const reportData = [
-          { type: "Redovan rad", hours: 160 },
-          { type: "Prekovremeni rad", hours: 10 },
-          { type: "Noćni rad", hours: 20 },
-          { type: "Rad vikendom", hours: 16 },
-          { type: "Rad blagdanom", hours: 8 }
-      ];
-
-      const reportTableBody = document.getElementById("reportTableBody");
-      reportTableBody.innerHTML = "";
-
-      reportData.forEach(item => {
-          const row = reportTableBody.insertRow();
-          const cellType = row.insertCell(0);
-          const cellHours = row.insertCell(1);
-          cellType.textContent = item.type;
-          cellHours.textContent = item.hours;
-      });
-
-      document.getElementById("reportContent").style.display = "block";
+  if (!branchId) {
+    alert("Molimo odaberite ispostavu");
+    return;
   }
+
+  const reportContent = document.getElementById("reportContent");
+  reportContent.innerHTML = ""; // Clear previous content
+
+  const branchName = document.getElementById("branchSelect").options[document.getElementById("branchSelect").selectedIndex].text;
+  const monthName = document.getElementById("monthSelect").options[document.getElementById("monthSelect").selectedIndex].text;
+
+  // Add report header
+  const headerCard = document.createElement("div");
+  headerCard.className = "card mb-4";
+  headerCard.innerHTML = `
+    <div class="card-header">
+      <h5 class="mb-0">Podaci o izvještaju</h5>
+    </div>
+    <div class="card-body">
+      <div class="mb-2">
+        <strong>Ispostava:</strong>
+        <span>${branchName}</span>
+      </div>
+      <div class="mb-2">
+        <strong>Razdoblje:</strong>
+        <span>${monthName} ${year}</span>
+      </div>
+    </div>
+  `;
+  reportContent.appendChild(headerCard);
+
+  if (employeeId) {
+    // Report for a single employee
+    const employee = employeesByBranch[branchId].find(emp => emp.id === parseInt(employeeId));
+    if (employee) {
+      const reportData = generateEmployeeReport(employee, month, year);
+      addEmployeeReportToDOM(employee, reportData);
+    }
+  } else {
+    // Report for all employees in the branch
+    const employees = employeesByBranch[branchId] || [];
+    employees.forEach(employee => {
+      const reportData = generateEmployeeReport(employee, month, year);
+      addEmployeeReportToDOM(employee, reportData);
+    });
+  }
+
+  reportContent.style.display = "block";
+}
+
+function generateEmployeeReport(employee, month, year) {
+  // Simulirani podaci za zaposlenika
+  return [
+    { type: "Redovan rad", hours: Math.floor(Math.random() * 100) + 100 },
+    { type: "Prekovremeni rad", hours: Math.floor(Math.random() * 20) },
+    { type: "Noćni rad", hours: Math.floor(Math.random() * 30) },
+    { type: "Rad vikendom", hours: Math.floor(Math.random() * 25) },
+    { type: "Rad blagdanom", hours: Math.floor(Math.random() * 15) }
+  ];
+}
+
+function addEmployeeReportToDOM(employee, reportData) {
+  const reportContent = document.getElementById("reportContent");
+
+  const employeeCard = document.createElement("div");
+  employeeCard.className = "card mb-4";
+  employeeCard.innerHTML = `
+    <div class="card-header">
+      <h5 class="mb-0">${employee.name}</h5>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead class="table-light">
+            <tr>
+              <th>Vrsta rada</th>
+              <th>Ukupno sati</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${reportData.map(item => `
+              <tr>
+                <td>${item.type}</td>
+                <td>${item.hours}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  reportContent.appendChild(employeeCard);
+}
+
+// Dodajte ovo na kraj postojećeg JavaScript koda
+document.getElementById("branchSelect").addEventListener("change", function() {
+  const employeeSelect = document.getElementById("employeeSelect");
+  employeeSelect.innerHTML = "<option value=''>Svi zaposlenici</option>";
+
+  if (this.value === "") {
+    employeeSelect.setAttribute("disabled", "disabled");
+  } else {
+    employeeSelect.removeAttribute("disabled");
+    const employees = employeesByBranch[this.value] || [];
+    employees.forEach(emp => {
+      const option = document.createElement("option");
+      option.value = emp.id;
+      option.textContent = emp.name;
+      employeeSelect.appendChild(option);
+    });
+  }
+});
 
   function openForm(day, element) {
       const formContainer = document.getElementById("workTimeFormContainer");
