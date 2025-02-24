@@ -150,6 +150,11 @@ public class EmployeeController {
 
         // ispisati datume i sate koje je korisnik unio u prekovremene
 
+        LocalDate overtimeDateFrom = overtimeStartDT.toLocalDate();
+        int overtimeHoursFrom = overtimeStartDT.toLocalTime().getHour();
+        LocalDate overtimeDateTo = overtimeEndDT.toLocalDate();
+        int overtimeHoursTo = overtimeEndDT.toLocalTime().getHour();
+
         // vezati na stavke ?
 
         return "redirect:/employee/workhour/list";
