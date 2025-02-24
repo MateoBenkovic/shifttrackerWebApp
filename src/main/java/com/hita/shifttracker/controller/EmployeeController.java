@@ -129,8 +129,7 @@ public class EmployeeController {
 
         AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
 
-
-        System.out.println(workingTimeToDelete);
+        workingTimeService.deleteWorkingTimeById(appUser.getId(), workingTimeToDelete);
 
         return "redirect:/employee/workhour/list";
     }

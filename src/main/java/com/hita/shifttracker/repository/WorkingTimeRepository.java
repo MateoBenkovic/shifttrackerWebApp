@@ -154,4 +154,11 @@ public class WorkingTimeRepository {
                     return workingTime;
                 });
     }
+
+    public void setStatusByAppUserIdAndWorkingTimeId(int appUserId, int workingTimeId) {
+        String sql = "UPDATE working_time SET status = 'Z' " +
+                "WHERE app_user_id = ? AND id_work_time = ?";
+
+        jdbcTemplate.update(sql, appUserId, workingTimeId);
+    }
 }

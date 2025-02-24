@@ -61,8 +61,9 @@ public class WorkingTimeService {
         System.out.println("wt: " + wt.toString());
         wt.setStatus("Z");
         System.out.println("wt: " + wt.toString());
-
-        //workingTimeRepository.setStatusByAppUserIdAndWorkingTimeId(appUserId, workingTimeId);
+        if(wt.getIdWorkTime() != 0) {
+            //workingTimeRepository.setStatusByAppUserIdAndWorkingTimeId(appUserId, workingTimeId);
+        }
     }
 
     public Map<LocalDate, List<WorkingTimeDTO>> getWorkingHoursForMonth(int appUserId, int year, int month) {
