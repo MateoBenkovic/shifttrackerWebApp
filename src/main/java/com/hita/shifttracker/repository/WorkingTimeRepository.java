@@ -51,27 +51,6 @@ public class WorkingTimeRepository {
                 });
     }
 
-    // exist by app user id and date from
-    public boolean existsByAppUserIdAndDateFrom(int appUserId, LocalDate dateFrom) {
-        String sql = "SELECT * FROM working_time WHERE app_user_id = ? AND date_from = ?";
-
-        // Using query to fetch a list of results (if any)
-        List<WorkingTime> resultList = jdbcTemplate.query(sql, new Object[]{appUserId, dateFrom},
-                (rs, rowNum) -> {
-                    WorkingTime workingTime = new WorkingTime();
-                    workingTime.setAppUserId(rs.getInt("app_user_id"));
-                    workingTime.setDateFrom(rs.getDate("date_from").toLocalDate());
-                    workingTime.setHoursFrom(rs.getInt("hours_from"));
-                    workingTime.setDateTo(rs.getDate("date_to").toLocalDate());
-                    workingTime.setHoursTo(rs.getInt("hours_to"));
-                    workingTime.setTotalHours(rs.getInt("total_hours"));
-                    workingTime.setShiftId(rs.getInt("shift_id"));
-                    return workingTime;
-                });
-
-        return !resultList.isEmpty();  // Returns true if list is not empty
-    }
-
     // exist by app user id, date from and shift id
     public boolean existsByAppUserIdAndDateFromAndShiftId(int appUserId, LocalDate dateFrom, int shiftId) {
         String sql = "SELECT * FROM working_time WHERE app_user_id = ? AND date_from = ? AND shift_id = ?";
@@ -91,6 +70,25 @@ public class WorkingTimeRepository {
                 });
 
         return !resultList.isEmpty();  // Returns true if list is not empty
+    }
+
+    public WorkingTime findByAppUserIdAndDateFromAndShiftId(int appUserId, LocalDate dateFrom, int shiftId) {
+        String sql = "SELECT * FROM working_time WHERE app_user_id = ? AND date_from = ? AND shift_id = ?";
+
+        // Using query to fetch a list of results (if any)
+        return jdbcTemplate.queryForObject(sql, new Object[]{appUserId, dateFrom, shiftId},
+                (rs, rowNum) -> {
+                    WorkingTime workingTime = new WorkingTime();
+                    workingTime.setIdWorkTime(rs.getInt("id_work_time"));
+                    workingTime.setAppUserId(rs.getInt("app_user_id"));
+                    workingTime.setDateFrom(rs.getDate("date_from").toLocalDate());
+                    workingTime.setHoursFrom(rs.getInt("hours_from"));
+                    workingTime.setDateTo(rs.getDate("date_to").toLocalDate());
+                    workingTime.setHoursTo(rs.getInt("hours_to"));
+                    workingTime.setTotalHours(rs.getInt("total_hours"));
+                    workingTime.setShiftId(rs.getInt("shift_id"));
+                    return workingTime;
+                });
     }
 
     // find all by app user id, month and year
@@ -124,10 +122,12 @@ public class WorkingTimeRepository {
     public void updateWorkingTimeByAppUserId(WorkingTime workingTime) {
         String sql = "UPDATE working_time " +
                 "SET date_from = ?, hours_from = ?, date_to = ?, hours_to = ? " +
-                "WHERE app_user_id = ? AND date_from = ?" ;
+                "WHERE app_user_id = ? AND date_from = ? AND id_work_time = ?" ;
 
+        System.out.println("preforming update: ");
+        System.out.println(workingTime.toString());
         jdbcTemplate.update(sql, workingTime.getDateFrom(), workingTime.getHoursFrom(), workingTime.getDateTo(),
-                workingTime.getHoursTo(), workingTime.getAppUserId(), workingTime.getDateFrom());
+                workingTime.getHoursTo(), workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getIdWorkTime());
     }
 
     // delete all

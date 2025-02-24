@@ -6,6 +6,7 @@ import com.hita.shifttracker.model.Period;
 import com.hita.shifttracker.model.WorkingTime;
 import com.hita.shifttracker.repository.PeriodRepository;
 import com.hita.shifttracker.repository.WorkingTimeRepository;
+import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -35,19 +36,33 @@ public class WorkingTimeService {
         }
         workingTime.setShiftId(shiftType);
 
-        if(workingTimeRepository.existsByAppUserIdAndDateFromAndShiftId(workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getShiftId())) {
+        WorkingTime wt = new WorkingTime();
+
+        if(workingTimeRepository.existsByAppUserIdAndDateFromAndShiftId(workingTime.getAppUserId(),
+                workingTime.getDateFrom(), workingTime.getShiftId())) {
+            wt = workingTimeRepository.findByAppUserIdAndDateFromAndShiftId(workingTime.getAppUserId(),
+                    workingTime.getDateFrom(), workingTime.getSchedId());
+        }
+
+        System.out.println("wt: " + wt.toString());
+        System.out.println("working time: " + workingTime.toString());
+
+        if(wt.getIdWorkTime() != 0) {
             // working time id
+            // calculate total hours
+            //int totalHours = Math.abs(workingTime.getHoursTo() - workingTime.getHoursFrom());
+            //workingTime.setTotalHours(totalHours);
+            workingTime.setIdWorkTime(wt.getIdWorkTime());
+            System.out.println("in update");
             workingTimeRepository.updateWorkingTimeByAppUserId(workingTime);
         } else {
+            System.out.println("in insert");
             workingTimeRepository.insertWorkingTimeByAppUserId(workingTime);
         }
     }
 
     public void deleteWorkingTimeByAppUserIdAndDateFrom(int appUserId, LocalDate dateFrom) {
-        if(workingTimeRepository.existsByAppUserIdAndDateFrom(appUserId, dateFrom)) {
-            // po trazi id work time
-            //workingTimeRepository.deleteByAppUserIdAndDateFrom(appUserId, dateFrom);
-        }
+
     }
 
     public void deleteWorkingTimeById(int appUserId, int workingTimeId) {
