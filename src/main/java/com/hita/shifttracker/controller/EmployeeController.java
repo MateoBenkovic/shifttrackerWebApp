@@ -136,7 +136,17 @@ public class EmployeeController {
 
 
     @GetMapping("/employee/workhour/overtime")
-    public String employeeWorkHourOvertimeProcess() {
+    public String employeeWorkHourOvertimeProcess(@RequestParam("overtimeStart") String overtimeStart,
+                                                  @RequestParam("overtimeEnd") String overtimeEnd,
+                                                  Model model, HttpSession session) {
+
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+
+        LocalDateTime overtimeStartDT = LocalDateTime.parse(overtimeStart);
+        LocalDateTime overtimeEndDT = LocalDateTime.parse(overtimeEnd);
+
+        System.out.println("overtime start: " + overtimeEndDT);
+        System.out.println("overtime end: " + overtimeEndDT);
 
         // ispisati datume i sate koje je korisnik unio u prekovremene
 
