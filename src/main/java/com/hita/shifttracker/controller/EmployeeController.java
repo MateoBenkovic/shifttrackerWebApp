@@ -102,7 +102,7 @@ public class EmployeeController {
         int shiftType = 2;
         if(dateFrom.equals(dateTo)) {
             shiftType = 1;
-        }
+        } // check shift type prebaciti u servis
 
         WorkingTime workingTime = new WorkingTime();
         workingTime.setDateFrom(dateFrom);
