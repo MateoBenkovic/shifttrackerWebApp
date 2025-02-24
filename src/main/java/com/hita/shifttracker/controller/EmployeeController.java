@@ -118,14 +118,17 @@ public class EmployeeController {
 
     @GetMapping("/employee/workhour/add")
     public String getEmployeeWorkHourAdd(Model model, HttpSession session){
-        AppUserDTO appUserDTO = (AppUserDTO) session.getAttribute("appUser");
-        model.addAttribute("appUser", appUserDTO);
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+        model.addAttribute("appUser", appUser);
 
         return "employee_workhour_add";
     }
 
     @GetMapping("/employee/workhour/delete")
     public String employeeWorkHourDelete(@RequestParam("workingTimeToDelete") int workingTimeToDelete, HttpSession session){
+
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+
 
         System.out.println(workingTimeToDelete);
 

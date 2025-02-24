@@ -136,15 +136,22 @@ public class WorkingTimeRepository {
         jdbcTemplate.update(sql);
     }
 
-    public boolean existsByAppUserIdAndWorkingTimeId(int appUserId, int workingTimeId) {
-        String sql = "";
-        return false;
+    public WorkingTime findByAppUserIdAndWorkingTimeId(int appUserId, int workingTimeId) {
+        String sql = "SELECT * FROM working_time WHERE app_user_id = ? AND id_work_time = ?";
+
+        return jdbcTemplate.queryForObject(sql,new Object[]{appUserId, workingTimeId},
+                (rs, rowNum) -> {
+                    WorkingTime workingTime = new WorkingTime();
+                    workingTime.setIdWorkTime(rs.getInt("id_work_time"));
+                    workingTime.setAppUserId(rs.getInt("app_user_id"));
+                    workingTime.setDateFrom(rs.getDate("date_from").toLocalDate());
+                    workingTime.setHoursFrom(rs.getInt("hours_from"));
+                    workingTime.setDateTo(rs.getDate("date_to").toLocalDate());
+                    workingTime.setHoursTo(rs.getInt("hours_to"));
+                    workingTime.setTotalHours(rs.getInt("total_hours"));
+                    workingTime.setShiftId(rs.getInt("shift_id"));
+                    workingTime.setStatus(rs.getString("status"));
+                    return workingTime;
+                });
     }
-
-    public void setStatusByAppUserIdAndWorkingTimeId(int appUserId, int workingTimeId) {
-        // povuci id from work time
-        String sql = "";
-
-    }
-
 }

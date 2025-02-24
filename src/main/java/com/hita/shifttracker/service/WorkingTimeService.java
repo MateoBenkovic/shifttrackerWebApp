@@ -44,30 +44,25 @@ public class WorkingTimeService {
                     workingTime.getDateFrom(), workingTime.getSchedId());
         }
 
-        System.out.println("wt: " + wt.toString());
-        System.out.println("working time: " + workingTime.toString());
-
         if(wt.getIdWorkTime() != 0) {
-            // working time id
-            // calculate total hours
-            //int totalHours = Math.abs(workingTime.getHoursTo() - workingTime.getHoursFrom());
-            //workingTime.setTotalHours(totalHours);
             workingTime.setIdWorkTime(wt.getIdWorkTime());
-            System.out.println("in update");
             workingTimeRepository.updateWorkingTimeByAppUserId(workingTime);
         } else {
-            System.out.println("in insert");
             workingTimeRepository.insertWorkingTimeByAppUserId(workingTime);
         }
     }
 
-    public void deleteWorkingTimeByAppUserIdAndDateFrom(int appUserId, LocalDate dateFrom) {
 
-    }
 
     public void deleteWorkingTimeById(int appUserId, int workingTimeId) {
         // set status to z
-        workingTimeRepository.setStatusByAppUserIdAndWorkingTimeId(appUserId, workingTimeId);
+        // find working time by id and app user id
+        WorkingTime wt = workingTimeRepository.findByAppUserIdAndWorkingTimeId(appUserId, workingTimeId);
+        System.out.println("wt: " + wt.toString());
+        wt.setStatus("Z");
+        System.out.println("wt: " + wt.toString());
+
+        //workingTimeRepository.setStatusByAppUserIdAndWorkingTimeId(appUserId, workingTimeId);
     }
 
     public Map<LocalDate, List<WorkingTimeDTO>> getWorkingHoursForMonth(int appUserId, int year, int month) {

@@ -40,4 +40,7 @@ public class WorkingTime {
     @Column("shift_id")
     private int shiftId;
 
+    @Column("status")
+    private String status;
+
 }
