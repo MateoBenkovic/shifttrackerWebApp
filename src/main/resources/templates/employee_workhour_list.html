@@ -369,7 +369,8 @@ td.holiday {
 <script th:src="@{/scripts/calendarDisplay.js}"></script>
 <script th:src="@{/scripts/employeeWorkHoursFormDisplay.js}"></script>
 <script th:src="@{/scripts/employeeWorkHoursFormRules.js}"></script>
-<script th:src="@{/scripts/employeeRenderWorkHoursTable.js}"></script>
+<script type="module" th:src="@{/scripts/renderWorkHoursTable.js}"></script>
+<script type="module" src="/scripts/employeeLoadWorkHoursData.js" th:attr="src=@{/scripts/employeeLoadWorkHoursData.js}"></script>
 
 </body>
 </html>
