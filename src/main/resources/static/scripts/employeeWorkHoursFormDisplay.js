@@ -42,7 +42,7 @@ function openForm(day, element, year, month, workDataAttr) {
         const formattedEndHour = shift.endHour === 24 ? "00" : String(shift.endHour).padStart(2, "0");
 
         let startDate = shift.date; // Originalni datum smjene
-            let endDate = shift.date;   // Datum završetka smjene
+        let endDate = shift.date;   // Datum završetka smjene
 
             if (shift.endHour === 24) {
                 let endDateObj = new Date(shift.date);
@@ -53,10 +53,9 @@ function openForm(day, element, year, month, workDataAttr) {
         startTimeInput.value = `${startDate}T${formattedStartHour}:00`;
         endTimeInput.value = `${endDate}T${formattedEndHour}:00`;
 
-        console.log("Dodjeljujem href za brisanje:", `/employee/workhour/delete/${shift.id}`);
         // Omogući gumb za brisanje i dodaj ID smjene
         deleteButton.style.display = "block";
-        deleteButton.setAttribute("onclick", `window.location.href='/employee/workhour/delete?workingTimeToDelete=${shift.id}'`);
+        deleteButton.setAttribute("onclick", `confirmDelete('${shift.id}', '${startDate}')`);
 
     } else {
         // Ako nema smjene, sakrij gumb za brisanje
@@ -108,3 +107,5 @@ function openForm(day, element, year, month, workDataAttr) {
         element.classList.remove("highlighted-date");
     };
 }
+
+

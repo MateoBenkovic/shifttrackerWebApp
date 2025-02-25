@@ -80,7 +80,7 @@ public class WorkingTimeItemRepository {
     }
 
     public List<WorkingTimeItemView> findAllWorkingTimeItemViewByAppUser(AppUserDTO appUser, int month, int year) {
-        String sql = "SELECT * FROM vw_working_tim_user_all_wt_cal wtuv " +
+        String sql = "SELECT * FROM vw_working_time_user_all_wt_cal wtuv " +
                      "WHERE wtuv.us_code = ? AND wtuv.mjesec = ? AND wtuv.godina = ?";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> {

@@ -1,10 +1,9 @@
 window.onload = function () {
     const monthPicker = document.getElementById("monthYearSelection");
-
     // Dohvati trenutni mjesec i godinu
     const today = new Date();
     const currentYear = today.getFullYear();
-    const currentMonth = String(today.getMonth() + 1).padStart(2, "0"); // Dodaje nulu ako je potrebno (npr. 01, 02...)
+    const currentMonth = String(today.getMonth() + 1).padStart(2, "0");
 
     // Postavi početnu vrijednost inputa
     monthPicker.value = `${currentYear}-${currentMonth}`;
@@ -13,8 +12,6 @@ window.onload = function () {
     loadWorkHours(currentYear, currentMonth);
 };
 
-// const monthYearSelection = document.getElementById('monthYearSelection');
-
 document.getElementById("monthYearSelection").addEventListener("change", function () {
     const selectedDate = this.value;
     const [year, month] = selectedDate.split("-").map(Number);
@@ -22,9 +19,11 @@ document.getElementById("monthYearSelection").addEventListener("change", functio
     loadWorkHours(year, month);
 });
 
-// tu treba fetchati i period
+const employeeId = document.getElementById("employeeId").value;
+
+
 function loadWorkHours(year, month) {
-    fetch(`/employee/workhour/data?year=${year}&month=${month}`)
+    fetch(`/head_nurse/employee/workhour/data?year=${year}&month=${month}&id=${employeeId}`)
     .then(response => {
         if (!response.ok) {
             throw new Error(`Greška: ${response.status} ${response.statusText}`);
@@ -186,4 +185,14 @@ function updateTable(workHours, workingTimes, year, month, schedule) {
 // Funkcija za dohvacanje broja dana u mjesecu
 function getDaysInMonth(year, month) {
     return new Date(year, month, 0).getDate();
+}
+
+function confirmDelete(shiftId, startDate) {
+    let employeeId = document.getElementById("employeeId").value;
+    let formattedDate = new Date(startDate).toLocaleDateString("hr-HR");
+    let confirmAction = confirm(`Jeste li sigurni da želite obrisati radno vrijeme za dan: ${formattedDate}?`);
+
+    if (confirmAction) {
+        window.location.href = "/head_nurse/employee/workhour/delete?workingTimeToDelete=" + shiftId + "&employeeId=" + employeeId;
+    }
 }

@@ -87,6 +87,7 @@ public class EmployeeController {
 
     @GetMapping("/employee/workhour/process")
     public String employeeWorkHourProcess(@RequestParam("startShift") String startShift, @RequestParam("endShift") String endShift,
+                                          @RequestParam("selectedColumn") String selectedColumn,
                                           Model model, HttpSession session){
 
         AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
@@ -99,10 +100,6 @@ public class EmployeeController {
         LocalDate dateTo = endDateTime.toLocalDate();
         int hoursTo = endDateTime.toLocalTime().getHour();
 
-        int shiftType = 2;
-        if(dateFrom.equals(dateTo)) {
-            shiftType = 1;
-        }
 
         WorkingTime workingTime = new WorkingTime();
         workingTime.setDateFrom(dateFrom);
@@ -110,7 +107,6 @@ public class EmployeeController {
         workingTime.setDateTo(dateTo);
         workingTime.setHoursTo(hoursTo);
         workingTime.setAppUserId(appUser.getId());
-        workingTime.setShiftId(shiftType);
         workingTime.setSchedId(1);
 
         workingTimeService.addWorkingTime(workingTime);
@@ -120,8 +116,8 @@ public class EmployeeController {
 
     @GetMapping("/employee/workhour/add")
     public String getEmployeeWorkHourAdd(Model model, HttpSession session){
-        AppUserDTO appUserDTO = (AppUserDTO) session.getAttribute("appUser");
-        model.addAttribute("appUser", appUserDTO);
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+        model.addAttribute("appUser", appUser);
 
         return "employee_workhour_add";
     }
@@ -129,16 +125,31 @@ public class EmployeeController {
     @GetMapping("/employee/workhour/delete")
     public String employeeWorkHourDelete(@RequestParam("workingTimeToDelete") int workingTimeToDelete, HttpSession session){
 
-        System.out.println(workingTimeToDelete);
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+
+        workingTimeService.deleteWorkingTimeById(appUser.getId(), workingTimeToDelete);
 
         return "redirect:/employee/workhour/list";
     }
 
 
     @GetMapping("/employee/workhour/overtime")
-    public String employeeWorkHourOvertimeProcess() {
+    public String employeeWorkHourOvertimeProcess(@RequestParam("overtimeStart") String overtimeStart,
+                                                  @RequestParam("overtimeEnd") String overtimeEnd,
+                                                  Model model, HttpSession session) {
 
-        // ispisati datume i sate koje je korisnik unio u prekovremene
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+
+        LocalDateTime overtimeStartDT = LocalDateTime.parse(overtimeStart);
+        LocalDateTime overtimeEndDT = LocalDateTime.parse(overtimeEnd);
+
+        System.out.println("overtime start: " + overtimeEndDT);
+        System.out.println("overtime end: " + overtimeEndDT);
+
+        LocalDate overtimeDateFrom = overtimeStartDT.toLocalDate();
+        int overtimeHoursFrom = overtimeStartDT.toLocalTime().getHour();
+        LocalDate overtimeDateTo = overtimeEndDT.toLocalDate();
+        int overtimeHoursTo = overtimeEndDT.toLocalTime().getHour();
 
         return "redirect:/employee/workhour/list";
     }
