@@ -46,8 +46,10 @@ public class WorkingTimeService {
 
         if(wt.getIdWorkTime() != 0) {
             workingTime.setIdWorkTime(wt.getIdWorkTime());
+            workingTime.setStatus("O");
             workingTimeRepository.updateWorkingTimeByAppUserId(workingTime);
         } else {
+            workingTime.setStatus("O");
             workingTimeRepository.insertWorkingTimeByAppUserId(workingTime);
         }
     }
@@ -55,14 +57,20 @@ public class WorkingTimeService {
 
 
     public void deleteWorkingTimeById(int appUserId, int workingTimeId) {
-        // set status to z
         // find working time by id and app user id
         WorkingTime wt = workingTimeRepository.findByAppUserIdAndWorkingTimeId(appUserId, workingTimeId);
         System.out.println("wt: " + wt.toString());
-        wt.setStatus("Z");
+        //wt.setStatus("S");
         System.out.println("wt: " + wt.toString());
         if(wt.getIdWorkTime() != 0) {
-            //workingTimeRepository.setStatusByAppUserIdAndWorkingTimeId(appUserId, workingTimeId);
+            // check status if status is o
+            if (wt.getStatus().equals("O")){
+                // check mjesec iz period == O i radnik period_radnik == O
+                // promjeni u S
+                // set status to S
+                //wt.setStatus("S");
+            }
+            //workingTimeRepository.setStatusByAppUserIdAndWorkingTimeId(appUserId, workingTimeId, wt.getStatus());
         }
     }
 

@@ -98,7 +98,7 @@ public class WorkingTimeRepository {
                 "(EXTRACT(MONTH FROM date_to) = ? AND EXTRACT(YEAR FROM date_to) = ?) " +
                 "OR " +
                 "(EXTRACT(MONTH FROM date_from) = ? AND EXTRACT(YEAR FROM date_from) = ?) " +
-                ")";
+                ") ";
 
 
         return jdbcTemplate.query(sql, new Object[]{appUserId, month, year, month, year},
@@ -155,10 +155,10 @@ public class WorkingTimeRepository {
                 });
     }
 
-    public void setStatusByAppUserIdAndWorkingTimeId(int appUserId, int workingTimeId) {
-        String sql = "UPDATE working_time SET status = 'Z' " +
+    public void setStatusByAppUserIdAndWorkingTimeId(int appUserId, int workingTimeId, String status) {
+        String sql = "UPDATE working_time SET status = ? " +
                 "WHERE app_user_id = ? AND id_work_time = ?";
 
-        jdbcTemplate.update(sql, appUserId, workingTimeId);
+        jdbcTemplate.update(sql, status, appUserId, workingTimeId);
     }
 }
