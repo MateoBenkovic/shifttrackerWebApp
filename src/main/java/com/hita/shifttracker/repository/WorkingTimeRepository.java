@@ -54,12 +54,13 @@ public class WorkingTimeRepository {
 
     // exist by app user id, date from and shift id
     public boolean existsByAppUserIdAndDateFromAndShiftId(int appUserId, LocalDate dateFrom, int shiftId) {
-        String sql = "SELECT * FROM working_time WHERE app_user_id = ? AND date_from = ? AND shift_id = ?";
+        String sql = "SELECT * FROM working_time WHERE app_user_id = ? AND date_from = ? AND shift_id = ? ";
 
         // Using query to fetch a list of results (if any)
         List<WorkingTime> resultList = jdbcTemplate.query(sql, new Object[]{appUserId, dateFrom, shiftId},
                 (rs, rowNum) -> {
                     WorkingTime workingTime = new WorkingTime();
+                    workingTime.setIdWorkTime(rs.getInt("id_work_time"));
                     workingTime.setAppUserId(rs.getInt("app_user_id"));
                     workingTime.setDateFrom(rs.getDate("date_from").toLocalDate());
                     workingTime.setHoursFrom(rs.getInt("hours_from"));
@@ -71,6 +72,14 @@ public class WorkingTimeRepository {
                 });
 
         return !resultList.isEmpty();  // Returns true if list is not empty
+    }
+
+    // set status to 'O'
+    public void setStatusToO(int appUserId, LocalDate dateFrom, int shiftId){
+        String sql = "UPDATE working_time SET status = 'O' " +
+                "WHERE app_user_id = ? AND date_from = ? AND shift_id = ?";
+
+        jdbcTemplate.update(sql, appUserId, dateFrom, shiftId);
     }
 
     public WorkingTime findByAppUserIdAndDateFromAndShiftId(int appUserId, LocalDate dateFrom, int shiftId) {
