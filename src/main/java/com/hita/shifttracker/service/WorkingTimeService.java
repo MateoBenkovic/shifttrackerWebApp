@@ -28,7 +28,9 @@ public class WorkingTimeService {
 
     // add workhour
     public void addWorkingTime(WorkingTime workingTime){
-        // check if exists
+        // treba provjerit smjenu da li postoji u bazi
+        // i provjeriti sate od i do u istom danu da nisu vec uneseni
+        // onda dodaj novu stavku
 
         int shiftType = 2;
         if(workingTime.getDateFrom().equals(workingTime.getDateTo())) {
@@ -44,8 +46,6 @@ public class WorkingTimeService {
             workingTimeRepository.setStatusToO(workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getShiftId());
             wt = workingTimeRepository.findByAppUserIdAndDateFromAndShiftId(workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getShiftId());
         }
-
-
 
         if(wt.getIdWorkTime() != 0) {
             workingTime.setIdWorkTime(wt.getIdWorkTime());
