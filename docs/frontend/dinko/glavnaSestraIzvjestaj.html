@@ -549,26 +549,49 @@
           "Redovan rad",
           "Redovan rad II. smjena",
           "Redovan rad noć",
-          "Redovan rad subota"
+          "Redovan rad subota",
+          "Rad blagdanom",
+          "Godišnji odmor",
+          "Bolovanje",
+          "Edukacija",
+          "Ostale odsutnosti",
+          "UKUPNO SATI"
       ];
+
+      let totalHours = 0;
 
       workTypes.forEach((type, index) => {
           const row = document.createElement("tr");
-          if (index === 2) row.classList.add("total-row");
+          if (index === 2 || index === workTypes.length - 1) row.classList.add("total-row");
 
           const typeCell = document.createElement("td");
           typeCell.className = "work-type";
           typeCell.textContent = type;
           row.appendChild(typeCell);
 
+          let rowTotal = 0;
+
           for (let day = 1; day <= daysInMonth; day++) {
               const td = document.createElement("td");
-              td.textContent = "-";
+              if (index <= 2) {
+                  td.textContent = "-";
+              } else {
+                  const hours = Math.floor(Math.random() * 9);
+                  td.textContent = hours > 0 ? hours : "-";
+                  if (hours > 0) rowTotal += hours;
+              }
               row.appendChild(td);
           }
 
           const totalCell = document.createElement("td");
-          totalCell.textContent = index === 2 ? "156" : (index > 2 ? Math.floor(Math.random() * 40) : "-");
+          if (index > 2 && index < workTypes.length - 1) {
+              totalCell.textContent = rowTotal;
+              totalHours += rowTotal;
+          } else if (index === workTypes.length - 1) {
+              totalCell.textContent = totalHours;
+          } else {
+              totalCell.textContent = "-";
+          }
           row.appendChild(totalCell);
 
           scheduleBody.appendChild(row);
@@ -648,7 +671,11 @@ function generateEmployeeReport(employee, month, year) {
     { type: "Prekovremeni rad", hours: Math.floor(Math.random() * 20) },
     { type: "Noćni rad", hours: Math.floor(Math.random() * 30) },
     { type: "Rad vikendom", hours: Math.floor(Math.random() * 25) },
-    { type: "Rad blagdanom", hours: Math.floor(Math.random() * 15) }
+    { type: "Rad blagdanom", hours: Math.floor(Math.random() * 15) },
+    { type: "Godišnji odmor", hours: Math.floor(Math.random() * 40) },
+    { type: "Bolovanje", hours: Math.floor(Math.random() * 20) },
+    { type: "Edukacija", hours: Math.floor(Math.random() * 10) },
+    { type: "Ostale odsutnosti", hours: Math.floor(Math.random() * 5) }
   ];
 }
 
@@ -677,6 +704,10 @@ function addEmployeeReportToDOM(employee, reportData) {
                 <td>${item.hours}</td>
               </tr>
             `).join('')}
+            <tr class="table-secondary">
+              <td><strong>UKUPNO SATI</strong></td>
+              <td><strong>${reportData.reduce((total, item) => total + item.hours, 0)}</strong></td>
+            </tr>
           </tbody>
         </table>
       </div>
