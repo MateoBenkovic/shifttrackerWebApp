@@ -139,10 +139,10 @@ public class WorkingTimeService {
                 boolean isOverlapping = false;
                 for(WorkingTimeItem wti: workingTimeItems) {
                     // jebem ti big decimal
-                    if ((BigDecimal.valueOf(wti.getHoursFrom()).compareTo(workingOvertime.getHoursFrom()) <= 0 &&
-                            BigDecimal.valueOf(wti.getHoursTo()).compareTo(workingOvertime.getHoursFrom()) >= 0) ||
-                        (BigDecimal.valueOf(wti.getHoursTo()).compareTo(workingOvertime.getHoursFrom()) >= 0 &&
-                            BigDecimal.valueOf(wti.getHoursTo()).compareTo(workingOvertime.getHoursTo()) <= 0)) {
+                    if ((BigDecimal.valueOf(wti.getHoursFrom()).compareTo(workingOvertime.getHoursFrom()) < 0 &&
+                            BigDecimal.valueOf(wti.getHoursTo()).compareTo(workingOvertime.getHoursFrom()) > 0) ||
+                        (BigDecimal.valueOf(wti.getHoursTo()).compareTo(workingOvertime.getHoursFrom()) > 0 &&
+                            BigDecimal.valueOf(wti.getHoursTo()).compareTo(workingOvertime.getHoursTo()) < 0)) {
                         // wti.getHoursTo falls within the range [workingOvertime.getHoursFrom(), workingOvertime.getHoursTo()]
                         // Code for overlapping logic here
                         isOverlapping = true;
