@@ -74,6 +74,11 @@ public class WorkingTimeRepository {
         return !resultList.isEmpty();  // Returns true if list is not empty
     }
 
+    public boolean existsByAppUserIdAndDateFrom(int appUserId, LocalDate dateFrom, int idWorkTime) {
+        String sql = "SELECT COUNT(*) FROM working_time WHERE app_user_id = ? AND date_from = ? AND id_work_time = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{appUserId, dateFrom, idWorkTime}, Integer.class) > 0;
+    }
+
     // set status to 'O'
     public void setStatusToO(int appUserId, LocalDate dateFrom, int shiftId){
         String sql = "UPDATE working_time SET status = 'O' " +

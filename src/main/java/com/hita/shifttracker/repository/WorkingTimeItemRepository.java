@@ -4,10 +4,12 @@ import com.hita.shifttracker.dto.AppUserDTO;
 import com.hita.shifttracker.dto.WorkingTimeItemDTO;
 import com.hita.shifttracker.dto.WorkingTimeItemTotalHourDTO;
 import com.hita.shifttracker.model.AppUser;
+import com.hita.shifttracker.model.WorkingTimeItem;
 import com.hita.shifttracker.model.WorkingTimeItemView;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -130,5 +132,31 @@ public class WorkingTimeItemRepository {
 
             return workingTimeItemView;
         }, appUser.getUserCode(), month, year);
+    }
+
+    // find wti by app user id and date
+    public List<WorkingTimeItem> findItemByAppUserIdAndDate(int appUserId, LocalDate date) {
+        String sql = "SELECT wti.id_work_time_item, wti.work_time_id, wti.app_user_id, wti.date, " +
+                     "wti.work_type_code, wti.hours_from, wti.hours_to, wti.total_hours, wti.item_number " +
+                     "FROM working_time_item wti " +
+                     "WHERE wti.app_user_id = ? " +
+                     "AND wti.date = ?";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            WorkingTimeItem workingTimeItem = new WorkingTimeItem();
+
+            workingTimeItem.setIdWorkTimeItem(rs.getInt("id_work_time_item"));
+            workingTimeItem.setAppUserId(rs.getInt("app_user_id"));
+            workingTimeItem.setWorkTimeId(rs.getInt("work_time_id"));
+            workingTimeItem.setAppUserId(rs.getInt("app_user_id"));
+            workingTimeItem.setDate(rs.getDate("date").toLocalDate());
+            workingTimeItem.setWorkTypeCode(rs.getInt("work_type_code"));
+            workingTimeItem.setHoursFrom(rs.getInt("hours_from"));
+            workingTimeItem.setHoursTo(rs.getInt("hours_to"));
+            workingTimeItem.setTotalHours(rs.getInt("total_hours"));
+            workingTimeItem.setItemNumber(rs.getInt("item_number"));
+
+            return workingTimeItem;
+        }, appUserId, date);
     }
 }
