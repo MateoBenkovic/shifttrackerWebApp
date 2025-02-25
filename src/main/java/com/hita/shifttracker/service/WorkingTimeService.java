@@ -10,6 +10,7 @@ import com.hita.shifttracker.utils.TimeConverterHelper;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -133,14 +134,31 @@ public class WorkingTimeService {
 
             if(workingTimeRepository.existsByAppUserIdAndDateFrom(workingOvertime.getAppUserId(),
                     workingOvertime.getDateFrom(), workingOvertime.getIdWorkTime())) {
-
                 // provjeriti da se sati ne preklapaju
-                // calculate total hours
-                workingOvertime.setTotalHours(TimeConverterHelper.calculateTotalHours(
-                        workingOvertime.getHoursFrom(), workingOvertime.getHoursTo()));
+                // overlapping times
+                boolean isOverlapping = false;
+                for(WorkingTimeItem wti: workingTimeItems) {
+                    // jebem ti big decimal
+                    if ((BigDecimal.valueOf(wti.getHoursFrom()).compareTo(workingOvertime.getHoursFrom()) <= 0 &&
+                            BigDecimal.valueOf(wti.getHoursTo()).compareTo(workingOvertime.getHoursFrom()) >= 0) ||
+                        (BigDecimal.valueOf(wti.getHoursTo()).compareTo(workingOvertime.getHoursFrom()) >= 0 &&
+                            BigDecimal.valueOf(wti.getHoursTo()).compareTo(workingOvertime.getHoursTo()) <= 0)) {
+                        // wti.getHoursTo falls within the range [workingOvertime.getHoursFrom(), workingOvertime.getHoursTo()]
+                        // Code for overlapping logic here
+                        isOverlapping = true;
+                        break;
+                    }
 
-                // check if overtime exists by app user id and date and id work time
-                workingOvertimeRepository.insert(workingOvertime);
+                }
+
+                // calculate total hours
+                if(!isOverlapping) {
+                    workingOvertime.setTotalHours(TimeConverterHelper.calculateTotalHours(
+                            workingOvertime.getHoursFrom(), workingOvertime.getHoursTo()));
+
+                    // check if overtime exists by app user id and date and id work time
+                    workingOvertimeRepository.insert(workingOvertime);
+                }
             }
 
         }
