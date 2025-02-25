@@ -35,6 +35,7 @@ public class WorkingTimeService {
             shiftType = 1;
         }
         workingTime.setShiftId(shiftType);
+        System.out.println("working time: " + workingTime.toString());
 
         WorkingTime wt = new WorkingTime();
 
@@ -68,9 +69,10 @@ public class WorkingTimeService {
                 // check mjesec iz period == O i radnik period_radnik == O
                 // promjeni u S
                 // set status to S
-                //wt.setStatus("S");
+                wt.setStatus("S");
+                workingTimeRepository.setStatusByAppUserIdAndWorkingTimeId(appUserId, workingTimeId, wt.getStatus());
             }
-            //workingTimeRepository.setStatusByAppUserIdAndWorkingTimeId(appUserId, workingTimeId, wt.getStatus());
+
         }
     }
 

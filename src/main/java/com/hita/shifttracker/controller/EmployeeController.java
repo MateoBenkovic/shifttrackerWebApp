@@ -95,8 +95,6 @@ public class EmployeeController {
         LocalDateTime startDateTime = LocalDateTime.parse(startShift);
         LocalDateTime endDateTime = LocalDateTime.parse(endShift);
 
-        //System.out.println("selected column: " + selectedColumn);
-
         LocalDate dateFrom = startDateTime.toLocalDate();
         int hoursFrom = startDateTime.toLocalTime().getHour();
         LocalDate dateTo = endDateTime.toLocalDate();

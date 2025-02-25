@@ -20,10 +20,11 @@ public class WorkingTimeRepository {
     // without sched_id
     public void insertWorkingTimeByAppUserId(WorkingTime workingTime) {
         String sql = "INSERT INTO working_time (app_user_id, date_from, hours_from, date_to, hours_to," +
-                "total_hours, shift_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                "total_hours, shift_id, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql, workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getHoursFrom(),
-                workingTime.getDateTo(), workingTime.getHoursTo(), workingTime.getTotalHours(), workingTime.getShiftId());
+                workingTime.getDateTo(), workingTime.getHoursTo(), workingTime.getTotalHours(), workingTime.getShiftId(),
+                workingTime.getStatus());
     }
 
     // find by app user id, date from
@@ -98,7 +99,7 @@ public class WorkingTimeRepository {
                 "(EXTRACT(MONTH FROM date_to) = ? AND EXTRACT(YEAR FROM date_to) = ?) " +
                 "OR " +
                 "(EXTRACT(MONTH FROM date_from) = ? AND EXTRACT(YEAR FROM date_from) = ?) " +
-                ")";
+                ") AND status = 'O'";
 
 
         return jdbcTemplate.query(sql, new Object[]{appUserId, month, year, month, year},
@@ -121,13 +122,14 @@ public class WorkingTimeRepository {
     // update working time
     public void updateWorkingTimeByAppUserId(WorkingTime workingTime) {
         String sql = "UPDATE working_time " +
-                "SET date_from = ?, hours_from = ?, date_to = ?, hours_to = ? " +
+                "SET date_from = ?, hours_from = ?, date_to = ?, hours_to = ?, status = ? " +
                 "WHERE app_user_id = ? AND date_from = ? AND id_work_time = ?" ;
 
         //System.out.println("preforming update: ");
         //System.out.println(workingTime.toString());
         jdbcTemplate.update(sql, workingTime.getDateFrom(), workingTime.getHoursFrom(), workingTime.getDateTo(),
-                workingTime.getHoursTo(), workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getIdWorkTime());
+                workingTime.getHoursTo(), workingTime.getStatus(), workingTime.getAppUserId(),
+                workingTime.getDateFrom(), workingTime.getIdWorkTime());
     }
 
     // delete all
