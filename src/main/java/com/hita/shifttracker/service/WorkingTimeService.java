@@ -42,6 +42,7 @@ public class WorkingTimeService {
         if(workingTimeRepository.existsByAppUserIdAndDateFromAndShiftId(workingTime.getAppUserId(),
                 workingTime.getDateFrom(), workingTime.getShiftId())) {
             workingTimeRepository.setStatusToO(workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getShiftId());
+            wt = workingTimeRepository.findByAppUserIdAndDateFromAndShiftId(workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getShiftId());
         }
 
 
