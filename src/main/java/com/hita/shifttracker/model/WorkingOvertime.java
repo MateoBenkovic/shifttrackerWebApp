@@ -28,6 +28,9 @@ public class WorkingOvertime {
     @Column("hours_to")
     private BigDecimal hoursTo;
 
+    @Column("total_hours")
+    private BigDecimal totalHours;
+
     @Column("shift_id")
     private int shiftId;
 
