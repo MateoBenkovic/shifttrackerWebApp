@@ -98,7 +98,7 @@ public class WorkingTimeRepository {
                 "(EXTRACT(MONTH FROM date_to) = ? AND EXTRACT(YEAR FROM date_to) = ?) " +
                 "OR " +
                 "(EXTRACT(MONTH FROM date_from) = ? AND EXTRACT(YEAR FROM date_from) = ?) " +
-                ") ";
+                ")";
 
 
         return jdbcTemplate.query(sql, new Object[]{appUserId, month, year, month, year},
@@ -124,8 +124,8 @@ public class WorkingTimeRepository {
                 "SET date_from = ?, hours_from = ?, date_to = ?, hours_to = ? " +
                 "WHERE app_user_id = ? AND date_from = ? AND id_work_time = ?" ;
 
-        System.out.println("preforming update: ");
-        System.out.println(workingTime.toString());
+        //System.out.println("preforming update: ");
+        //System.out.println(workingTime.toString());
         jdbcTemplate.update(sql, workingTime.getDateFrom(), workingTime.getHoursFrom(), workingTime.getDateTo(),
                 workingTime.getHoursTo(), workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getIdWorkTime());
     }
