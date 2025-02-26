@@ -108,4 +108,23 @@ function openForm(day, element, year, month, workDataAttr) {
     };
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+    const absenceButton = document.getElementById("absenceButton");
+    const absenceForm = document.getElementById("absenceFormContainer");
+    const overlay = document.getElementById("overlay");
+    const closeButton = document.getElementById("closeForm");
+
+    absenceButton.addEventListener("click", function() {
+        absenceForm.style.display = "block";
+        overlay.style.display = "block";
+    });
+
+    function closeForm() {
+        absenceForm.style.display = "none";
+        overlay.style.display = "none";
+    }
+
+    overlay.addEventListener("click", closeForm);
+    closeButton.addEventListener("click", closeForm);
+});
 
