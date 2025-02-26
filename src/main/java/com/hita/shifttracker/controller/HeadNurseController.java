@@ -66,6 +66,15 @@ public class HeadNurseController {
         return "head_nurse_employee_workhour";
     }
 
+    @GetMapping("/head_nurse/workhour/report")
+    public String getWorkHourReport(Model model, HttpSession session) {
+
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+        model.addAttribute("appUser", appUser);
+
+        return "head_nurse_workhour_report.html";
+    }
+
     @GetMapping("/head_nurse/employee/workhour/data")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getEmployeeWorkHours(HttpSession session,

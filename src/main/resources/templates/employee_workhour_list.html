@@ -196,6 +196,26 @@ td.holiday {
         .secondShift:hover {
             background: rgba(255, 193, 7, 0.8) !important;
         }
+        #absenceFormContainer {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+        }
 
 
     </style>
@@ -273,7 +293,7 @@ td.holiday {
                     </div>
                 </div>
                 <div class="d-flex justify-content-end mb-3">
-<!--                    <buton class="btn btn-info me-1">Posebne vrste rada</buton>-->
+                    <buton class="btn btn-primary me-1" id="absenceButton">Odsutnosti</buton>
                     <buton class="btn btn-dark">Predaj evidenciju</buton>
                 </div>
             </div>
@@ -361,6 +381,35 @@ td.holiday {
             </div>
         </div>
     </div>
+</div>
+<div id="absenceFormContainer" class="form-section col-md-6 col-lg-5 bg-light p-4 rounded shadow">
+    <span id="closeForm" class="close-btn">&times;</span>
+    <h4 class="mb-4 text-center">Unos odsutnosti</h4>
+    <form id="absenceForm">
+        <div class="mb-3">
+            <label for="absenceType" class="form-label">Vrsta odsutnosti</label>
+            <select class="form-select" id="absenceType" required>
+                <option value="">Odaberite vrstu odsutnosti</option>
+                <option value="Godišnji odmor">Godišnji odmor</option>
+                <option value="Bolovanje">Bolovanje</option>
+                <option value="Edukacija">Edukacija</option>
+                <option value="Ostale odsutnosti">Ostale odsutnosti</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="startDate" class="form-label">Od datuma</label>
+            <input type="date" class="form-control" id="startDate" required>
+        </div>
+        <div class="mb-3">
+            <label for="endDate" class="form-label">Do datuma</label>
+            <input type="date" class="form-control" id="endDate" required>
+        </div>
+        <div class="mb-3">
+            <label for="absenceReason" class="form-label">Razlog</label>
+            <textarea class="form-control" id="absenceReason" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-dark w-100">Spremi</button>
+    </form>
 </div>
 
 
