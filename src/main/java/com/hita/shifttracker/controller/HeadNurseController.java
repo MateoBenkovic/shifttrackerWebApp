@@ -182,38 +182,38 @@ public class HeadNurseController {
     }
 
     // overtime
-    @GetMapping("/employee/workhour/overtime")
-    public String employeeWorkHourOvertimeProcess(@RequestParam("overtimeStart") String overtimeStart,
-                                                  @RequestParam("overtimeEnd") String overtimeEnd,
-                                                  Model model, HttpSession session /*request parameter employee id*/) {
-
-        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
-
-        LocalDateTime overtimeStartDT = LocalDateTime.parse(overtimeStart);
-        LocalDateTime overtimeEndDT = LocalDateTime.parse(overtimeEnd);
-
-        System.out.println("overtime start: " + overtimeEndDT);
-        System.out.println("overtime end: " + overtimeEndDT);
-
-        LocalDate overtimeDateFrom = overtimeStartDT.toLocalDate();
-        LocalDate overtimeDateTo = overtimeEndDT.toLocalDate();
-
-        BigDecimal overtimeHoursFrom = TimeConverterHelper.convertAndRoundToHalf(
-                overtimeStartDT.toLocalTime().getHour(), overtimeStartDT.toLocalTime().getMinute());
-        BigDecimal overtimeHoursTo = TimeConverterHelper.convertAndRoundToHalf(
-                overtimeEndDT.toLocalTime().getHour(), overtimeEndDT.toLocalTime().getMinute());
-
-        // create overtime object
-        WorkingOvertime workingOvertime = new WorkingOvertime();
-        workingOvertime.setDateFrom(overtimeDateFrom);
-        workingOvertime.setHoursFrom(overtimeHoursFrom);
-        workingOvertime.setDateTo(overtimeDateTo);
-        workingOvertime.setHoursTo(overtimeHoursTo);
-        //workingOvertime.setAppUserId(); // TODO employee Id
-
-        workingTimeService.addOvertimeWorkHour(workingOvertime);
-
-        return "redirect:/employee/workhour/list";
-    }
+//    @GetMapping("/employee/workhour/overtime")
+//    public String employeeWorkHourOvertimeProcess(@RequestParam("overtimeStart") String overtimeStart,
+//                                                  @RequestParam("overtimeEnd") String overtimeEnd,
+//                                                  Model model, HttpSession session /*request parameter employee id*/) {
+//
+//        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+//
+//        LocalDateTime overtimeStartDT = LocalDateTime.parse(overtimeStart);
+//        LocalDateTime overtimeEndDT = LocalDateTime.parse(overtimeEnd);
+//
+//        System.out.println("overtime start: " + overtimeEndDT);
+//        System.out.println("overtime end: " + overtimeEndDT);
+//
+//        LocalDate overtimeDateFrom = overtimeStartDT.toLocalDate();
+//        LocalDate overtimeDateTo = overtimeEndDT.toLocalDate();
+//
+//        BigDecimal overtimeHoursFrom = TimeConverterHelper.convertAndRoundToHalf(
+//                overtimeStartDT.toLocalTime().getHour(), overtimeStartDT.toLocalTime().getMinute());
+//        BigDecimal overtimeHoursTo = TimeConverterHelper.convertAndRoundToHalf(
+//                overtimeEndDT.toLocalTime().getHour(), overtimeEndDT.toLocalTime().getMinute());
+//
+//        // create overtime object
+//        WorkingOvertime workingOvertime = new WorkingOvertime();
+//        workingOvertime.setDateFrom(overtimeDateFrom);
+//        workingOvertime.setHoursFrom(overtimeHoursFrom);
+//        workingOvertime.setDateTo(overtimeDateTo);
+//        workingOvertime.setHoursTo(overtimeHoursTo);
+//        //workingOvertime.setAppUserId(); // TODO employee Id
+//
+//        workingTimeService.addOvertimeWorkHour(workingOvertime);
+//
+//        return "redirect:/employee/workhour/list";
+//    }
 
 }
