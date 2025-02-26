@@ -138,7 +138,7 @@ public class WorkingTimeService {
                 // overlapping times
                 boolean isOverlapping = false;
                 for(WorkingTimeItem wti: workingTimeItems) {
-                    // jebem ti big decimal
+                    // big decimal ????
                     if ((BigDecimal.valueOf(wti.getHoursFrom()).compareTo(workingOvertime.getHoursFrom()) < 0 &&
                             BigDecimal.valueOf(wti.getHoursTo()).compareTo(workingOvertime.getHoursFrom()) > 0) ||
                         (BigDecimal.valueOf(wti.getHoursTo()).compareTo(workingOvertime.getHoursFrom()) > 0 &&
