@@ -36,7 +36,7 @@
         cursor: pointer;
         }
         .calendar-day:hover {
-            background: rgba(255, 193, 7, 0.8) !important;
+            background: #ffd254 !important;
         }
         .schedule-table td {
         text-align: center;
@@ -120,7 +120,7 @@ td.holiday {
 /* Istaknut kliknuti datum */
 /* Stilizacija istaknutog datuma */
 .highlighted-date {
-    background: rgba(255, 193, 7, 0.8) !important;
+    background: #ffd254 !important;
     color: black !important;
     box-shadow: 0px 0px 10px rgba(255, 193, 7, 1);
     border-radius: 5px;
@@ -189,11 +189,11 @@ td.holiday {
             font-weight: 500;
         }
         #deviation {
-            background-color: #FFA500;
+            background-color: #ffd254;
             font-weight: bold;
         }
         .secondShift:hover {
-            background: rgba(255, 193, 7, 0.8) !important;
+            background: #ffd254 !important;
         }
         #absenceFormContainer {
             display: none;
@@ -340,6 +340,7 @@ td.holiday {
                         <form id="workTimeForm" action="/head_nurse/employee/workhour/process">
                             <input type="hidden" th:value="${employee.id}" id="employeeId" name="employeeId">
                             <input type="hidden" name="selectedColumn" id="selectedColumn">
+                            <input type="hidden" name="workingTimeId" id="workingTimeId">
                             <div class="mb-3">
                                 <label for="startShift" class="form-label">Početak radnog vremena</label>
                                 <input type="datetime-local" class="form-control" id="startShift" name="startShift" required step="3600">
@@ -353,7 +354,7 @@ td.holiday {
                             </div>
                             <div class="d-flex justify-content-between">
                                 <button type="button" class="btn btn-danger" style="display: none;" id="deleteShiftButton">Obriši</button>
-                                <button type="submit" class="btn btn-dark" id="spremiButton">Spremi</button>
+                                <button type="submit" class="btn btn-dark" id="saveShiftButton">Spremi</button>
                             </div>
                         </form>
                     </div>

@@ -6,6 +6,7 @@
             const startTimeInput = document.getElementById('startShift');
             const endTimeInput = document.getElementById('endShift');
             const workDateInput = document.getElementById('workDate');
+            const workTimeForm = document.getElementById('workTimeForm');
 
             function setDateTime(dateString, hours, minutes) {
                 const [year, month, day] = dateString.split('-');
@@ -54,36 +55,32 @@
                 endTimeInput.value = setDateTime(nextDay.toISOString().split("T")[0], 7, 0);
             });
 
-            const workTimeForm = document.getElementById('workTimeForm');
+
 
         workTimeForm.addEventListener('submit', function(event) {
+            event.preventDefault();
             const start = startTimeInput.value;
             const end = endTimeInput.value;
 
             const startDate = new Date(start);
             const endDate = new Date(end);
 
+            const diffMs = endDate - startDate;
+                        const diffHours = diffMs / (1000 * 60 * 60);
+
             // Provjera da kraj nije prije početka
             if(endDate <= startDate) {
                 document.getElementById("errorMessage").innerHTML = "Početak rada mora biti prije završetka!";
                 event.preventDefault();
                 return;
-            }
-
-            // Provjera trajanja smjene
-            const diffMs = endDate - startDate;
-            const diffHours = diffMs / (1000 * 60 * 60);
-
-            if(diffHours < 1) {
-                document.getElementById("errorMessage").innerHTML = "Minimalno trajanje radnog vremena je 1 sat!";
-                event.preventDefault();
-                return;
-            }
-
-            if(diffHours > 24) {
+            } else if(diffHours > 24) {
                 document.getElementById("errorMessage").innerHTML = "Najduže trajanje smjene je 24 sata!";
                 event.preventDefault();
                 return;
+            } else {
+                setTimeout(() => {
+                    this.submit();
+                }, 100);
             }
         });
     });

@@ -110,8 +110,12 @@ public class HeadNurseController {
     }
 
     @GetMapping("/head_nurse/employee/workhour/process")
-    public String employeeWorkHourProcess(@RequestParam("startShift") String startShift, @RequestParam("endShift") String endShift, @RequestParam("employeeId") int employeeId,
+    public String employeeWorkHourProcess(@RequestParam("startShift") String startShift, @RequestParam("endShift") String endShift,
+                                          @RequestParam("employeeId") int employeeId,
+                                          @RequestParam(value = "workingTimeId", required = false) Integer workingTimeId,
                                           Model model, HttpSession session){
+
+        System.out.println(workingTimeId);
 
         AppUserDTO employee = appUserService.getEmployeeById(employeeId);
 

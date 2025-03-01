@@ -89,8 +89,10 @@ public class EmployeeController {
 
     @GetMapping("/employee/workhour/process")
     public String employeeWorkHourProcess(@RequestParam("startShift") String startShift, @RequestParam("endShift") String endShift,
-                                          @RequestParam("selectedColumn") String selectedColumn,
+                                          @RequestParam(value = "workingTimeId", required = false) Integer workingTimeId,
                                           Model model, HttpSession session){
+
+        System.out.println("id: " + workingTimeId);
 
         AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
 
