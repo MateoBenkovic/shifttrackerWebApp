@@ -4,8 +4,11 @@ function openForm(day, element, year, month, workDataAttr) {
     const overlay = document.getElementById("overlay");
     const startTimeInput = document.getElementById("startShift");
     const endTimeInput = document.getElementById("endShift");
+    const saveButton = document.getElementById("saveShiftButton");
     const deleteButton = document.getElementById("deleteShiftButton");
     const errorMessage = document.getElementById("errorMessage");
+    const workingTimeIdInput = document.getElementById("workingTimeId");
+    const workTimeForm = document.getElementById("workTimeForm");
 
     formContainer.style.display = "block";
     formContainer.style.visibility = "hidden";
@@ -36,6 +39,7 @@ function openForm(day, element, year, month, workDataAttr) {
 
     if (existingShifts.length > 0) {
         const shift = existingShifts[0]; // Uzmi prvu smjenu ako ih ima više
+        workingTimeIdInput.value = shift.id;
 
         // Postavi početak i kraj smjene
         const formattedStartHour = shift.startHour === 24 ? "00" : String(shift.startHour).padStart(2, "0");
@@ -44,11 +48,11 @@ function openForm(day, element, year, month, workDataAttr) {
         let startDate = shift.date; // Originalni datum smjene
         let endDate = shift.date;   // Datum završetka smjene
 
-            if (shift.endHour === 24) {
-                let endDateObj = new Date(shift.date);
-                endDateObj.setDate(endDateObj.getDate() + 1); // Povećaj dan za jedan
-                endDate = endDateObj.toISOString().split("T")[0]; // Dobij formatiran datum "YYYY-MM-DD"
-            }
+        if (shift.endHour === 24) {
+            let endDateObj = new Date(shift.date);
+            endDateObj.setDate(endDateObj.getDate() + 1); // Povećaj dan za jedan
+            endDate = endDateObj.toISOString().split("T")[0]; // Dobij formatiran datum "YYYY-MM-DD"
+        }
 
         startTimeInput.value = `${startDate}T${formattedStartHour}:00`;
         endTimeInput.value = `${endDate}T${formattedEndHour}:00`;
@@ -63,6 +67,15 @@ function openForm(day, element, year, month, workDataAttr) {
         deleteButton.removeAttribute("data-id");
         deleteButton.removeAttribute("onclick");
     }
+
+    saveButton.style.display = "block";
+
+//    // Dinamički postavi action forme ovisno o stranici
+//    if (window.location.pathname.includes("/head_nurse/")) {
+//        workTimeForm.action = "/head_nurse/employee/workhour/process";
+//    } else {
+//        workTimeForm.action = "/employee/workhour/process";
+//    }
 
     document.querySelectorAll(".highlighted-date").forEach(el => el.classList.remove("highlighted-date"));
     errorMessage.innerHTML = "";
@@ -105,6 +118,7 @@ function openForm(day, element, year, month, workDataAttr) {
         formContainer.style.display = "none";
         overlay.style.display = "none";
         element.classList.remove("highlighted-date");
+        resetForm();
     };
 }
 
@@ -127,4 +141,26 @@ document.addEventListener("DOMContentLoaded", function() {
     overlay.addEventListener("click", closeForm);
     closeButton.addEventListener("click", closeForm);
 });
+
+function resetForm() {
+    const form = document.getElementById("workTimeForm");
+
+    if (form) {
+        // Resetiraj sva polja forme
+        form.reset();
+
+        // Ako imaš hidden inpute koji se ne resetiraju automatski, ručno ih očisti
+        document.getElementById("workingTimeId").value = "";
+
+        // Sakrij gumb za brisanje
+        document.getElementById("deleteShiftButton").style.display = "none";
+
+        // Resetiraj eventualne poruke o greškama
+        const errorMessage = document.getElementById("errorMessage");
+        if (errorMessage) {
+            errorMessage.innerText = "";
+        }
+    }
+}
+
 

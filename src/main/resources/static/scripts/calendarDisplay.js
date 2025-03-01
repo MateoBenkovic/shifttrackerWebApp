@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Kada se forma šalje, spremamo index u localStorage
     document.getElementById("workTimeForm").addEventListener("submit", function (event) {
-        event.preventDefault(); // Spriječimo instant reload
+//        event.preventDefault(); // Spriječimo instant reload
 
         const selectedIndex = document.getElementById("selectedColumn").value;
         const startShift = new Date(document.getElementById("startShift").value);
@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Delay za osiguravanje spremanja prije reload-a
-        setTimeout(() => {
-            this.submit();
-        }, 100);
+//        setTimeout(() => {
+//            this.submit();
+//        }, 100);
     });
 });
 
@@ -78,7 +78,7 @@ function highlightColumn(index) {
     }
 
     cells.forEach(cell => {
-        cell.style.backgroundColor = "#FFA500"; // Postavi boju
+        cell.style.backgroundColor = "#ffd254"; // Postavi boju
         cell.style.transition = "background-color 0.5s ease-in-out"; // Dodaj glatku tranziciju
         setTimeout(() => {
             cell.style.backgroundColor = ""; // Ukloni boju nakon 3 sekunde
@@ -91,7 +91,7 @@ function highlightColumn(index) {
         let nextCells = document.querySelectorAll(`#workHoursTable tbody tr td:nth-child(${parseInt(nextColumnIndex) + 1})`);
 
         nextCells.forEach(cell => {
-            cell.style.backgroundColor = "#FFA500"; // Postavi boju
+            cell.style.backgroundColor = "#ffd254"; // Postavi boju
             cell.style.transition = "background-color 0.5s ease-in-out"; // Dodaj glatku tranziciju
             setTimeout(() => {
                 cell.style.backgroundColor = ""; // Ukloni boju nakon 3 sekunde

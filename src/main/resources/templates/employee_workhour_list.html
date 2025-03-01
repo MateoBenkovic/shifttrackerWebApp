@@ -24,55 +24,41 @@
             margin-bottom: 20px;
         }
         .schedule-table {
-        background-color: #ffffff;
-        border-radius: 8px;
-        overflow: hidden;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
         }
         .schedule-table th {
-        background-color: #f1f3f5;
-        font-weight: bold;
-        text-align: center;
-        min-width: 40px;
-        border-bottom: 2px solid #333333;
-        cursor: pointer;
+            background-color: #f1f3f5;
+            font-weight: bold;
+            text-align: center;
+            min-width: 40px;
+            border-bottom: 2px solid #333333;
+            cursor: pointer;
         }
         .calendar-day:hover {
-            background: rgba(255, 193, 7, 0.8) !important;
+            background: #ffd254 !important;
         }
         .schedule-table td {
-        text-align: center;
-        padding: 8px;
-        border: 1px solid #dee2e6;
+            text-align: center;
+            padding: 8px;
+            border: 1px solid #dee2e6;
         }
-
-        /* Style for weekends (Saturday and Sunday) */
-td.weekend {
-    background-color: #e6e6e6;  /* Light grey */
-    /* color: #d32f2f;  Red color for text */
-}
-
-/* Style for holidays */
-td.holiday {
-    background-color: #ffeb3b;  /* Yellow background */
-    /* color: #1976d2;   Blue color for text */
-}
-
-/* Additional styles for total column */
-#work-type {
-    text-align: center;
-    font-weight: bold;
-}
-
-/* Optionally, add more styling for table and cells */
-#workHoursTable th, #workHoursTable td {
-    padding: 8px;
-    text-align: center;
-    border: 1px solid #ddd;
-}
-
-<!--        td.weekend {-->
-<!--            background-color: #FFEE97;-->
-<!--        }-->
+        td.weekend {
+            background-color: #e6e6e6;
+        }
+        td.holiday {
+            background-color: #ffeb3b;
+        }
+        #work-type {
+            text-align: center;
+            font-weight: bold;
+        }
+        #workHoursTable th, #workHoursTable td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
         #work-type {
             text-align: left !important;
             font-weight: 500;
@@ -80,54 +66,47 @@ td.holiday {
             font-weight: 500;
         }
         .total-row {
-        border-top: 2px solid #333333;
-        border-bottom: 2px solid #333333;
-        font-weight: bold;
+            border-top: 2px solid #333333;
+            border-bottom: 2px solid #333333;
+            font-weight: bold;
         }
         .table-responsive {
-        border: 2px solid #333333;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 2px solid #333333;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         .info-section p {
             margin-bottom: 1px;
         }
-
-        /* Stilizacija forme */
-#workTimeFormContainer {
-    background: white;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-    z-index: 1002; /* Veći z-index da bude iznad overlay-a */
-    position: absolute;
-    display: none;
-    max-width: 350px;
-    width: 100%;
-}
-
-/* Overlay koji zatamnjuje ostatak ekrana */
-#overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    display: none;
-}
-
-/* Istaknut kliknuti datum */
-/* Stilizacija istaknutog datuma */
-.highlighted-date {
-    background: rgba(255, 193, 7, 0.8) !important;
-    color: black !important;
-    box-shadow: 0px 0px 10px rgba(255, 193, 7, 1);
-    border-radius: 5px;
-    padding: 5px;
-    transition: all 0.3s ease-in-out;
-}
+        #workTimeFormContainer {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1002; /* Veći z-index da bude iznad overlay-a */
+            position: absolute;
+            display: none;
+            max-width: 350px;
+            width: 100%;
+        }
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+        }
+        .highlighted-date {
+            background: #ffd254 !important;
+            color: black !important;
+            box-shadow: 0px 0px 10px rgba(255, 193, 7, 1);
+            border-radius: 5px;
+            padding: 5px;
+            transition: all 0.3s ease-in-out;
+        }
         .card {
             background-color: #ffffff;
             border-radius: 16px;
@@ -135,21 +114,17 @@ td.holiday {
             margin-bottom: 20px;
             transition: box-shadow 0.3s ease;
         }
-
         .card-body {
             padding: 20px;
         }
-
         .card-title {
             font-size: 18px;
             margin-bottom: 15px;
         }
-
         .card-text {
             font-size: 14px;
             color: #4d4d4d;
         }
-
         .card:hover {
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
         }
@@ -190,11 +165,11 @@ td.holiday {
             font-weight: 500;
         }
         #deviation {
-            background-color: #FFA500;
+            background-color: #ffd254;
             font-weight: bold;
         }
         .secondShift:hover {
-            background: rgba(255, 193, 7, 0.8) !important;
+            background: #ffd254 !important;
         }
         #absenceFormContainer {
             display: none;
@@ -216,8 +191,6 @@ td.holiday {
             font-size: 20px;
             font-weight: bold;
         }
-
-
     </style>
 </head>
 <body>
@@ -353,7 +326,7 @@ td.holiday {
                             </div>
                             <div class="d-flex justify-content-between">
                                 <button type="button" class="btn btn-danger" style="display: none;" id="deleteShiftButton">Obriši</button>
-                                <button type="submit" class="btn btn-dark" id="spremiButton">Spremi</button>
+                                <button type="submit" class="btn btn-dark" id="saveShiftButton">Spremi</button>
                             </div>
                         </form>
                     </div>

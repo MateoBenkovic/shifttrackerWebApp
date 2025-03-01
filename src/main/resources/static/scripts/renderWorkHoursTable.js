@@ -16,16 +16,18 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
     // Kreiranje header reda
     let headerHTML = `<tr><th id="work-type">Vrsta rada</th>`;
     for (let i = 1; i <= daysInMonth; i++) {
-            const dateString = `${year}-${String(month).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-            const workEntry = workingTimes[dateString] || [];
+        const dateString = `${year}-${String(month).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+        const workEntry = workingTimes[dateString] || [];
+        workEntry.sort((a, b) => a.startHour - b.startHour);
 
-            let workDataAttr = "";
-            if (workEntry.length > 0) {
-                workDataAttr = `data-shift='${JSON.stringify(workEntry)}'`;
-            }
-
-            headerHTML += `<th data-day ${workDataAttr} onclick="openForm(${i}, this, ${year}, ${month})" class="calendar-day">${i}</th>`;
+        let firstShiftDataAttr = "";
+        if (workEntry.length > 0) {
+            firstShiftDataAttr = `data-shift='${JSON.stringify([workEntry[0]])}'`;
+            console.log("Prva: " + JSON.stringify([workEntry[0]]));
         }
+
+        headerHTML += `<th data-day ${firstShiftDataAttr} onclick="openForm(${i}, this, ${year}, ${month})" class="calendar-day">${i}</th>`;
+    }
 
     headerHTML += `<th id="work-type" style="text-align: center !important; font-weight: bold;">Ukupno</th></tr>`;
     tableHead.innerHTML = headerHTML;
@@ -89,9 +91,11 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
             endRow += `<td class="${dayClass}"></td>`;
         }
 
+        let secondShiftDataAttr = secondShift ? `data-shift='${JSON.stringify([secondShift])}'` : '';
+
         if (secondShift) {
-            startRow2 += `<td class="${dayClass} secondShift" ${deviationIdStart2} onclick="openForm(${i}, this, ${year}, ${month})" style="cursor: pointer; hover: background: rgba(255, 193, 7, 0.8) !important;">${secondShift.startHour.toString().padStart(2, '0')}</td>`;
-            endRow2 += `<td class="${dayClass} secondShift" ${deviationIdEnd2} onclick="openForm(${i}, this, ${year}, ${month})" style="cursor: pointer; hover: background: rgba(255, 193, 7, 0.8) !important;">${secondShift.endHour.toString().padStart(2, '0')}</td>`;
+            startRow2 += `<td class="${dayClass} secondShift" ${deviationIdStart2} ${secondShiftDataAttr} onclick="openForm(${i}, this, ${year}, ${month})" style="cursor: pointer; hover: background: rgba(255, 193, 7, 0.8) !important;">${secondShift.startHour.toString().padStart(2, '0')}</td>`;
+            endRow2 += `<td class="${dayClass} secondShift" ${deviationIdEnd2} ${secondShiftDataAttr} onclick="openForm(${i}, this, ${year}, ${month})" style="cursor: pointer; hover: background: rgba(255, 193, 7, 0.8) !important;">${secondShift.endHour.toString().padStart(2, '0')}</td>`;
         } else {
             if (firstShift && firstShift.endHour.toString().padStart(2, "0") < 24) {
                 startRow2 += `<td class="${dayClass} secondShift" onclick="openForm(${i}, this, ${year}, ${month})" style="cursor: pointer; hover: background: rgba(255, 193, 7, 0.8) !important;"></td>`;
@@ -119,7 +123,7 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
 
     // Dodavanje radnih sati iz workHours
     workHours.forEach(row => {
-        let tr = `<tr><td style="text-align: left;">${row.workTypeName}</td>`;
+        let tr = `<tr><td style="text-align: left;">${row.idWorkTypes} - ${row.workTypeName}</td>`;
 
         for (let i = 1; i <= daysInMonth; i++) {
             let dayKey = `day${String(i).padStart(2, '0')}`;
@@ -133,7 +137,22 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
             // Add styles for weekends and holidays
             const dayClass = isWeekend ? 'weekend' : isHoliday ? 'holiday' : '';
 
-            tr += `<td class="${dayClass}">${row[dayKey] !== null ? row[dayKey] : ""}</td>`;
+            let value = row[dayKey];
+
+                    if (value !== null) {
+                        let numValue = parseFloat(value);
+
+                        // Provjeri je li decimalni broj i je li u formatu X.5
+                        if (!Number.isInteger(numValue) && numValue % 1 !== 0.5) {
+                            numValue = Math.round(numValue); // Zaokruži na cijeli broj
+                        }
+
+                        value = numValue; // Postavi novu vrijednost
+                    } else {
+                        value = "";
+                    }
+
+            tr += `<td class="${dayClass}">${value}</td>`;
         }
 
         tr += `<td>${row.total}</td></tr>`;
