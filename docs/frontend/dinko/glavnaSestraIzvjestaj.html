@@ -6,6 +6,11 @@
   <title>Raspored Zaposlenika i Izvještaji</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Dodajemo SheetJS za Excel export -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- Dodajemo jsPDF za PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
   <style>
     body {
         background-color: #f8f9fa;
@@ -183,6 +188,44 @@
         margin-bottom: 1rem;
         color: #333;
     }
+    /* Dodani stilovi za export gumbe */
+    .export-buttons {
+        margin-top: 15px;
+        display: flex;
+        gap: 10px;
+    }
+    .export-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    /* Stil za oznaku glavne sestre */
+    .head-nurse-badge {
+        background-color: #198754;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        margin-left: 8px;
+    }
+    /* Stil za tab kontrole izvještaja */
+    .report-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    .report-tab {
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+    }
+    .report-tab.active {
+        background-color: #333333;
+        color: white;
+        border-color: #333333;
+    }
   </style>
 </head>
 <body>
@@ -200,6 +243,8 @@
     <div class="navbar-nav ms-auto d-flex align-items-center">
       <div class="d-flex align-items-center me-3">
         <span th:text="${appUser.firstName + ' ' + appUser.lastName}">ime korisnika</span>
+        <!-- Oznaka za glavnu sestru -->
+        <span class="head-nurse-badge" th:if="${appUser.isHeadNurse}">Glavna sestra</span>
       </div>
 
       <div class="dropdown">
@@ -308,7 +353,7 @@
 
     <!-- Schedule Table -->
     <div class="table-responsive">
-      <table class="table schedule-table">
+      <table class="table schedule-table" id="scheduleTable">
         <thead>
         <tr id="calendarRow">
           <!-- Calendar headers will be dynamically generated -->
@@ -375,6 +420,19 @@
         <div class="row">
           <div class="col-12">
             <button class="btn btn-dark" onclick="generateReport()">Generiraj izvještaj</button>
+
+            <!-- Dodatni gumbi za glavnu sestru - vidljivi samo ako je korisnik glavna sestra -->
+            <div class="export-buttons" id="headNurseControls" th:if="${appUser.isHeadNurse}" style="display: none;">
+              <select class="form-select me-2" id="exportEmployeeSelect">
+                <option value="">Svi zaposlenici</option>
+              </select>
+              <button class="btn btn-success export-btn" onclick="exportToExcel()">
+                <i class="bi bi-file-earmark-excel"></i> Izvoz rasporeda u Excel
+              </button>
+              <button class="btn btn-danger export-btn" onclick="exportToPDF()">
+                <i class="bi bi-file-earmark-pdf"></i> Izvoz rasporeda u PDF
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -405,7 +463,7 @@
 
       <!-- Report Table -->
       <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="reportTable">
           <thead class="table-light">
           <tr>
             <th>Vrsta rada</th>
@@ -476,6 +534,33 @@
       ]
   };
 
+  // Simulirani podaci o ispostavama
+  const branches = {
+      "1": "Krapina",
+      "2": "Zabok",
+      "3": "Pregrada",
+      "4": "Klanjec",
+      "5": "Zlatar"
+  };
+
+  // Simulacija provjere je li korisnik glavna sestra
+  const isHeadNurse = true; // Ovo bi trebalo biti postavljeno na temelju stvarnih podataka korisnika
+
+  // Globalna varijabla za praćenje trenutno odabranog tipa izvještaja
+  let currentReportType = 'summary'; // 'summary' ili 'schedule'
+
+  // Funkcija za promjenu tipa izvještaja
+  function switchReportTab(reportType) {
+    currentReportType = reportType;
+
+    // Ažuriraj aktivni tab
+    document.querySelectorAll('.report-tab').forEach(tab => {
+      tab.classList.remove('active');
+    });
+
+    document.getElementById(reportType + 'Tab').classList.add('active');
+  }
+
   // Event listener za promjenu ispostave
   document.getElementById("branchSelect").addEventListener("change", function() {
   const employeeSelect = document.getElementById("employeeSelect");
@@ -512,6 +597,13 @@
       }
   });
 
+  // Globalna varijabla za pohranu podataka rasporeda
+  let scheduleData = {
+    days: 0,
+    headers: [],
+    rows: []
+  };
+
   function generateCalendar(selectedMonth, selectedYear) {
       const calendarRow = document.getElementById("calendarRow");
       calendarRow.innerHTML = "";
@@ -523,17 +615,27 @@
       typeTh.style.cursor = "default";
       calendarRow.appendChild(typeTh);
 
+      // Pohrani broj dana u mjesecu za izvještaje
+      scheduleData.days = daysInMonth;
+      scheduleData.headers = ["Vrsta rada"];
+
       for (let day = 1; day <= daysInMonth; day++) {
           const th = document.createElement("th");
           th.textContent = day;
           th.onclick = function() { openForm(day, this); };
           calendarRow.appendChild(th);
+
+          // Dodaj dan u zaglavlje za izvještaje
+          scheduleData.headers.push(day.toString());
       }
 
       const totalTh = document.createElement("th");
       totalTh.textContent = "Ukupno";
       totalTh.style.cursor = "default";
       calendarRow.appendChild(totalTh);
+
+      // Dodaj "Ukupno" u zaglavlje za izvještaje
+      scheduleData.headers.push("Ukupno");
 
       generateScheduleData(daysInMonth);
   }
@@ -558,6 +660,9 @@
           "UKUPNO SATI"
       ];
 
+      // Resetiraj podatke redaka za izvještaje
+      scheduleData.rows = [];
+
       let totalHours = 0;
 
       workTypes.forEach((type, index) => {
@@ -569,18 +674,38 @@
           typeCell.textContent = type;
           row.appendChild(typeCell);
 
+          // Pripremi red za izvještaje
+          const reportRow = [type];
+
           let rowTotal = 0;
 
           for (let day = 1; day <= daysInMonth; day++) {
               const td = document.createElement("td");
               if (index <= 2) {
-                  td.textContent = "-";
+                  // Za početak i završetak rada te ukupno radno vrijeme
+                  if (index === 0) {
+                      // Početak rada
+                      const startHour = Math.random() > 0.5 ? "07:00" : "19:00";
+                      td.textContent = Math.random() > 0.3 ? startHour : "-";
+                  } else if (index === 1) {
+                      // Završetak rada
+                      const endHour = Math.random() > 0.5 ? "19:00" : "07:00";
+                      td.textContent = Math.random() > 0.3 ? endHour : "-";
+                  } else {
+                      // Ukupno radno vrijeme
+                      const hours = Math.random() > 0.3 ? 12 : 0;
+                      td.textContent = hours > 0 ? hours : "-";
+                  }
               } else {
+                  // Za ostale vrste rada
                   const hours = Math.floor(Math.random() * 9);
                   td.textContent = hours > 0 ? hours : "-";
                   if (hours > 0) rowTotal += hours;
               }
               row.appendChild(td);
+
+              // Dodaj vrijednost u red za izvještaje
+              reportRow.push(td.textContent);
           }
 
           const totalCell = document.createElement("td");
@@ -594,6 +719,12 @@
           }
           row.appendChild(totalCell);
 
+          // Dodaj ukupno u red za izvještaje
+          reportRow.push(totalCell.textContent);
+
+          // Dodaj red u podatke za izvještaje
+          scheduleData.rows.push(reportRow);
+
           scheduleBody.appendChild(row);
       });
   }
@@ -605,8 +736,17 @@
       } else if (sectionId === 'reports') {
           document.getElementById('workReviewSection').style.display = 'none';
           document.getElementById('reportsSection').style.display = 'block';
+
+          // Prikaži kontrole za glavnu sestru ako je korisnik glavna sestra
+          if (isHeadNurse) {
+              document.getElementById('headNurseControls').style.display = 'flex';
+          }
       }
   }
+
+  // Globalna varijabla za pohranu podataka izvještaja
+  let currentReportData = [];
+  let allEmployeesReportData = [];
 
   function generateReport() {
   const branchId = document.getElementById("branchSelect").value;
@@ -645,11 +785,16 @@
   `;
   reportContent.appendChild(headerCard);
 
+  // Resetiraj globalne varijable za podatke izvještaja
+  currentReportData = [];
+  allEmployeesReportData = [];
+
   if (employeeId) {
     // Report for a single employee
     const employee = employeesByBranch[branchId].find(emp => emp.id === parseInt(employeeId));
     if (employee) {
       const reportData = generateEmployeeReport(employee, month, year);
+      currentReportData = reportData;
       addEmployeeReportToDOM(employee, reportData);
     }
   } else {
@@ -657,6 +802,10 @@
     const employees = employeesByBranch[branchId] || [];
     employees.forEach(employee => {
       const reportData = generateEmployeeReport(employee, month, year);
+      allEmployeesReportData.push({
+        employee: employee,
+        data: reportData
+      });
       addEmployeeReportToDOM(employee, reportData);
     });
   }
@@ -717,93 +866,193 @@ function addEmployeeReportToDOM(employee, reportData) {
   reportContent.appendChild(employeeCard);
 }
 
-// Dodajte ovo na kraj postojećeg JavaScript koda
-document.getElementById("branchSelect").addEventListener("change", function() {
-  const employeeSelect = document.getElementById("employeeSelect");
-  employeeSelect.innerHTML = "<option value=''>Svi zaposlenici</option>";
+// Funkcija za izvoz u Excel
+function exportToExcel() {
+  const branchId = document.getElementById("branchSelect").value;
+  const employeeId = document.getElementById("employeeSelect").value;
+  const month = document.getElementById("monthSelect").value;
+  const year = document.getElementById("yearSelect").value;
 
-  if (this.value === "") {
-    employeeSelect.setAttribute("disabled", "disabled");
+  if (!branchId) {
+    alert("Molimo odaberite ispostavu");
+    return;
+  }
+
+  const reportContent = document.getElementById("reportContent");
+  reportContent.innerHTML = ""; // Clear previous content
+
+  const branchName = document.getElementById("branchSelect").options[document.getElementById("branchSelect").selectedIndex].text;
+  const monthName = document.getElementById("monthSelect").options[document.getElementById("monthSelect").selectedIndex].text;
+
+  // Add report header
+  const headerCard = document.createElement("div");
+  headerCard.className = "card mb-4";
+  headerCard.innerHTML = `
+    <div class="card-header">
+      <h5 class="mb-0">Podaci o izvještaju</h5>
+    </div>
+    <div class="card-body">
+      <div class="mb-2">
+        <strong>Ispostava:</strong>
+        <span>${branchName}</span>
+      </div>
+      <div class="mb-2">
+        <strong>Razdoblje:</strong>
+        <span>${monthName} ${year}</span>
+      </div>
+    </div>
+  `;
+  reportContent.appendChild(headerCard);
+
+  // Resetiraj globalne varijable za podatke izvještaja
+  currentReportData = [];
+  allEmployeesReportData = [];
+
+  if (employeeId) {
+    // Report for a single employee
+    const employee = employeesByBranch[branchId].find(emp => emp.id === parseInt(employeeId));
+    if (employee) {
+      const reportData = generateEmployeeReport(employee, month, year);
+      currentReportData = reportData;
+      addEmployeeReportToDOM(employee, reportData);
+    }
   } else {
-    employeeSelect.removeAttribute("disabled");
-    const employees = employeesByBranch[this.value] || [];
+    // Report for all employees in the branch
+    const employees = employeesByBranch[branchId] || [];
+    employees.forEach(employee => {
+      const reportData = generateEmployeeReport(employee, month, year);
+      allEmployeesReportData.push({
+        employee: employee,
+        data: reportData
+      });
+      addEmployeeReportToDOM(employee, reportData);
+    });
+  }
+
+  reportContent.style.display = "block";
+}
+
+
+function populateExportEmployeeSelect() {
+  const exportEmployeeSelect = document.getElementById("exportEmployeeSelect");
+  const branchId = document.getElementById("branchSelect").value;
+
+  exportEmployeeSelect.innerHTML = "<option value=''>Svi zaposlenici</option>";
+
+  if (branchId) {
+    const employees = employeesByBranch[branchId] || [];
     employees.forEach(emp => {
       const option = document.createElement("option");
       option.value = emp.id;
       option.textContent = emp.name;
-      employeeSelect.appendChild(option);
+      exportEmployeeSelect.appendChild(option);
     });
   }
-});
+}
 
-  function openForm(day, element) {
-      const formContainer = document.getElementById("workTimeFormContainer");
-      const workDateInput = document.getElementById("workDate");
-      const overlay = document.getElementById("overlay");
-      const startTimeInput = document.getElementById("startShift");
-      const endTimeInput = document.getElementById("endShift");
+function exportToExcel() {
+  const employeeId = document.getElementById("exportEmployeeSelect").value;
+  const month = document.getElementById("monthSelectOld").value;
+  const year = document.getElementById("yearSelectOld").value;
 
-      formContainer.style.display = "block";
-      formContainer.style.visibility = "hidden";
+  let workbook = XLSX.utils.book_new();
 
-      const formWidth = formContainer.offsetWidth;
-
-      formContainer.style.display = "none";
-      formContainer.style.visibility = "visible";
-
-      startTimeInput.value = "";
-      endTimeInput.value = "";
-
-      const selectedMonth = document.getElementById("monthSelectOld").value;
-      const selectedYear = document.getElementById("yearSelectOld").value;
-      const selectedDate = `${selectedYear}-${String(selectedMonth).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-
-      workDateInput.value = selectedDate;
-
-      document.querySelectorAll(".highlighted-date").forEach(el => el.classList.remove("highlighted-date"));
-
-      element.classList.add("highlighted-date");
-
-      const rect = element.getBoundingClientRect();
-      const windowWidth = window.innerWidth;
-
-      let leftPosition;
-
-      if (day <= 15) {
-          if (rect.right + formWidth < windowWidth) {
-              leftPosition = rect.right + window.scrollX + 10;
-          } else {
-              leftPosition = rect.left + window.scrollX - formWidth - 10;
-          }
-      } else {
-          if (rect.left - formWidth > 0) {
-              leftPosition = rect.left + window.scrollX - formWidth - 10;
-          } else {
-              leftPosition = rect.right + window.scrollX + 10;
-          }
-      }
-
-      if (leftPosition + formWidth > windowWidth) {
-          leftPosition = windowWidth - formWidth - 20;
-      }
-      if (leftPosition < 0) {
-          leftPosition = 10;
-      }
-
-      formContainer.style.top = `${rect.bottom + window.scrollY + 5}px`;
-      formContainer.style.left = `${leftPosition}px`;
-
-      formContainer.style.display = "block";
-      overlay.style.display = "block";
-
-      overlay.onclick = function () {
-          formContainer.style.display = "none";
-          overlay.style.display = "none";
-          element.classList.remove("highlighted-date");
-      };
+  if (employeeId) {
+    // Izvoz za jednog zaposlenika
+    const employee = getEmployeeById(employeeId);
+    if (employee) {
+      const worksheet = prepareScheduleWorksheet(employee);
+      XLSX.utils.book_append_sheet(workbook, worksheet, employee.name);
+    }
+  } else {
+    // Izvoz za sve zaposlenike
+    const branchId = document.getElementById("branchSelect").value;
+    const employees = employeesByBranch[branchId] || [];
+    employees.forEach(employee => {
+      const worksheet = prepareScheduleWorksheet(employee);
+      XLSX.utils.book_append_sheet(workbook, worksheet, employee.name);
+    });
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
+  const branchName = document.getElementById("branchSelect").options[document.getElementById("branchSelect").selectedIndex].text;
+  const monthName = document.getElementById("monthSelectOld").options[document.getElementById("monthSelectOld").selectedIndex].text;
+  const fileName = `Raspored_${branchName}_${monthName}_${year}.xlsx`;
+  XLSX.writeFile(workbook, fileName);
+}
+
+function prepareScheduleWorksheet(employee) {
+  const data = [
+    ["Raspored rada - " + employee.name],
+    [""],
+    scheduleData.headers
+  ];
+
+  scheduleData.rows.forEach(row => {
+    data.push(row);
+  });
+
+  return XLSX.utils.aoa_to_sheet(data);
+}
+
+function exportToPDF() {
+  const employeeId = document.getElementById("exportEmployeeSelect").value;
+  const month = document.getElementById("monthSelectOld").value;
+  const year = document.getElementById("yearSelectOld").value;
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF('l', 'mm', 'a4');
+
+  const branchName = document.getElementById("branchSelect").options[document.getElementById("branchSelect").selectedIndex].text;
+  const monthName = document.getElementById("monthSelectOld").options[document.getElementById("monthSelectOld").selectedIndex].text;
+
+  if (employeeId) {
+    // Izvoz za jednog zaposlenika
+    const employee = getEmployeeById(employeeId);
+    if (employee) {
+      addScheduleToPDF(doc, employee, 10);
+    }
+  } else {
+    // Izvoz za sve zaposlenike
+    const branchId = document.getElementById("branchSelect").value;
+    const employees = employeesByBranch[branchId] || [];
+    employees.forEach((employee, index) => {
+      if (index > 0) {
+        doc.addPage();
+      }
+      addScheduleToPDF(doc, employee, 10);
+    });
+  }
+
+  const fileName = `Raspored_${branchName}_${monthName}_${year}.pdf`;
+  doc.save(fileName);
+}
+
+function addScheduleToPDF(doc, employee, startY) {
+  doc.setFontSize(16);
+  doc.text(`Raspored rada - ${employee.name}`, 14, startY);
+  doc.setFontSize(12);
+  doc.text(`${document.getElementById("monthSelectOld").options[document.getElementById("monthSelectOld").selectedIndex].text} ${document.getElementById("yearSelectOld").value}`, 14, startY + 10);
+
+  doc.autoTable({
+    startY: startY + 20,
+    head: [scheduleData.headers],
+    body: scheduleData.rows,
+    theme: 'grid',
+    headStyles: { fillColor: [51, 51, 51], textColor: [255, 255, 255] },
+    styles: { fontSize: 8, cellPadding: 1 },
+    columnStyles: { 0: { cellWidth: 40 } }
+  });
+}
+
+function getEmployeeById(id) {
+  const branchId = document.getElementById("branchSelect").value;
+  const employees = employeesByBranch[branchId] || [];
+  return employees.find(emp => emp.id === parseInt(id));
+}
+
+// Dodajte sljedeći event listener u postojeću DOMContentLoaded funkciju:
+
+document.addEventListener("DOMContentLoaded", function () {
       const btnDnevna = document.getElementById('btnDnevna');
       const btnNocna = document.getElementById('btnNocna');
       const startTimeInput = document.getElementById('startShift');
@@ -884,6 +1133,17 @@ document.getElementById("branchSelect").addEventListener("change", function() {
               return;
           }
       });
+
+      // Dodajte sljedeći event listener u postojeću DOMContentLoaded funkciju:
+      document.getElementById("branchSelect").addEventListener("change", populateExportEmployeeSelect);
+
+      // Također, pozovite populateExportEmployeeSelect() na kraju DOMContentLoaded funkcije:
+      populateExportEmployeeSelect();
+
+      // Provjeri je li korisnik glavna sestra i prikaži odgovarajuće kontrole
+      if (isHeadNurse) {
+          document.getElementById('headNurseControls').style.display = 'none'; // Početno sakriveno, prikazat će se kad se otvori sekcija izvještaja
+      }
   });
 
   // Inicijalno postavljanje kalendara
@@ -906,3 +1166,4 @@ document.getElementById("branchSelect").addEventListener("change", function() {
 
 </body>
 </html>
+
