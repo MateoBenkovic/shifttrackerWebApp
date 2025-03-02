@@ -36,7 +36,7 @@
         cursor: pointer;
         }
         .calendar-day:hover {
-            background: rgba(255, 193, 7, 0.8) !important;
+            background: #ffd254 !important;
         }
         .schedule-table td {
         text-align: center;
@@ -120,7 +120,7 @@ td.holiday {
 /* Istaknut kliknuti datum */
 /* Stilizacija istaknutog datuma */
 .highlighted-date {
-    background: rgba(255, 193, 7, 0.8) !important;
+    background: #ffd254 !important;
     color: black !important;
     box-shadow: 0px 0px 10px rgba(255, 193, 7, 1);
     border-radius: 5px;
@@ -189,13 +189,32 @@ td.holiday {
             font-weight: 500;
         }
         #deviation {
-            background-color: #FFA500;
+            background-color: #ffd254;
             font-weight: bold;
         }
         .secondShift:hover {
-            background: rgba(255, 193, 7, 0.8) !important;
+            background: #ffd254 !important;
         }
-
+        #absenceFormContainer {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+        }
 
     </style>
 
@@ -213,7 +232,7 @@ td.holiday {
             <img src="/logo.png" style="height: 50px; width:100px" class="me-5">
             <a class="nav-link active me-4" href="/head_nurse/employee/list">Zaposlenici</a>
             <a class="nav-link me-4" href="#">Raspored</a>
-            <a class="nav-link me-4" href="#">Izvještaj</a>
+            <a class="nav-link me-4" href="/head_nurse/workhour/report">Izvještaj</a>
         </div>
 
         <div class="navbar-nav ms-auto d-flex align-items-center">
@@ -278,6 +297,9 @@ td.holiday {
                         <p class="card-text"><strong>IBAN:</strong> <span th:text="${' ' + company.companyIBAN}">HR7223400091110492278</span></p>
                     </div>
                 </div>
+                <div class="d-flex justify-content-end mb-3">
+                    <buton class="btn btn-primary me-1" id="absenceButton">Odsutnosti</buton>
+                </div>
             </div>
         </div>
     </div>
@@ -318,6 +340,7 @@ td.holiday {
                         <form id="workTimeForm" action="/head_nurse/employee/workhour/process">
                             <input type="hidden" th:value="${employee.id}" id="employeeId" name="employeeId">
                             <input type="hidden" name="selectedColumn" id="selectedColumn">
+                            <input type="hidden" name="workingTimeId" id="workingTimeId">
                             <div class="mb-3">
                                 <label for="startShift" class="form-label">Početak radnog vremena</label>
                                 <input type="datetime-local" class="form-control" id="startShift" name="startShift" required step="3600">
@@ -331,13 +354,14 @@ td.holiday {
                             </div>
                             <div class="d-flex justify-content-between">
                                 <button type="button" class="btn btn-danger" style="display: none;" id="deleteShiftButton">Obriši</button>
-                                <button type="submit" class="btn btn-dark" id="spremiButton">Spremi</button>
+                                <button type="submit" class="btn btn-dark" id="saveShiftButton">Spremi</button>
                             </div>
                         </form>
                     </div>
                     <div class="tab-pane fade" id="overtime" role="tabpanel">
                         <h4 class="mb-4 text-center">Unos prekovremenog rada</h4>
                         <form id="overtimeForm" action="/head_nurse/employee/workhour/overtime">
+                            <input type="hidden" th:value="${employee.id}" id="employeeIdOvertime" name="employeeIdOvertime">
                             <div class="mb-3">
                                 <label for="overtimeStart" class="form-label">Početak prekovremenog rada</label>
                                 <input type="datetime-local" class="form-control" id="overtimeStart" name="overtimeStart" required step="3600">
@@ -360,12 +384,41 @@ td.holiday {
         </div>
     </div>
 </div>
-
+<div id="absenceFormContainer" class="form-section col-md-6 col-lg-5 bg-light p-4 rounded shadow">
+    <span id="closeForm" class="close-btn">&times;</span>
+    <h4 class="mb-4 text-center">Unos odsutnosti</h4>
+    <form id="absenceForm">
+        <div class="mb-3">
+            <label for="absenceType" class="form-label">Vrsta odsutnosti</label>
+            <select class="form-select" id="absenceType" required>
+                <option value="">Odaberite vrstu odsutnosti</option>
+                <option value="Godišnji odmor">Godišnji odmor</option>
+                <option value="Bolovanje">Bolovanje</option>
+                <option value="Edukacija">Edukacija</option>
+                <option value="Ostale odsutnosti">Ostale odsutnosti</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="startDate" class="form-label">Od datuma</label>
+            <input type="date" class="form-control" id="startDate" required>
+        </div>
+        <div class="mb-3">
+            <label for="endDate" class="form-label">Do datuma</label>
+            <input type="date" class="form-control" id="endDate" required>
+        </div>
+        <div class="mb-3">
+            <label for="absenceReason" class="form-label">Razlog</label>
+            <textarea class="form-control" id="absenceReason" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-dark w-100">Spremi</button>
+    </form>
+</div>
 
 <script th:src="@{/scripts/calendarDisplay.js}"></script>
 <script th:src="@{/scripts/employeeWorkHoursFormDisplay.js}"></script>
 <script th:src="@{/scripts/employeeWorkHoursFormRules.js}"></script>
-<script th:src="@{/scripts/headNurseRenderWorkHoursTable.js}"></script>
+<script type="module" th:src="@{/scripts/renderWorkHoursTable.js}"></script>
+<script type="module" src="/scripts/headNurseLoadWorkHoursData.js" th:attr="src=@{/scripts/headNurseLoadWorkHoursData.js}"></script>
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

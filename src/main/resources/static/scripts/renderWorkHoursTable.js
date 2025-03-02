@@ -1,44 +1,4 @@
-window.onload = function () {
-    const monthPicker = document.getElementById("monthYearSelection");
-    // Dohvati trenutni mjesec i godinu
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    const currentMonth = String(today.getMonth() + 1).padStart(2, "0");
-
-    // Postavi početnu vrijednost inputa
-    monthPicker.value = `${currentYear}-${currentMonth}`;
-
-    // Pozovi funkciju za učitavanje podataka odmah
-    loadWorkHours(currentYear, currentMonth);
-};
-
-document.getElementById("monthYearSelection").addEventListener("change", function () {
-    const selectedDate = this.value;
-    const [year, month] = selectedDate.split("-").map(Number);
-
-    loadWorkHours(year, month);
-});
-
-const employeeId = document.getElementById("employeeId").value;
-
-
-function loadWorkHours(year, month) {
-    fetch(`/head_nurse/employee/workhour/data?year=${year}&month=${month}&id=${employeeId}`)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Greška: ${response.status} ${response.statusText}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        updateTable(data.workHours, data.workingTimes, year, month, data.schedule);
-        const prescribedHours = data.period;
-        document.getElementById('prescribed-hours').textContent = `${prescribedHours.totalHours}`;
-    })
-    .catch(error => console.error("Greška:", error));
-}
-
-function updateTable(workHours, workingTimes, year, month, schedule) {
+export function updateTable(workHours, workingTimes, year, month, schedule) {
     const tableHead = document.querySelector("#workHoursTable thead");
     const tableBody = document.querySelector("#workHoursTable tbody");
     console.log(workingTimes);
@@ -49,7 +9,6 @@ function updateTable(workHours, workingTimes, year, month, schedule) {
 
     const daysInMonth = getDaysInMonth(year, month);
 
-    // -- added by me --
     const holidays = ["2025-01-01", "2025-01-06", "2025-04-20", "2025-04-21", "2025-05-01", "2025-05-30",
                       "2025-06-19", "2025-06-22", "2025-08-05", "2025-08-15", "2025-11-01", "2025-11-18",
                       "2025-12-25", "2025-12-26"];
@@ -57,16 +16,18 @@ function updateTable(workHours, workingTimes, year, month, schedule) {
     // Kreiranje header reda
     let headerHTML = `<tr><th id="work-type">Vrsta rada</th>`;
     for (let i = 1; i <= daysInMonth; i++) {
-            const dateString = `${year}-${String(month).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-            const workEntry = workingTimes[dateString] || [];
+        const dateString = `${year}-${String(month).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+        const workEntry = workingTimes[dateString] || [];
+        workEntry.sort((a, b) => a.startHour - b.startHour);
 
-            let workDataAttr = "";
-            if (workEntry.length > 0) {
-                workDataAttr = `data-shift='${JSON.stringify(workEntry)}'`;
-            }
-
-            headerHTML += `<th data-day ${workDataAttr} onclick="openForm(${i}, this, ${year}, ${month})" class="calendar-day">${i}</th>`;
+        let firstShiftDataAttr = "";
+        if (workEntry.length > 0) {
+            firstShiftDataAttr = `data-shift='${JSON.stringify([workEntry[0]])}'`;
+            console.log("Prva: " + JSON.stringify([workEntry[0]]));
         }
+
+        headerHTML += `<th data-day ${firstShiftDataAttr} onclick="openForm(${i}, this, ${year}, ${month})" class="calendar-day">${i}</th>`;
+    }
 
     headerHTML += `<th id="work-type" style="text-align: center !important; font-weight: bold;">Ukupno</th></tr>`;
     tableHead.innerHTML = headerHTML;
@@ -130,11 +91,13 @@ function updateTable(workHours, workingTimes, year, month, schedule) {
             endRow += `<td class="${dayClass}"></td>`;
         }
 
+        let secondShiftDataAttr = secondShift ? `data-shift='${JSON.stringify([secondShift])}'` : '';
+
         if (secondShift) {
-            startRow2 += `<td class="${dayClass} secondShift" ${deviationIdStart2} onclick="openForm(${i}, this, ${year}, ${month})" style="cursor: pointer; hover: background: rgba(255, 193, 7, 0.8) !important;">${secondShift.startHour.toString().padStart(2, '0')}</td>`;
-            endRow2 += `<td class="${dayClass} secondShift" ${deviationIdEnd2} onclick="openForm(${i}, this, ${year}, ${month})" style="cursor: pointer; hover: background: rgba(255, 193, 7, 0.8) !important;">${secondShift.endHour.toString().padStart(2, '0')}</td>`;
+            startRow2 += `<td class="${dayClass} secondShift" ${deviationIdStart2} ${secondShiftDataAttr} onclick="openForm(${i}, this, ${year}, ${month})" style="cursor: pointer; hover: background: rgba(255, 193, 7, 0.8) !important;">${secondShift.startHour.toString().padStart(2, '0')}</td>`;
+            endRow2 += `<td class="${dayClass} secondShift" ${deviationIdEnd2} ${secondShiftDataAttr} onclick="openForm(${i}, this, ${year}, ${month})" style="cursor: pointer; hover: background: rgba(255, 193, 7, 0.8) !important;">${secondShift.endHour.toString().padStart(2, '0')}</td>`;
         } else {
-            if (firstShift) {
+            if (firstShift && firstShift.endHour.toString().padStart(2, "0") < 24) {
                 startRow2 += `<td class="${dayClass} secondShift" onclick="openForm(${i}, this, ${year}, ${month})" style="cursor: pointer; hover: background: rgba(255, 193, 7, 0.8) !important;"></td>`;
                 endRow2 += `<td class="${dayClass} secondShift" onclick="openForm(${i}, this, ${year}, ${month})" style="cursor: pointer; hover: background: rgba(255, 193, 7, 0.8) !important;"></td>`;
             } else {
@@ -160,7 +123,7 @@ function updateTable(workHours, workingTimes, year, month, schedule) {
 
     // Dodavanje radnih sati iz workHours
     workHours.forEach(row => {
-        let tr = `<tr><td style="text-align: left;">${row.workTypeName}</td>`;
+        let tr = `<tr><td style="text-align: left;">${row.idWorkTypes} - ${row.workTypeName}</td>`;
 
         for (let i = 1; i <= daysInMonth; i++) {
             let dayKey = `day${String(i).padStart(2, '0')}`;
@@ -174,7 +137,22 @@ function updateTable(workHours, workingTimes, year, month, schedule) {
             // Add styles for weekends and holidays
             const dayClass = isWeekend ? 'weekend' : isHoliday ? 'holiday' : '';
 
-            tr += `<td class="${dayClass}">${row[dayKey] !== null ? row[dayKey] : ""}</td>`;
+            let value = row[dayKey];
+
+                    if (value !== null) {
+                        let numValue = parseFloat(value);
+
+                        // Provjeri je li decimalni broj i je li u formatu X.5
+                        if (!Number.isInteger(numValue) && numValue % 1 !== 0.5) {
+                            numValue = Math.round(numValue); // Zaokruži na cijeli broj
+                        }
+
+                        value = numValue; // Postavi novu vrijednost
+                    } else {
+                        value = "";
+                    }
+
+            tr += `<td class="${dayClass}">${value}</td>`;
         }
 
         tr += `<td>${row.total}</td></tr>`;
@@ -187,12 +165,3 @@ function getDaysInMonth(year, month) {
     return new Date(year, month, 0).getDate();
 }
 
-function confirmDelete(shiftId, startDate) {
-    let employeeId = document.getElementById("employeeId").value;
-    let formattedDate = new Date(startDate).toLocaleDateString("hr-HR");
-    let confirmAction = confirm(`Jeste li sigurni da želite obrisati radno vrijeme za dan: ${formattedDate}?`);
-
-    if (confirmAction) {
-        window.location.href = "/head_nurse/employee/workhour/delete?workingTimeToDelete=" + shiftId + "&employeeId=" + employeeId;
-    }
-}

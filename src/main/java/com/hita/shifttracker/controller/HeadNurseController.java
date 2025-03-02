@@ -4,6 +4,7 @@ import com.hita.shifttracker.dto.AppUserDTO;
 import com.hita.shifttracker.dto.WorkingTimeDTO;
 import com.hita.shifttracker.model.*;
 import com.hita.shifttracker.service.*;
+import com.hita.shifttracker.utils.TimeConverterHelper;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -66,6 +68,15 @@ public class HeadNurseController {
         return "head_nurse_employee_workhour";
     }
 
+    @GetMapping("/head_nurse/workhour/report")
+    public String getWorkHourReport(Model model, HttpSession session) {
+
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+        model.addAttribute("appUser", appUser);
+
+        return "head_nurse_workhour_report.html";
+    }
+
     @GetMapping("/head_nurse/employee/workhour/data")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getEmployeeWorkHours(HttpSession session,
@@ -101,8 +112,12 @@ public class HeadNurseController {
     }
 
     @GetMapping("/head_nurse/employee/workhour/process")
-    public String employeeWorkHourProcess(@RequestParam("startShift") String startShift, @RequestParam("endShift") String endShift, @RequestParam("employeeId") int employeeId,
+    public String employeeWorkHourProcess(@RequestParam("startShift") String startShift, @RequestParam("endShift") String endShift,
+                                          @RequestParam("employeeId") int employeeId,
+                                          @RequestParam(value = "workingTimeId", required = false) Integer workingTimeId,
                                           Model model, HttpSession session){
+
+        System.out.println(workingTimeId);
 
         AppUserDTO employee = appUserService.getEmployeeById(employeeId);
 
@@ -169,5 +184,40 @@ public class HeadNurseController {
         appUserService.saveEmployee(employee);
         return "redirect:/head_nurse/employee/list";
     }
+
+    // overtime
+//    @GetMapping("/employee/workhour/overtime")
+//    public String employeeWorkHourOvertimeProcess(@RequestParam("overtimeStart") String overtimeStart,
+//                                                  @RequestParam("overtimeEnd") String overtimeEnd,
+//                                                  Model model, HttpSession session /*request parameter employee id*/) {
+//
+//        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+//
+//        LocalDateTime overtimeStartDT = LocalDateTime.parse(overtimeStart);
+//        LocalDateTime overtimeEndDT = LocalDateTime.parse(overtimeEnd);
+//
+//        System.out.println("overtime start: " + overtimeEndDT);
+//        System.out.println("overtime end: " + overtimeEndDT);
+//
+//        LocalDate overtimeDateFrom = overtimeStartDT.toLocalDate();
+//        LocalDate overtimeDateTo = overtimeEndDT.toLocalDate();
+//
+//        BigDecimal overtimeHoursFrom = TimeConverterHelper.convertAndRoundToHalf(
+//                overtimeStartDT.toLocalTime().getHour(), overtimeStartDT.toLocalTime().getMinute());
+//        BigDecimal overtimeHoursTo = TimeConverterHelper.convertAndRoundToHalf(
+//                overtimeEndDT.toLocalTime().getHour(), overtimeEndDT.toLocalTime().getMinute());
+//
+//        // create overtime object
+//        WorkingOvertime workingOvertime = new WorkingOvertime();
+//        workingOvertime.setDateFrom(overtimeDateFrom);
+//        workingOvertime.setHoursFrom(overtimeHoursFrom);
+//        workingOvertime.setDateTo(overtimeDateTo);
+//        workingOvertime.setHoursTo(overtimeHoursTo);
+//        //workingOvertime.setAppUserId(); // TODO employee Id
+//
+//        workingTimeService.addOvertimeWorkHour(workingOvertime);
+//
+//        return "redirect:/employee/workhour/list";
+//    }
 
 }

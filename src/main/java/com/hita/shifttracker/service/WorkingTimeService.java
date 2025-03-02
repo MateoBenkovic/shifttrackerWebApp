@@ -1,14 +1,16 @@
 package com.hita.shifttracker.service;
 
 import com.hita.shifttracker.dto.WorkingTimeDTO;
-import com.hita.shifttracker.model.AppUser;
-import com.hita.shifttracker.model.Period;
-import com.hita.shifttracker.model.WorkingTime;
+import com.hita.shifttracker.model.*;
 import com.hita.shifttracker.repository.PeriodRepository;
+import com.hita.shifttracker.repository.WorkingOvertimeRepository;
+import com.hita.shifttracker.repository.WorkingTimeItemRepository;
 import com.hita.shifttracker.repository.WorkingTimeRepository;
+import com.hita.shifttracker.utils.TimeConverterHelper;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,18 +22,19 @@ public class WorkingTimeService {
 
     private final WorkingTimeRepository workingTimeRepository;
     private final PeriodRepository periodRepository;
+    private final WorkingTimeItemRepository workingTimeItemRepository;
+    private final WorkingOvertimeRepository workingOvertimeRepository;
 
-    public WorkingTimeService(WorkingTimeRepository workingTimeRepository, PeriodRepository periodRepository) {
+    public WorkingTimeService(WorkingTimeRepository workingTimeRepository, PeriodRepository periodRepository,
+                              WorkingTimeItemRepository workingTimeItemRepository, WorkingOvertimeRepository workingOvertimeRepository) {
         this.workingTimeRepository = workingTimeRepository;
         this.periodRepository = periodRepository;
+        this.workingTimeItemRepository = workingTimeItemRepository;
+        this.workingOvertimeRepository = workingOvertimeRepository;
     }
 
     // add workhour
     public void addWorkingTime(WorkingTime workingTime){
-        // treba provjerit smjenu da li postoji u bazi
-        // i provjeriti sate od i do u istom danu da nisu vec uneseni
-        // onda dodaj novu stavku
-
         int shiftType = 2;
         if(workingTime.getDateFrom().equals(workingTime.getDateTo())) {
             shiftType = 1;
@@ -114,6 +117,55 @@ public class WorkingTimeService {
     }
 
     // overtime
+
+    // dohvatiti kljuc id work time i spremiti ga u overtime
+    public void addOvertimeWorkHour(WorkingOvertime workingOvertime) {
+
+        // da li postoji stavka workTimeItem ? sa app user id i datumom from
+            // get work time item by app user id and date
+        List<WorkingTimeItem> workingTimeItems = workingTimeItemRepository.findItemByAppUserIdAndDate(
+                workingOvertime.getAppUserId(), workingOvertime.getDateFrom());
+
+        // ako postoji uzmi kljuc
+        if(workingTimeItems.size() > 0) {
+            WorkingTimeItem workingTimeItem = workingTimeItems.get(0);
+            int workTimeId = workingTimeItem.getWorkTimeId();
+            workingOvertime.setIdWorkTime(workTimeId);
+
+            if(workingTimeRepository.existsByAppUserIdAndDateFrom(workingOvertime.getAppUserId(),
+                    workingOvertime.getDateFrom(), workingOvertime.getIdWorkTime())) {
+                // provjeriti da se sati ne preklapaju
+                // overlapping times
+                boolean isOverlapping = false;
+                for(WorkingTimeItem wti: workingTimeItems) {
+                    // big decimal ????
+                    if ((BigDecimal.valueOf(wti.getHoursFrom()).compareTo(workingOvertime.getHoursFrom()) < 0 &&
+                            BigDecimal.valueOf(wti.getHoursTo()).compareTo(workingOvertime.getHoursFrom()) > 0) ||
+                        (BigDecimal.valueOf(wti.getHoursTo()).compareTo(workingOvertime.getHoursFrom()) > 0 &&
+                            BigDecimal.valueOf(wti.getHoursTo()).compareTo(workingOvertime.getHoursTo()) < 0)) {
+                        // wti.getHoursTo falls within the range [workingOvertime.getHoursFrom(), workingOvertime.getHoursTo()]
+                        // Code for overlapping logic here
+                        isOverlapping = true;
+                        break;
+                    }
+
+                }
+
+                // calculate total hours
+                if(!isOverlapping) {
+                    workingOvertime.setTotalHours(TimeConverterHelper.calculateTotalHours(
+                            workingOvertime.getHoursFrom(), workingOvertime.getHoursTo()));
+
+                    // check if overtime exists by app user id and date and id work time
+                    workingOvertimeRepository.insert(workingOvertime);
+                }
+            }
+
+        }
+
+    }
+
+    // onemoguciti unos preklapanja
 
     // insert overtime
 

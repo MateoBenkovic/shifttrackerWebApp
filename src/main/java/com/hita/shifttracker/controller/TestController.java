@@ -1,10 +1,7 @@
 package com.hita.shifttracker.controller;
 
 import com.hita.shifttracker.model.*;
-import com.hita.shifttracker.repository.PeriodRepository;
-import com.hita.shifttracker.repository.TempSchedulePerEmployeeRepository;
-import com.hita.shifttracker.repository.WorkingOvertimeRepository;
-import com.hita.shifttracker.repository.WorkingTimeRepository;
+import com.hita.shifttracker.repository.*;
 import com.hita.shifttracker.service.DateService;
 
 import com.hita.shifttracker.service.TempSchedulePerEmployeeService;
@@ -24,15 +21,15 @@ import java.util.Objects;
 public class TestController {
 
     @Autowired
-    private WorkingTimeRepository repo;
+    private WorkingTimeItemRepository repo;
 
     @GetMapping("/test")
     public String test(Model model) {
 
-        WorkingTime wt = repo.findByAppUserIdAndDateFrom(22, LocalDate.of(2025,2,5));
+        WorkingTimeItem wti = repo.findItemByAppUserIdAndDate(30, LocalDate.of(2025,2,11)).get(0);
 
+        System.out.println(wti.toString());
 
-            System.out.println("working time: " + wt.toString());
 
 
         return "test";

@@ -4,6 +4,7 @@ import com.hita.shifttracker.dto.AppUserDTO;
 import com.hita.shifttracker.dto.WorkingTimeDTO;
 import com.hita.shifttracker.model.*;
 import com.hita.shifttracker.service.*;
+import com.hita.shifttracker.utils.TimeConverterHelper;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -87,8 +89,10 @@ public class EmployeeController {
 
     @GetMapping("/employee/workhour/process")
     public String employeeWorkHourProcess(@RequestParam("startShift") String startShift, @RequestParam("endShift") String endShift,
-                                          @RequestParam("selectedColumn") String selectedColumn,
+                                          @RequestParam(value = "workingTimeId", required = false) Integer workingTimeId,
                                           Model model, HttpSession session){
+
+        System.out.println("id: " + workingTimeId);
 
         AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
 
@@ -147,9 +151,22 @@ public class EmployeeController {
         System.out.println("overtime end: " + overtimeEndDT);
 
         LocalDate overtimeDateFrom = overtimeStartDT.toLocalDate();
-        int overtimeHoursFrom = overtimeStartDT.toLocalTime().getHour();
         LocalDate overtimeDateTo = overtimeEndDT.toLocalDate();
-        int overtimeHoursTo = overtimeEndDT.toLocalTime().getHour();
+
+        BigDecimal overtimeHoursFrom = TimeConverterHelper.convertAndRoundToHalf(
+                overtimeStartDT.toLocalTime().getHour(), overtimeStartDT.toLocalTime().getMinute());
+        BigDecimal overtimeHoursTo = TimeConverterHelper.convertAndRoundToHalf(
+                overtimeEndDT.toLocalTime().getHour(), overtimeEndDT.toLocalTime().getMinute());
+
+        // create overtime object
+        WorkingOvertime workingOvertime = new WorkingOvertime();
+        workingOvertime.setDateFrom(overtimeDateFrom);
+        workingOvertime.setHoursFrom(overtimeHoursFrom);
+        workingOvertime.setDateTo(overtimeDateTo);
+        workingOvertime.setHoursTo(overtimeHoursTo);
+        workingOvertime.setAppUserId(appUser.getId());
+
+        workingTimeService.addOvertimeWorkHour(workingOvertime);
 
         return "redirect:/employee/workhour/list";
     }
