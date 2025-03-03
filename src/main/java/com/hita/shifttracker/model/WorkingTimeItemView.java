@@ -21,6 +21,8 @@ public class WorkingTimeItemView {
     private int idWorkTypes;
     @Column("naziv_vr_rada")
     private String workTypeName;
+    @Column("cop_broj")
+    private String copNum;
 
     @Column ("1")
     private String day01;

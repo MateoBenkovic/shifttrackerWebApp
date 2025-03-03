@@ -123,7 +123,7 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
 
     // Dodavanje radnih sati iz workHours
     workHours.forEach(row => {
-        let tr = `<tr><td style="text-align: left;">${row.idWorkTypes} - ${row.workTypeName}</td>`;
+        let tr = `<tr><td style="text-align: left;">${row.workTypeName}`;
 
         for (let i = 1; i <= daysInMonth; i++) {
             let dayKey = `day${String(i).padStart(2, '0')}`;
@@ -146,7 +146,6 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
                         if (!Number.isInteger(numValue) && numValue % 1 !== 0.5) {
                             numValue = Math.round(numValue); // Zaokruži na cijeli broj
                         }
-
                         value = numValue; // Postavi novu vrijednost
                     } else {
                         value = "";
