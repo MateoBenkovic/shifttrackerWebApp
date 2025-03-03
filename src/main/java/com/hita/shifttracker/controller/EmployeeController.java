@@ -118,13 +118,13 @@ public class EmployeeController {
         return "redirect:/employee/workhour/list";
     }
 
-    @GetMapping("/employee/workhour/add")
-    public String getEmployeeWorkHourAdd(Model model, HttpSession session){
-        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
-        model.addAttribute("appUser", appUser);
-
-        return "employee_workhour_add";
-    }
+//    @GetMapping("/employee/workhour/add")
+//    public String getEmployeeWorkHourAdd(Model model, HttpSession session){
+//        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+//        model.addAttribute("appUser", appUser);
+//
+//        return "employee_workhour_add";
+//    }
 
     @GetMapping("/employee/workhour/delete")
     public String employeeWorkHourDelete(@RequestParam("workingTimeToDelete") int workingTimeToDelete, HttpSession session){

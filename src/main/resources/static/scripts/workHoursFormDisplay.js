@@ -70,13 +70,6 @@ function openForm(day, element, year, month, workDataAttr) {
 
     saveButton.style.display = "block";
 
-//    // Dinamički postavi action forme ovisno o stranici
-//    if (window.location.pathname.includes("/head_nurse/")) {
-//        workTimeForm.action = "/head_nurse/employee/workhour/process";
-//    } else {
-//        workTimeForm.action = "/employee/workhour/process";
-//    }
-
     document.querySelectorAll(".highlighted-date").forEach(el => el.classList.remove("highlighted-date"));
     errorMessage.innerHTML = "";
 
