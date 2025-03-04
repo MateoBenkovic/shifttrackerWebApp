@@ -78,22 +78,11 @@ public class WorkingTimeService {
 
 
 
-    public void deleteWorkingTimeById(int appUserId, int workingTimeId) {
-        // find working time by id and app user id
-        WorkingTime wt = workingTimeRepository.findByAppUserIdAndWorkingTimeId(appUserId, workingTimeId);
-        System.out.println("wt: " + wt.toString());
-        //wt.setStatus("S");
-        System.out.println("wt: " + wt.toString());
-        if(wt.getIdWorkTime() != 0) {
-            // check status if status is o
-            if (wt.getStatus().equals("O")){
-                // check mjesec iz period == O i radnik period_radnik == O
-                // promjeni u S
-                // set status to S
-                wt.setStatus("S");
-                workingTimeRepository.setStatusByAppUserIdAndWorkingTimeId(appUserId, workingTimeId, wt.getStatus());
-            }
-
+    public void deleteWorkingTimeById(int idWorkTime) {
+        // exists by id
+        if (workingTimeRepository.existsByIdWorkTime(idWorkTime)) {
+            // set status to S
+            workingTimeRepository.setWorkingTimeStatusToSByIdWorkTime(idWorkTime);
         }
     }
 

@@ -200,4 +200,9 @@ public class WorkingTimeRepository {
                     return workingTime;
                 });
     }
+
+    public void setWorkingTimeStatusToSByIdWorkTime(int idWorkTime) {
+        String sql = "UPDATE working_time SET status = 'S' WHERE id_work_time = ?";
+        jdbcTemplate.update(sql, idWorkTime);
+    }
 }
