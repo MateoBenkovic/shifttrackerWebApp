@@ -114,12 +114,11 @@ public class EmployeeController {
         workingTime.setSchedId(1);
 
         if (workingTimeId == null) {
-            // add working time
-            System.out.println("id is null call service");
             workingTimeService.addWorkingTime(workingTime);
         } else if (workingTimeId != null) {
             // update working time
-
+            workingTime.setIdWorkTime(workingTimeId);
+            workingTimeService.updateWorkingTime(workingTime);
         }
 
 

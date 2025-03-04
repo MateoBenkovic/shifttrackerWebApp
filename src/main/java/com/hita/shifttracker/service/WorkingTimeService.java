@@ -40,16 +40,10 @@ public class WorkingTimeService {
             shiftType = 1;
         }
         workingTime.setShiftId(shiftType);
-        System.out.println("working time: in service:" + workingTime.toString());
-
-        boolean checkValue = periodRepository.isPeriodStatusO(workingTime.getDateFrom().getMonthValue(), workingTime.getDateFrom().getYear());
-        System.out.println("Print Check Value: " + checkValue);
 
         // check period status
         if (periodRepository.isPeriodStatusO(workingTime.getDateFrom().getMonthValue(), workingTime.getDateFrom().getYear())) {
-            System.out.println("period status is O");
             workingTime.setStatus("O");
-            System.out.println("working time with status: " + workingTime.toString());
             workingTimeRepository.insertWorkingTimeByAppUserId(workingTime);
         }
 
@@ -73,8 +67,10 @@ public class WorkingTimeService {
 //        }
     }
 
-    public void updateWorkingTime(WorkingTime workingTime, int workingTimeId) {
+    public void updateWorkingTime(WorkingTime workingTime) {
         // get working time by id
+        WorkingTime wt = workingTimeRepository.findByIdWorkTime(workingTime.getIdWorkTime());
+        System.out.println("get working time from db: " + wt.toString());
 
         // set values to working time
 
