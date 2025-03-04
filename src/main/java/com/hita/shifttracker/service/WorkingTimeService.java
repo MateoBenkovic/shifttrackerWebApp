@@ -69,14 +69,11 @@ public class WorkingTimeService {
 
     public void updateWorkingTime(WorkingTime workingTime) {
         // get working time by id
-        WorkingTime wt = workingTimeRepository.findByIdWorkTime(workingTime.getIdWorkTime());
-        System.out.println("get working time from db: " + wt.toString());
-
-        // set values to working time
-
-        // update working time
-
-        //workingTimeRepository.updateWorkingTimeByAppUserId(workingTime);
+        if (workingTimeRepository.existsByIdWorkTime(workingTime.getIdWorkTime()) &&
+                periodRepository.isPeriodStatusO(workingTime.getDateFrom().getMonthValue(), workingTime.getDateFrom().getYear())) {
+            workingTime.setStatus("O");
+            workingTimeRepository.updateWorkingTimeByIdWorkTime(workingTime);
+        }
     }
 
 

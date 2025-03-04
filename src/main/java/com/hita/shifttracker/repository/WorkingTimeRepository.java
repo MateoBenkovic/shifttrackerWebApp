@@ -136,16 +136,13 @@ public class WorkingTimeRepository {
     }
 
     // update working time
-    public void updateWorkingTimeByAppUserId(WorkingTime workingTime) {
+    public void updateWorkingTimeByIdWorkTime(WorkingTime workingTime) {
         String sql = "UPDATE working_time " +
                 "SET date_from = ?, hours_from = ?, date_to = ?, hours_to = ?, status = ? " +
-                "WHERE app_user_id = ? AND date_from = ? AND id_work_time = ?" ;
+                "WHERE id_work_time = ?"; ;
 
-        //System.out.println("preforming update: ");
-        //System.out.println(workingTime.toString());
         jdbcTemplate.update(sql, workingTime.getDateFrom(), workingTime.getHoursFrom(), workingTime.getDateTo(),
-                workingTime.getHoursTo(), workingTime.getStatus(), workingTime.getAppUserId(),
-                workingTime.getDateFrom(), workingTime.getIdWorkTime());
+                workingTime.getHoursTo(), workingTime.getStatus(), workingTime.getIdWorkTime());
     }
 
     // delete all
@@ -178,6 +175,11 @@ public class WorkingTimeRepository {
                 "WHERE app_user_id = ? AND id_work_time = ?";
 
         jdbcTemplate.update(sql, status, appUserId, workingTimeId);
+    }
+
+    public boolean existsByIdWorkTime(int idWorkTime) {
+        String sql = "SELECT COUNT(*) FROM working_time WHERE id_work_time = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{idWorkTime}, Integer.class) > 0;
     }
 
     public WorkingTime findByIdWorkTime(int idWorkTime) {
