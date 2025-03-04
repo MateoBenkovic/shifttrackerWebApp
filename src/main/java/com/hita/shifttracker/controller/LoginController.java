@@ -23,7 +23,7 @@ public class LoginController {
     public String getLogin(){
         return "login";
     }
-
+// if not corporate page uncomment this
 //    @GetMapping("/")
 //    public String redirectToLogin() {
 //        return "redirect:/login";
