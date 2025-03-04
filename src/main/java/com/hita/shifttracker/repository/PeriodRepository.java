@@ -60,4 +60,10 @@ public class PeriodRepository {
             return period;
         });
     }
+
+    public boolean isPeriodStatusO(int month, int year) {
+        String sql = "SELECT COUNT(*) FROM period WHERE month = ? AND year = ? AND status = 'O'";
+        int count = jdbcTemplate.queryForObject(sql, new Object[]{month, year}, Integer.class);
+        return count > 0;
+    }
 }

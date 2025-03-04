@@ -40,24 +40,47 @@ public class WorkingTimeService {
             shiftType = 1;
         }
         workingTime.setShiftId(shiftType);
-        System.out.println("working time: " + workingTime.toString());
+        System.out.println("working time: in service:" + workingTime.toString());
 
-        WorkingTime wt = new WorkingTime();
+        boolean checkValue = periodRepository.isPeriodStatusO(workingTime.getDateFrom().getMonthValue(), workingTime.getDateFrom().getYear());
+        System.out.println("Print Check Value: " + checkValue);
 
-        if(workingTimeRepository.existsByAppUserIdAndDateFromAndShiftId(workingTime.getAppUserId(),
-                workingTime.getDateFrom(), workingTime.getShiftId())) {
-            workingTimeRepository.setStatusToO(workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getShiftId());
-            wt = workingTimeRepository.findByAppUserIdAndDateFromAndShiftId(workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getShiftId());
-        }
-
-        if(wt.getIdWorkTime() != 0) {
-            workingTime.setIdWorkTime(wt.getIdWorkTime());
+        // check period status
+        if (periodRepository.isPeriodStatusO(workingTime.getDateFrom().getMonthValue(), workingTime.getDateFrom().getYear())) {
+            System.out.println("period status is O");
             workingTime.setStatus("O");
-            workingTimeRepository.updateWorkingTimeByAppUserId(workingTime);
-        } else {
-            workingTime.setStatus("O");
+            System.out.println("working time with status: " + workingTime.toString());
             workingTimeRepository.insertWorkingTimeByAppUserId(workingTime);
         }
+
+
+
+//        WorkingTime wt = new WorkingTime();
+//
+//        if(workingTimeRepository.existsByAppUserIdAndDateFromAndShiftId(workingTime.getAppUserId(),
+//                workingTime.getDateFrom(), workingTime.getShiftId())) {
+//            workingTimeRepository.setStatusToO(workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getShiftId());
+//            wt = workingTimeRepository.findByAppUserIdAndDateFromAndShiftId(workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getShiftId());
+//        }
+//
+//        if(wt.getIdWorkTime() != 0) {
+//            workingTime.setIdWorkTime(wt.getIdWorkTime());
+//            workingTime.setStatus("O");
+//            workingTimeRepository.updateWorkingTimeByAppUserId(workingTime);
+//        } else {
+//            workingTime.setStatus("O");
+//            workingTimeRepository.insertWorkingTimeByAppUserId(workingTime);
+//        }
+    }
+
+    public void updateWorkingTime(WorkingTime workingTime, int workingTimeId) {
+        // get working time by id
+
+        // set values to working time
+
+        // update working time
+
+        //workingTimeRepository.updateWorkingTimeByAppUserId(workingTime);
     }
 
 

@@ -113,7 +113,16 @@ public class EmployeeController {
         workingTime.setAppUserId(appUser.getId());
         workingTime.setSchedId(1);
 
-        workingTimeService.addWorkingTime(workingTime);
+        if (workingTimeId == null) {
+            // add working time
+            System.out.println("id is null call service");
+            workingTimeService.addWorkingTime(workingTime);
+        } else if (workingTimeId != null) {
+            // update working time
+
+        }
+
+
 
         return "redirect:/employee/workhour/list";
     }
