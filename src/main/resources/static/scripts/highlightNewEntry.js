@@ -34,7 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Kada se forma šalje, spremamo index u localStorage
     document.getElementById("workTimeForm").addEventListener("submit", function (event) {
-//        event.preventDefault(); // Spriječimo instant reload
 
         const selectedIndex = document.getElementById("selectedColumn").value;
         const startShift = new Date(document.getElementById("startShift").value);
@@ -48,11 +47,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 localStorage.setItem("highlightNextColumn", parseInt(selectedIndex) + 1);
             }
         }
-
-        // Delay za osiguravanje spremanja prije reload-a
-//        setTimeout(() => {
-//            this.submit();
-//        }, 100);
     });
 });
 

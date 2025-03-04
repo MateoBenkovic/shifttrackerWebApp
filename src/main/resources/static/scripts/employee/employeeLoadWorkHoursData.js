@@ -1,4 +1,4 @@
-import { updateTable } from "./renderWorkHoursTable.js";
+import { updateTable } from "./employeeRenderWorkHoursTable.js";
 
 window.onload = function () {
     const monthPicker = document.getElementById("monthYearSelection");
@@ -22,10 +22,8 @@ document.getElementById("monthYearSelection").addEventListener("change", functio
     loadWorkHours(year, month);
 });
 
-const employeeId = document.getElementById("employeeId").value;
-
 function loadWorkHours(year, month) {
-    fetch(`/head_nurse/employee/workhour/data?year=${year}&month=${month}&id=${employeeId}`)
+    fetch(`/employee/workhour/data?year=${year}&month=${month}`)
     .then(response => {
         if (!response.ok) {
             throw new Error(`Greška: ${response.status} ${response.statusText}`);
@@ -41,12 +39,11 @@ function loadWorkHours(year, month) {
 }
 
 function confirmDelete(shiftId, startDate) {
-    let employeeId = document.getElementById("employeeId").value;
     let formattedDate = new Date(startDate).toLocaleDateString("hr-HR");
     let confirmAction = confirm(`Jeste li sigurni da želite obrisati radno vrijeme za dan: ${formattedDate}?`);
 
     if (confirmAction) {
-        window.location.href = "/head_nurse/employee/workhour/delete?workingTimeToDelete=" + shiftId + "&employeeId=" + employeeId;
+        window.location.href = "/employee/workhour/delete?workingTimeToDelete=" + shiftId;
     }
 }
 

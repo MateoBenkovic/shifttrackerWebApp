@@ -93,6 +93,7 @@ public class WorkingTimeItemRepository {
             workingTimeItemView.setAppUserCode(rs.getString("us_code"));
             workingTimeItemView.setIdWorkTypes(rs.getInt("id_v_r"));
             workingTimeItemView.setWorkTypeName(rs.getString("naziv_vr_rada"));
+            workingTimeItemView.setCopNum(rs.getString("cop_broj"));
 
             workingTimeItemView.setDay01(rs.getString("1"));
             workingTimeItemView.setDay02(rs.getString("2"));
