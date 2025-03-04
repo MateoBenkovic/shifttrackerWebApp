@@ -46,25 +46,6 @@ public class WorkingTimeService {
             workingTime.setStatus("O");
             workingTimeRepository.insertWorkingTimeByAppUserId(workingTime);
         }
-
-
-
-//        WorkingTime wt = new WorkingTime();
-//
-//        if(workingTimeRepository.existsByAppUserIdAndDateFromAndShiftId(workingTime.getAppUserId(),
-//                workingTime.getDateFrom(), workingTime.getShiftId())) {
-//            workingTimeRepository.setStatusToO(workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getShiftId());
-//            wt = workingTimeRepository.findByAppUserIdAndDateFromAndShiftId(workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getShiftId());
-//        }
-//
-//        if(wt.getIdWorkTime() != 0) {
-//            workingTime.setIdWorkTime(wt.getIdWorkTime());
-//            workingTime.setStatus("O");
-//            workingTimeRepository.updateWorkingTimeByAppUserId(workingTime);
-//        } else {
-//            workingTime.setStatus("O");
-//            workingTimeRepository.insertWorkingTimeByAppUserId(workingTime);
-//        }
     }
 
     public void updateWorkingTime(WorkingTime workingTime) {
