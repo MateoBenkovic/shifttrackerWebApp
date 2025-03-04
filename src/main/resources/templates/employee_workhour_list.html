@@ -363,10 +363,8 @@
             <label for="absenceType" class="form-label">Vrsta odsutnosti</label>
             <select class="form-select" id="absenceType" required>
                 <option value="">Odaberite vrstu odsutnosti</option>
-                <option value="Godišnji odmor">Godišnji odmor</option>
-                <option value="Bolovanje">Bolovanje</option>
-                <option value="Edukacija">Edukacija</option>
-                <option value="Ostale odsutnosti">Ostale odsutnosti</option>
+                <option th:each="wto : ${workTypesOtherList}" th:value="${wto.id}" th:text="${wto.workTypeName}">Godišnji odmor</option>
+
             </select>
         </div>
         <div class="mb-3">

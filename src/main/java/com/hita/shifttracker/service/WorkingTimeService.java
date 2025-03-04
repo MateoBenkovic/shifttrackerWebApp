@@ -2,10 +2,7 @@ package com.hita.shifttracker.service;
 
 import com.hita.shifttracker.dto.WorkingTimeDTO;
 import com.hita.shifttracker.model.*;
-import com.hita.shifttracker.repository.PeriodRepository;
-import com.hita.shifttracker.repository.WorkingOvertimeRepository;
-import com.hita.shifttracker.repository.WorkingTimeItemRepository;
-import com.hita.shifttracker.repository.WorkingTimeRepository;
+import com.hita.shifttracker.repository.*;
 import com.hita.shifttracker.utils.TimeConverterHelper;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.stereotype.Service;
@@ -24,13 +21,16 @@ public class WorkingTimeService {
     private final PeriodRepository periodRepository;
     private final WorkingTimeItemRepository workingTimeItemRepository;
     private final WorkingOvertimeRepository workingOvertimeRepository;
+    private final WorkTypesOtherRepository workTypesOtherRepository;
 
     public WorkingTimeService(WorkingTimeRepository workingTimeRepository, PeriodRepository periodRepository,
-                              WorkingTimeItemRepository workingTimeItemRepository, WorkingOvertimeRepository workingOvertimeRepository) {
+                              WorkingTimeItemRepository workingTimeItemRepository, WorkingOvertimeRepository workingOvertimeRepository,
+                              WorkTypesOtherRepository workTypesOtherRepository) {
         this.workingTimeRepository = workingTimeRepository;
         this.periodRepository = periodRepository;
         this.workingTimeItemRepository = workingTimeItemRepository;
         this.workingOvertimeRepository = workingOvertimeRepository;
+        this.workTypesOtherRepository = workTypesOtherRepository;
     }
 
     // add workhour
@@ -151,12 +151,10 @@ public class WorkingTimeService {
 
     }
 
-    // onemoguciti unos preklapanja
+    // work types
 
-    // insert overtime
-
-    // automate overtime
-
-
+    public List<WorkTypesOther> findAllWorkTypesOther() {
+        return workTypesOtherRepository.findAll();
+    }
 
 }

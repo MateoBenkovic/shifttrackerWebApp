@@ -45,11 +45,13 @@ public class EmployeeController {
 
         AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
         Company company = companyService.findWithData();
-        int month = dateService.getCurrentMonthFromDatabase();
-        int year = dateService.getCurrentYearFromDatabase();
+        //int month = dateService.getCurrentMonthFromDatabase();
+        //int year = dateService.getCurrentYearFromDatabase();
+        List<WorkTypesOther> workTypesOtherList = workingTimeService.findAllWorkTypesOther();
 
         model.addAttribute("appUser", appUser);
         model.addAttribute("company", company);
+        model.addAttribute("workTypesOtherList", workTypesOtherList);
 
 
         return "employee_workhour_list";
