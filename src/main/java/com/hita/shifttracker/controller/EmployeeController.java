@@ -52,6 +52,9 @@ public class EmployeeController {
         model.addAttribute("appUser", appUser);
         model.addAttribute("company", company);
         model.addAttribute("workTypesOtherList", workTypesOtherList);
+        // leave record
+        model.addAttribute("leaveRecord", new LeaveRecord());
+       // model.addAttribute("workTypesOther", new WorkTypesOther());
 
 
         return "employee_workhour_list";
@@ -135,6 +138,19 @@ public class EmployeeController {
 
         workingTimeService.deleteWorkingTimeById(workingTimeToDelete);
 
+        return "redirect:/employee/workhour/list";
+    }
+
+    // leave records (odsutnosti)
+    @PostMapping("/employee/workhour/leaveRecord")
+    public String leaveRecordsProcess(@ModelAttribute LeaveRecord leaveRecord, HttpSession session) {
+
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+        System.out.println("leave record: " + leaveRecord.toString());
+        leaveRecord.setAppUserId(appUser.getId());
+        leaveRecord.setUidInsUpd(appUser.getId());
+
+        workingTimeService.addLeaveRecord(leaveRecord);
         return "redirect:/employee/workhour/list";
     }
 

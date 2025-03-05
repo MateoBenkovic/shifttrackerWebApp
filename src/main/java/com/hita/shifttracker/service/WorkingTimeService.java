@@ -22,15 +22,17 @@ public class WorkingTimeService {
     private final WorkingTimeItemRepository workingTimeItemRepository;
     private final WorkingOvertimeRepository workingOvertimeRepository;
     private final WorkTypesOtherRepository workTypesOtherRepository;
+    private final LeaveRecordRepository leaveRecordRepository;
 
     public WorkingTimeService(WorkingTimeRepository workingTimeRepository, PeriodRepository periodRepository,
                               WorkingTimeItemRepository workingTimeItemRepository, WorkingOvertimeRepository workingOvertimeRepository,
-                              WorkTypesOtherRepository workTypesOtherRepository) {
+                              WorkTypesOtherRepository workTypesOtherRepository, LeaveRecordRepository leaveRecordRepository) {
         this.workingTimeRepository = workingTimeRepository;
         this.periodRepository = periodRepository;
         this.workingTimeItemRepository = workingTimeItemRepository;
         this.workingOvertimeRepository = workingOvertimeRepository;
         this.workTypesOtherRepository = workTypesOtherRepository;
+        this.leaveRecordRepository = leaveRecordRepository;
     }
 
     // add workhour
@@ -152,9 +154,27 @@ public class WorkingTimeService {
     }
 
     // work types
-
+// odustva
     public List<WorkTypesOther> findAllWorkTypesOther() {
         return workTypesOtherRepository.findAll();
+    }
+
+    public void addLeaveRecord(LeaveRecord leaveRecord) {
+        // unesti total days, hours per day, total hours, status
+        int totalDays = TimeConverterHelper.calculateTotalDays(leaveRecord.getDateFrom(), leaveRecord.getDateTo());
+        int hoursPerDay = 8;
+        int totalHours = totalDays * hoursPerDay;
+        // if status of period is o
+        if(periodRepository.isPeriodStatusO(leaveRecord.getDateFrom().getMonthValue(), leaveRecord.getDateFrom().getYear())) {
+            leaveRecord.setStatus("O");
+        }
+
+        leaveRecord.setTotalDays(totalDays);
+        leaveRecord.setHoursPerDay(hoursPerDay);
+        leaveRecord.setTotalHours(totalHours);
+
+
+        leaveRecordRepository.insert(leaveRecord);
     }
 
 }
