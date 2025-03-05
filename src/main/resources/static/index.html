@@ -403,6 +403,9 @@
           border-radius: var(--border-radius);
           padding: 30px;
           box-shadow: var(--shadow);
+          display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .demo-controls {
@@ -941,9 +944,11 @@
           background-color: rgba(0, 86, 179, 0.05);
         }
 
-        .work-type {
-          font-weight: bold;
-          text-align: left;
+        #work-type {
+            text-align: left !important;
+            font-weight: 500;
+            cursor: default;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -1010,7 +1015,7 @@
             <div class="prednost-card">
                 <div class="icon"><i class="bi bi-file-earmark-excel"></i></div>
                 <h3>Izvoz podataka</h3>
-                <p>Izvezite podatke u Excel ili PDF format za daljnju analizu ili dijeljenje s drugim odjelima.</p>
+                <p>Izvezite podatke u Excel format za daljnju analizu ili dijeljenje s drugim odjelima.</p>
             </div>
         </div>
     </div>
@@ -1036,7 +1041,7 @@
                                 <li>Jednostavan unos dnevnih i noćnih smjena</li>
                                 <li>Automatski izračun ukupnih radnih sati</li>
                                 <li>Pregled rasporeda po mjesecima</li>
-                                <li>Označavanje vikenda i praznika</li>
+                                <li>Brzi unos godišnjeg odmora, bolovanja i drugih odsutnosti</li>
                             </ul>
                         </div>
                         <div class="feature-image">
@@ -1048,11 +1053,11 @@
                     <div class="feature-content">
                         <div class="feature-text">
                             <h3>Detaljni izvještaji o radu</h3>
-                            <p>Generirajte detaljne izvještaje o radnim satima za pojedine zaposlenike ili cijele timove. Filtrirajte podatke po ispostavama, vremenskom razdoblju i vrsti rada.</p>
+                            <p>Generirajte detaljne izvještaje o radnim satima za pojedinog zaposlenika ili cijelu radnu jedinicu. Filtrirajte podatke po ispostavama i vremenskom razdoblju.</p>
                             <ul>
-                                <li>Izvještaji po zaposleniku ili timu</li>
+                                <li>Izvještaji po zaposleniku</li>
                                 <li>Filtriranje po vremenskom razdoblju</li>
-                                <li>Izvoz u Excel ili PDF format</li>
+                                <li>Izvoz u Excel format</li>
                                 <li>Statistički pregled radnih sati</li>
                             </ul>
                         </div>
@@ -1086,84 +1091,10 @@
     <div class="container">
         <h2 class="section-title">Pogledajte kako sustav radi</h2>
         <div class="demo-container">
-            <div class="demo-controls">
-                <div class="control-group">
-                    <label for="demoMonth">Mjesec:</label>
-                    <select id="demoMonth" class="form-select">
-                        <option value="1">Siječanj</option>
-                        <option value="2">Veljača</option>
-                        <option value="3">Ožujak</option>
-                        <option value="4">Travanj</option>
-                        <option value="5">Svibanj</option>
-                        <option value="6">Lipanj</option>
-                        <option value="7">Srpanj</option>
-                        <option value="8">Kolovoz</option>
-                        <option value="9">Rujan</option>
-                        <option value="10">Listopad</option>
-                        <option value="11">Studeni</option>
-                        <option value="12">Prosinac</option>
-                    </select>
-                </div>
-                <div class="control-group">
-                    <label for="demoYear">Godina:</label>
-                    <select id="demoYear" class="form-select">
-                        <option value="2023">2023</option>
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="table-responsive">
-                <table class="schedule-table" id="demoTable">
-                    <thead>
-                    <tr id="calendarRow">
-                        <th>Vrsta rada</th>
-                        <!-- Kalendar će biti generiran JavaScript-om -->
-                    </tr>
-                    </thead>
-                    <tbody id="scheduleBody">
-                    <!-- Podaci će biti generirani JavaScript-om -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Testimonials sekcija -->
-<section id="testimonials">
-    <div class="container">
-        <h2 class="section-title">Što kažu naši korisnici</h2>
-        <div class="testimonials-slider">
-            <div class="testimonial">
-                <div class="testimonial-content">
-                    <p>"Ovaj sustav je značajno olakšao planiranje smjena i praćenje radnih sati naših medicinskih timova. Uštedili smo mnogo vremena na administraciji."</p>
-                </div>
-                <div class="testimonial-author">
-                    <img src="/placeholder.svg?height=60&width=60" alt="Korisnik" class="author-image">
-                    <div class="author-info">
-                        <h4>Dr. Marko Novak</h4>
-                        <p>Ravnatelj, Zavod za hitnu medicinu</p>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial" style="display: none;">
-                <div class="testimonial-content">
-                    <p>"Izvještaji koje generira sustav su detaljni i precizni, što nam je olakšalo obračun plaća i planiranje budžeta. Odlično rješenje za zdravstvene ustanove."</p>
-                </div>
-                <div class="testimonial-author">
-                    <img src="/placeholder.svg?height=60&width=60" alt="Korisnik" class="author-image">
-                    <div class="author-info">
-                        <h4>Ana Kovačić</h4>
-                        <p>Voditeljica računovodstva, Opća bolnica</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="slider-controls">
-            <button id="prevTestimonial" class="slider-btn"><i class="bi bi-chevron-left"></i></button>
-            <button id="nextTestimonial" class="slider-btn"><i class="bi bi-chevron-right"></i></button>
+            <video controls width="1000">
+                <source src="demo.mp4" type="video/mp4">
+                Vaš preglednik ne podržava HTML5 video.
+            </video>
         </div>
     </div>
 </section>
@@ -1172,7 +1103,7 @@
 <section id="cta">
     <div class="container">
         <div class="cta-content">
-            <h2>Spremni ste unaprijediti upravljanje rasporedima?</h2>
+            <h2>Spremni ste unaprijediti upravljanje evidencijom rada?</h2>
             <p>Kontaktirajte nas danas i dogovorite besplatnu demonstraciju sustava prilagođenu vašim potrebama.</p>
             <a href="#kontakt" class="btn-primary">Zatražite demo</a>
         </div>
