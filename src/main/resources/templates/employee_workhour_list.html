@@ -333,6 +333,7 @@
                     <div class="tab-pane fade" id="overtime" role="tabpanel">
                         <h4 class="mb-4 text-center">Unos prekovremenog rada</h4>
                             <form id="overtimeForm" action="/employee/workhour/overtime">
+                                <input type="hidden" name="overtimeTimeId" id="overtimeTimeId">
                             <div class="mb-3">
                                 <label for="overtimeStart" class="form-label">Početak prekovremenog rada</label>
                                 <input type="datetime-local" class="form-control" id="overtimeStart" name="overtimeStart" required step="3600">
