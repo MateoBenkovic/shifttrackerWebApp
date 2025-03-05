@@ -161,6 +161,7 @@ public class WorkingTimeService {
 
     public void addLeaveRecord(LeaveRecord leaveRecord) {
         // unesti total days, hours per day, total hours, status
+
         int totalDays = TimeConverterHelper.calculateTotalDays(leaveRecord.getDateFrom(), leaveRecord.getDateTo());
         int hoursPerDay = 8;
         int totalHours = totalDays * hoursPerDay;
@@ -169,9 +170,12 @@ public class WorkingTimeService {
             leaveRecord.setStatus("O");
         }
 
+        // ovo sve mozes unesti nule
         leaveRecord.setTotalDays(totalDays);
         leaveRecord.setHoursPerDay(hoursPerDay);
         leaveRecord.setTotalHours(totalHours);
+        System.out.println("total days: " + totalDays);
+        System.out.println("leave record setup: " +  leaveRecord.toString());
 
 
         leaveRecordRepository.insert(leaveRecord);
