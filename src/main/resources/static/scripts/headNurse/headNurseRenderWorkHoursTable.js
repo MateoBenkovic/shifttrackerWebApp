@@ -14,7 +14,7 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
                       "2025-12-25", "2025-12-26"];
 
     // Kreiranje header reda
-    let headerHTML = `<tr><th id="work-type">Vrsta rada</th>`;
+    let headerHTML = `<tr><th id="work-type"></th>`;
     for (let i = 1; i <= daysInMonth; i++) {
         const dateString = `${year}-${String(month).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
         const workEntry = workingTimes[dateString] || [];
@@ -123,7 +123,9 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
 
     // Dodavanje radnih sati iz workHours
     workHours.forEach(row => {
-        let tr = `<tr><td style="text-align: left;">${row.idWorkTypes} - ${row.workTypeName}`;
+        let backgroundColor = row.workTypeName.includes("Redovan rad") ? "" : "background-color: #ff00000d;";
+
+        let tr = `<tr style="${backgroundColor}"><td style="text-align: left;">${row.idWorkTypes} - ${row.workTypeName}`;
         if (row.copNum !== null && row.copNum !== undefined && row.copNum !== '') {
             tr += ` - ${row.copNum}</td>`;
         }

@@ -6,7 +6,12 @@ import com.hita.shifttracker.model.*;
 import com.hita.shifttracker.service.*;
 import com.hita.shifttracker.utils.TimeConverterHelper;
 import jakarta.servlet.http.HttpSession;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Row;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +25,18 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
+
 
 
 @Controller
@@ -68,14 +85,7 @@ public class HeadNurseController {
         return "head_nurse_employee_workhour";
     }
 
-    @GetMapping("/head_nurse/workhour/report")
-    public String getWorkHourReport(Model model, HttpSession session) {
 
-        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
-        model.addAttribute("appUser", appUser);
-
-        return "head_nurse_workhour_report.html";
-    }
 
     @GetMapping("/head_nurse/employee/workhour/data")
     @ResponseBody
@@ -183,6 +193,173 @@ public class HeadNurseController {
 
         appUserService.saveEmployee(employee);
         return "redirect:/head_nurse/employee/list";
+    }
+
+
+    @GetMapping("/head_nurse/workhour/report")
+    public String getWorkHourReport(Model model, HttpSession session) {
+
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+        model.addAttribute("appUser", appUser);
+
+        return "head_nurse_workhour_report.html";
+    }
+
+    @GetMapping("/head_nurse/workhour/report/download")
+    public ResponseEntity<byte[]> getEmployeeWorkHourReport(@RequestParam ("employeeId") int employeeId,
+                                            @RequestParam ("monthYearSelect") String monthYearSelect,
+                                            HttpSession session,
+                                            Model model) throws IOException {
+
+        AppUserDTO employee = (AppUserDTO) appUserService.getEmployeeById(employeeId);
+
+        String[] parts = monthYearSelect.split("-");
+        int year = Integer.parseInt(parts[0]);
+        int month = Integer.parseInt(parts[1]);
+
+        List<WorkingTimeItemView> workingTimeItemsView = workingTimeItemService.getWorkingTimeItemViewByAppUser(employee, month, year);
+
+        byte[] excelBytes = generateExcelReport(employee, workingTimeItemsView, month, year);
+
+        String fileName = employee.getFirstName() + "_" + employee.getLastName() + "_izvjestaj_" + monthYearSelect + ".xlsx";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(excelBytes);
+    }
+
+    private byte[] generateExcelReport(AppUserDTO employee, List<WorkingTimeItemView> workingTimeItems, int month, int year) throws IOException {
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+
+            Sheet sheet = workbook.createSheet("Work Hours");
+
+            // STILOVI
+            CellStyle boldBorderStyle = workbook.createCellStyle();
+            Font boldFont = workbook.createFont();
+            boldFont.setBold(true);
+            boldBorderStyle.setFont(boldFont);
+            boldBorderStyle.setBorderTop(BorderStyle.THIN);
+            boldBorderStyle.setBorderBottom(BorderStyle.THIN);
+            boldBorderStyle.setBorderLeft(BorderStyle.THIN);
+            boldBorderStyle.setBorderRight(BorderStyle.THIN);
+
+            CellStyle headerStyle = workbook.createCellStyle();
+            headerStyle.setFont(boldFont);
+            headerStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            headerStyle.setBorderTop(BorderStyle.THIN);
+            headerStyle.setBorderBottom(BorderStyle.THIN);
+            headerStyle.setBorderLeft(BorderStyle.THIN);
+            headerStyle.setBorderRight(BorderStyle.THIN);
+
+            CellStyle borderStyle = workbook.createCellStyle();
+            borderStyle.setBorderTop(BorderStyle.THIN);
+            borderStyle.setBorderBottom(BorderStyle.THIN);
+            borderStyle.setBorderLeft(BorderStyle.THIN);
+            borderStyle.setBorderRight(BorderStyle.THIN);
+
+            // HEADER (Ime i Razdoblje)
+            Row row0 = sheet.createRow(0);
+            row0.createCell(0).setCellValue("Ime zaposlenika: " + employee.getFirstName() + " " + employee.getLastName());
+
+            Row row1 = sheet.createRow(1);
+            row1.createCell(0).setCellValue("Razdoblje: " + getMonthName(month) + " " + year);
+
+            // PRAZAN RED
+            sheet.createRow(2);
+
+            // TABLICA HEADER
+            Row headerRow = sheet.createRow(3);
+            headerRow.createCell(0).setCellValue("Vrsta rada");
+            headerRow.createCell(1).setCellValue("Ukupno");
+            headerRow.getCell(0).setCellStyle(headerStyle);
+            headerRow.getCell(1).setCellStyle(headerStyle);
+
+            // DODAVANJE REDOVA
+            int rowNum = 4;
+            double ukupnoSati = 0;
+
+            for (WorkingTimeItemView item : workingTimeItems) {
+                Row row = sheet.createRow(rowNum++);
+                String workType = item.getWorkTypeName() + " - " + item.getCopNum();
+                double totalHours = item.getTotal().doubleValue();
+
+                row.createCell(0).setCellValue(workType);
+                row.createCell(1).setCellValue(totalHours);
+                row.getCell(0).setCellStyle(borderStyle);
+                row.getCell(1).setCellStyle(borderStyle);
+                ukupnoSati += totalHours;
+            }
+
+            // RED ZA UKUPNE SATE
+            Row totalRow = sheet.createRow(rowNum);
+            totalRow.createCell(0).setCellValue("Ukupno sati");
+            totalRow.createCell(1).setCellValue(ukupnoSati);
+            totalRow.getCell(0).setCellStyle(headerStyle);
+            totalRow.getCell(1).setCellStyle(headerStyle);
+
+            // AUTOFIT KOLONE
+            sheet.autoSizeColumn(0);
+            sheet.autoSizeColumn(1);
+
+            // PRAZAN RED
+            sheet.createRow(rowNum + 2);
+            sheet.createRow(rowNum + 3);
+
+            // RED S CRTAMA ZA POTPIS
+            Row signatureRow1 = sheet.createRow(rowNum + 4);
+            signatureRow1.createCell(0).setCellValue("______________________");
+
+            Row signatureRow2 = sheet.createRow(rowNum + 7);
+            signatureRow2.createCell(0).setCellValue("______________________");
+
+            Row signatureRow3 = sheet.createRow(rowNum + 10);
+            signatureRow3.createCell(0).setCellValue("______________________");
+
+            // RED S OPISOM ISPOD CRTA
+            Row descriptionRow1 = sheet.createRow(rowNum + 5);
+            descriptionRow1.createCell(0).setCellValue("(Datum zaključenja evidencije)");
+
+            Row descriptionRow2 = sheet.createRow(rowNum + 8);
+            descriptionRow2.createCell(0).setCellValue("(Evidenciju popunio djelatnik)");
+
+            Row descriptionRow3 = sheet.createRow(rowNum + 11);
+            descriptionRow3.createCell(0).setCellValue("(Odobrio)");
+
+            // PRAZAN RED ispod potpisa
+            sheet.createRow(rowNum + 14);
+
+            // PRAVNA NAPOMENA
+            Row legalNoteRow = sheet.createRow(rowNum + 15);
+            legalNoteRow.createCell(0).setCellValue("Napomena: ");
+            Row legalTextRow = sheet.createRow(rowNum + 16);
+            legalTextRow.createCell(0).setCellValue("Obveza iz čl. 13 Pravilnika o sadržaju i načinu vođenja evidencije o radnicima zaposlenim kod poslodavca");
+            Row legalTextRow2 = sheet.createRow(rowNum + 17);
+            legalTextRow2.createCell(0).setCellValue("(Nar. novine broj 55/24).");
+
+
+            workbook.write(outputStream);
+            return outputStream.toByteArray();
+        }
+    }
+
+    private String getMonthName(int month) {
+        return switch (month) {
+            case 1 -> "Siječanj";
+            case 2 -> "Veljača";
+            case 3 -> "Ožujak";
+            case 4 -> "Travanj";
+            case 5 -> "Svibanj";
+            case 6 -> "Lipanj";
+            case 7 -> "Srpanj";
+            case 8 -> "Kolovoz";
+            case 9 -> "Rujan";
+            case 10 -> "Listopad";
+            case 11 -> "Studeni";
+            case 12 -> "Prosinac";
+            default -> "Nepoznato";
+        };
     }
 
     // overtime
