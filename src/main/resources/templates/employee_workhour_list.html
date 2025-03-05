@@ -267,6 +267,7 @@
                 </div>
                 <div class="d-flex justify-content-end mb-3">
                     <buton class="btn btn-primary me-1" id="absenceButton">Odsutnosti</buton>
+                    <!-- stavi status u Z -->
                     <buton class="btn btn-dark">Predaj evidenciju</buton>
                 </div>
             </div>
@@ -375,6 +376,10 @@
         <div class="mb-3">
             <label for="endDate" class="form-label">Do datuma</label>
             <input type="date" class="form-control" id="endDate" th:field="*{dateTo}" required>
+        </div>
+        <div class="mb-3">
+            <label for="hoursPerDay" class="form-label">Stnica po danu</label>
+            <input type="number" class="form-control" id="hoursPerDay" th:field="*{hoursPerDay}" value="8" required min="0" max="24">
         </div>
         <div class="mb-3">
             <label for="absenceReason" class="form-label">Razlog</label>

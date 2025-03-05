@@ -64,7 +64,14 @@ public class WorkingTimeService {
     public void deleteWorkingTimeById(int idWorkTime) {
         // exists by id
         if (workingTimeRepository.existsByIdWorkTime(idWorkTime)) {
-            // set status to S
+            // find if hase overtime
+            List<WorkingOvertime> workingOvertimes = workingOvertimeRepository.findByIdWorkTime(idWorkTime);
+            if (workingOvertimes.size() > 0) {
+                for (WorkingOvertime wo : workingOvertimes) {
+                    workingOvertimeRepository.setStatusToS(wo.getIdOvertime(), wo.getIdWorkTime());
+                }
+            }
+
             workingTimeRepository.setWorkingTimeStatusToSByIdWorkTime(idWorkTime);
         }
     }
@@ -163,8 +170,7 @@ public class WorkingTimeService {
         // unesti total days, hours per day, total hours, status
 
         int totalDays = TimeConverterHelper.calculateTotalDays(leaveRecord.getDateFrom(), leaveRecord.getDateTo());
-        int hoursPerDay = 8;
-        int totalHours = totalDays * hoursPerDay;
+        int totalHours = totalDays * leaveRecord.getHoursPerDay();
         // if status of period is o
         if(periodRepository.isPeriodStatusO(leaveRecord.getDateFrom().getMonthValue(), leaveRecord.getDateFrom().getYear())) {
             leaveRecord.setStatus("O");
@@ -172,7 +178,6 @@ public class WorkingTimeService {
 
         // ovo sve mozes unesti nule
         leaveRecord.setTotalDays(totalDays);
-        leaveRecord.setHoursPerDay(hoursPerDay);
         leaveRecord.setTotalHours(totalHours);
         System.out.println("total days: " + totalDays);
         System.out.println("leave record setup: " +  leaveRecord.toString());
