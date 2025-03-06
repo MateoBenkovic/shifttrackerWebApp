@@ -186,4 +186,9 @@ public class WorkingTimeService {
         leaveRecordRepository.insert(leaveRecord);
     }
 
+
+    // working time service for period status
+    // period radnik status
+    // ako je u tablici period_radnik status Z onemoguci unosenje za cijeli mjesec
+    // ako je null onda
 }
