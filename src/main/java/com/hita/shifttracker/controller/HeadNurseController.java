@@ -196,11 +196,22 @@ public class HeadNurseController {
     }
 
 
+//    @GetMapping("/head_nurse/show/workhour/report")
+//    @ResponseBody
+//    public ResponseEntity<Map<String, Object>> showEmployeeWorkHoursReport(HttpSession session,
+//                                                                           @RequestParam("orgUnit") int orgUnitId) {
+//
+//    }
+
     @GetMapping("/head_nurse/workhour/report")
     public String getWorkHourReport(Model model, HttpSession session) {
 
         AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
         model.addAttribute("appUser", appUser);
+
+        List<AppUserDTO> employees = appUserService.getAllEmployees();
+        model.addAttribute("employees", employees);
+        System.out.println(employees);
 
         return "head_nurse_workhour_report.html";
     }

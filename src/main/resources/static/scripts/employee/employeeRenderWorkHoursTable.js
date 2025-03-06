@@ -1,6 +1,7 @@
 export function updateTable(workHours, workingTimes, year, month, schedule) {
     const tableHead = document.querySelector("#workHoursTable thead");
     const tableBody = document.querySelector("#workHoursTable tbody");
+    const totalSumParagraph = document.getElementById("totalSum");
     console.log(workingTimes);
     console.log(workHours);
 
@@ -121,6 +122,8 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
 
     tableBody.innerHTML += scheduleStart + scheduleEnd + startRow + endRow + startRow2 + endRow2 + totalRow;
 
+    let totalSum = 0;
+
     // Dodavanje radnih sati iz workHours
     workHours.forEach(row => {
         let tr = `<tr><td style="text-align: left;">${row.workTypeName}`;
@@ -141,6 +144,7 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
 
                     if (value !== null) {
                         let numValue = parseFloat(value);
+                        totalSum += numValue;
 
                         // Provjeri je li decimalni broj i je li u formatu X.5
                         if (!Number.isInteger(numValue) && numValue % 1 !== 0.5) {
@@ -157,6 +161,7 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
         tr += `<td>${row.total}</td></tr>`;
         tableBody.innerHTML += tr;
     });
+    totalSumParagraph.innerText = totalSum;
 }
 
 // Funkcija za dohvacanje broja dana u mjesecu
