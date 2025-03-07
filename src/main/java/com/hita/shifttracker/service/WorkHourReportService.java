@@ -18,4 +18,13 @@ public class WorkHourReportService {
     public List<WorkingTimeReportDTO> getEmployeeReport(List<Integer> appUserIds, int month, int year) {
         return workHourReportRepository.getEmployeeReport(appUserIds, month, year);
     }
+
+    public List<WorkingTimeReportDTO> getOrgUnitEmployeeReport(int orgUnitId, int month, int year) {
+        return workHourReportRepository.getOrgUnitEmployeeReport(orgUnitId, month, year);
+    }
+
+    public WorkingTimeReportDTO getOrgUnitReport(int orgUnitId, int month, int year) {
+        return workHourReportRepository.getOrgUnitWorkSummary(orgUnitId, month, year);
+    }
+
 }
