@@ -3,6 +3,7 @@ package com.hita.shifttracker.controller;
 import com.hita.shifttracker.dto.AppUserDTO;
 import com.hita.shifttracker.dto.WorkingTimeDTO;
 import com.hita.shifttracker.model.*;
+import com.hita.shifttracker.repository.WorkHourReportRepository;
 import com.hita.shifttracker.service.*;
 import com.hita.shifttracker.utils.TimeConverterHelper;
 import jakarta.servlet.http.HttpSession;
@@ -47,15 +48,17 @@ public class HeadNurseController {
     private final WorkingTimeItemService workingTimeItemService;
     private final WorkingTimeService workingTimeService;
     private final TempSchedulePerEmployeeService tempSchedulePerEmployeeService;
+    private final WorkHourReportService workHourReportService;
 
     public HeadNurseController(AppUserService appUserService, CompanyService companyService,
                                WorkingTimeItemService workingTimeItemService, WorkingTimeService workingTimeService,
-                               TempSchedulePerEmployeeService tempSchedulePerEmployeeService) {
+                               TempSchedulePerEmployeeService tempSchedulePerEmployeeService, WorkHourReportService workHourReportService) {
         this.appUserService = appUserService;
         this.companyService = companyService;
         this.workingTimeItemService = workingTimeItemService;
         this.workingTimeService = workingTimeService;
         this.tempSchedulePerEmployeeService = tempSchedulePerEmployeeService;
+        this.workHourReportService = workHourReportService;
     }
 
     // Popis svih zaposlenika
@@ -219,17 +222,23 @@ public class HeadNurseController {
                                               @RequestParam(value = "employeeId", required = false) List<Integer> employeeIds,
                                               @RequestParam("monthYear") String monthYear) {
 
-        System.out.println("Vrsta pretrage: " + searchType);
-        System.out.println("Mjesec i godina: " + monthYear);
-        System.out.println(monthYear);
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+        model.addAttribute("appUser", appUser);
+
+        List<AppUserDTO> employees = appUserService.getAllEmployees();
+        model.addAttribute("employees", employees);
+
+        String[] parts = monthYear.split("-");
+        int year = Integer.parseInt(parts[0]);
+        int month = Integer.parseInt(parts[1]);
 
         if ("orgUnit".equals(searchType)) {
             System.out.println("IspostavaId: " + orgUnitId);
         } else if ("employee".equals(searchType)) {
-            System.out.println("Odabrani zaposlenici: " + employeeIds);
+            System.out.println(workHourReportService.getEmployeeReport(employeeIds, month, year));
         }
 
-        return "redirect:/head_nurse/workhour/report";
+        return "head_nurse_workhour_report.html";
     }
 
 //    @GetMapping("/head_nurse/workhour/report/download")
