@@ -257,8 +257,10 @@ td.holiday {
         </div>
     </div>
 </nav>
+<div style="background-color: white; margin-left: 12px; margin-right: 12px;">
+    <button onclick="location.href = '/head_nurse/employee/list'" class="btn btn-dark ms-3 mt-2" style="width: 90px">Natrag</button>
+</div>
 
-<button onclick="location.href = '/head_nurse/employee/list'" class="btn btn-dark ms-3 mt-2" style="width: 90px">Natrag</button>
 
 <div class="container-fluid">
     <!-- Employee Info -->
@@ -278,11 +280,14 @@ td.holiday {
                 </div>
                 <div class="container info-section pb-3 pt-2">
                     <div class="row align-items-center justify-content-center text-center">
-                        <div class="col-md-6 d-flex justify-content-center">
+                        <div class="col-md-4 d-flex justify-content-center">
                             <input type="month" id="monthYearSelection">
                         </div>
-                        <div class="col-md-6 d-flex justify-content-center">
-                            <p class="mb-0 ps-4"><strong>Propisani mjesečni fond sati:</strong>&nbsp;<span id="prescribed-hours">184</span></p>
+                        <div class="col-md-4 d-flex justify-content-center">
+                            <p class="mb-0 ps-4"><strong>Propisani mjesečni fond sati:</strong>&nbsp;<span id="prescribed-hours">0</span></p>
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-center">
+                            <p class="mb-0 ps-4"><strong>Ukupno ovaj mjesec: </strong>&nbsp;<span id="totalSum">0</span></p>
                         </div>
                     </div>
                 </div>

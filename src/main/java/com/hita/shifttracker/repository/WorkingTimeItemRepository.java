@@ -129,8 +129,6 @@ public class WorkingTimeItemRepository {
 
             workingTimeItemView.setTotal(rs.getBigDecimal("Ukupno"));
 
-            System.out.println(workingTimeItemView);
-
             return workingTimeItemView;
         }, appUser.getUserCode(), month, year);
     }

@@ -1,6 +1,8 @@
 export function updateTable(workHours, workingTimes, year, month, schedule) {
     const tableHead = document.querySelector("#workHoursTable thead");
     const tableBody = document.querySelector("#workHoursTable tbody");
+    const totalSumParagraph = document.getElementById("totalSum");
+    const prescribedHours = document.getElementById('prescribed-hours').textContent;
     console.log(workingTimes);
     console.log(workHours);
 
@@ -14,7 +16,7 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
                       "2025-12-25", "2025-12-26"];
 
     // Kreiranje header reda
-    let headerHTML = `<tr><th id="work-type">Vrsta rada</th>`;
+    let headerHTML = `<tr><th id="work-type"></th>`;
     for (let i = 1; i <= daysInMonth; i++) {
         const dateString = `${year}-${String(month).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
         const workEntry = workingTimes[dateString] || [];
@@ -121,9 +123,13 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
 
     tableBody.innerHTML += scheduleStart + scheduleEnd + startRow + endRow + startRow2 + endRow2 + totalRow;
 
+    let totalSum = 0;
+
     // Dodavanje radnih sati iz workHours
     workHours.forEach(row => {
-        let tr = `<tr><td style="text-align: left;">${row.idWorkTypes} - ${row.workTypeName}`;
+        let backgroundColor = row.workTypeName.includes("Redovan rad") ? "" : "background-color: #ff00000d;";
+
+        let tr = `<tr style="${backgroundColor}"><td style="text-align: left;">${row.idWorkTypes} - ${row.workTypeName}`;
         if (row.copNum !== null && row.copNum !== undefined && row.copNum !== '') {
             tr += ` - ${row.copNum}</td>`;
         }
@@ -142,17 +148,18 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
 
             let value = row[dayKey];
 
-                    if (value !== null) {
-                        let numValue = parseFloat(value);
+                if (value !== null) {
+                    let numValue = parseFloat(value);
+                    totalSum += numValue;
 
-                        // Provjeri je li decimalni broj i je li u formatu X.5
-                        if (!Number.isInteger(numValue) && numValue % 1 !== 0.5) {
-                            numValue = Math.round(numValue); // Zaokruži na cijeli broj
-                        }
-                        value = numValue; // Postavi novu vrijednost
-                    } else {
-                        value = "";
+                    // Provjeri je li decimalni broj i je li u formatu X.5
+                    if (!Number.isInteger(numValue) && numValue % 1 !== 0.5) {
+                        numValue = Math.round(numValue); // Zaokruži na cijeli broj
                     }
+                    value = numValue; // Postavi novu vrijednost
+                } else {
+                    value = "";
+                }
 
             tr += `<td class="${dayClass}">${value}</td>`;
         }
@@ -160,6 +167,12 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
         tr += `<td>${row.total}</td></tr>`;
         tableBody.innerHTML += tr;
     });
+    totalSumParagraph.innerText = totalSum;
+    if (totalSum > prescribedHours) {
+        totalSumParagraph.style.color = "black";
+    } else {
+        totalSumParagraph.style.color = "red";
+    }
 }
 
 // Funkcija za dohvacanje broja dana u mjesecu
