@@ -182,7 +182,7 @@ public class WorkingTimeService {
         System.out.println("total days: " + totalDays);
         System.out.println("leave record setup: " +  leaveRecord.toString());
 
-
+        // pogledaj da li leave record postoji
         leaveRecordRepository.insert(leaveRecord);
     }
 
