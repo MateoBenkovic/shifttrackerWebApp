@@ -2,6 +2,7 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
     const tableHead = document.querySelector("#workHoursTable thead");
     const tableBody = document.querySelector("#workHoursTable tbody");
     const totalSumParagraph = document.getElementById("totalSum");
+    const prescribedHours = document.getElementById('prescribed-hours').textContent;
     console.log(workingTimes);
     console.log(workHours);
 
@@ -167,6 +168,11 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
         tableBody.innerHTML += tr;
     });
     totalSumParagraph.innerText = totalSum;
+    if (totalSum > prescribedHours) {
+        totalSumParagraph.style.color = "black";
+    } else {
+        totalSumParagraph.style.color = "red";
+    }
 }
 
 // Funkcija za dohvacanje broja dana u mjesecu
