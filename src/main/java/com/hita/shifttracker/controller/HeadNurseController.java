@@ -2,6 +2,7 @@ package com.hita.shifttracker.controller;
 
 import com.hita.shifttracker.dto.AppUserDTO;
 import com.hita.shifttracker.dto.WorkingTimeDTO;
+import com.hita.shifttracker.dto.WorkingTimeReportDTO;
 import com.hita.shifttracker.model.*;
 import com.hita.shifttracker.repository.WorkHourReportRepository;
 import com.hita.shifttracker.service.*;
@@ -233,9 +234,18 @@ public class HeadNurseController {
         int month = Integer.parseInt(parts[1]);
 
         if ("orgUnit".equals(searchType)) {
-            System.out.println("IspostavaId: " + orgUnitId);
+//            if (orgUnitId.equals("9")){
+//                WorkingTimeReportDTO allOrgUnitReport = workHourReportService.getAllOrgUnitReport(month, year);
+//                model.addAttribute("allOrgUnitReport", allOrgUnitReport);
+//            } else {
+            List<WorkingTimeReportDTO> reports = workHourReportService.getOrgUnitEmployeeReport(orgUnitId, month, year);
+            WorkingTimeReportDTO orgUnitReport = workHourReportService.getOrgUnitReport(orgUnitId, month, year);
+            model.addAttribute("reports", reports);
+            model.addAttribute("orgUnitReport", orgUnitReport);
+//            }
         } else if ("employee".equals(searchType)) {
-            System.out.println(workHourReportService.getEmployeeReport(employeeIds, month, year));
+            List<WorkingTimeReportDTO> reports = workHourReportService.getEmployeeReport(employeeIds, month, year);
+            model.addAttribute("reports", reports);
         }
 
         return "head_nurse_workhour_report.html";
