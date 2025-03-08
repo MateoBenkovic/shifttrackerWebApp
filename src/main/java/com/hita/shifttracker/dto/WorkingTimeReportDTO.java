@@ -45,4 +45,14 @@ public class WorkingTimeReportDTO {
         this.ukupno = ukupno;
         this.odsustva = odsustva;
     }
+
+    public WorkingTimeReportDTO(int month, int year, BigDecimal redovanRad, BigDecimal prekovremeniRad, BigDecimal odsustva, BigDecimal ukupno) {
+        this.orgUnitName = "Hitna KZŽ";
+        this.month = month;
+        this.year = year;
+        this.redovanRad = redovanRad;
+        this.prekovremeniRad = prekovremeniRad;
+        this.odsustva = odsustva;
+        this.ukupno = ukupno;
+    }
 }

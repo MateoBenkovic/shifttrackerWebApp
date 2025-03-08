@@ -119,6 +119,7 @@
                             <option value="6">Klanjec</option>
                             <option value="7">Konjšćina</option>
                             <option value="8">Marija Bistrica</option>
+                            <option value="9">HITNA KZŽ</option>
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -166,6 +167,54 @@
 </div>
 
 <div class="container mt-4">
+
+    <div th:each="allOrgUnitReport : ${allOrgUnitReport}" class="card mb-4">
+        <!-- Kartica za zaposlenika -->
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0" th:text="${allOrgUnitReport.orgUnitName}"></h5>
+        </div>
+        <div class="card-body">
+            <p><strong>Period:</strong> <span th:text="${allOrgUnitReport.month + '/' + allOrgUnitReport.year}"></span></p>
+
+            <!-- Tablica sa satima -->
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Vrsta rada</th>
+                        <th class="text-end">Ukupno sati</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Redovan rad</td>
+                        <td class="text-end"
+                            th:text="${allOrgUnitReport.redovanRad % 1 == 0 ? #numbers.formatInteger(allOrgUnitReport.redovanRad, 0) : #numbers.formatDecimal(allOrgUnitReport.redovanRad, 1, 1, 'POINT')}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Prekovremeni rad</td>
+                        <td class="text-end"
+                            th:text="${allOrgUnitReport.prekovremeniRad != null ? (allOrgUnitReport.prekovremeniRad % 1 == 0 ? #numbers.formatInteger(allOrgUnitReport.prekovremeniRad, 0) : #numbers.formatDecimal(report.prekovremeniRad, 1, 1, 'POINT')) : 0}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Odsustva</td>
+                        <td class="text-end"
+                            th:text="${allOrgUnitReport.odsustva != null ? (allOrgUnitReport.odsustva % 1 == 0 ? #numbers.formatInteger(allOrgUnitReport.odsustva, 0) : #numbers.formatDecimal(report.odsustva, 1, 1, 'POINT')) : 0}">
+                        </td>
+                    </tr>
+                    <tr class="table-secondary">
+                        <td><strong>UKUPNO SATI</strong></td>
+                        <td class="text-end">
+                            <strong th:text="${allOrgUnitReport.ukupno % 1 == 0 ? #numbers.formatInteger(allOrgUnitReport.ukupno, 0) : #numbers.formatDecimal(allOrgUnitReport.ukupno, 1, 1, 'POINT')}"></strong>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
     <div th:each="orgUnitReport : ${orgUnitReport}" class="card mb-4">
         <!-- Kartica za zaposlenika -->

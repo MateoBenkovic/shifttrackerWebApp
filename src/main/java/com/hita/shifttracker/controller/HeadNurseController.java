@@ -234,11 +234,15 @@ public class HeadNurseController {
         int month = Integer.parseInt(parts[1]);
 
         if ("orgUnit".equals(searchType)) {
-            System.out.println("IspostavaId: " + orgUnitId);
-            List<WorkingTimeReportDTO> reports = workHourReportService.getOrgUnitEmployeeReport(orgUnitId, month, year);
-            WorkingTimeReportDTO orgUnitReport = workHourReportService.getOrgUnitReport(orgUnitId, month, year);
-            model.addAttribute("reports", reports);
-            model.addAttribute("orgUnitReport", orgUnitReport);
+//            if (orgUnitId.equals("9")){
+//                WorkingTimeReportDTO allOrgUnitReport = workHourReportService.getAllOrgUnitReport(month, year);
+//                model.addAttribute("allOrgUnitReport", allOrgUnitReport);
+//            } else {
+                List<WorkingTimeReportDTO> reports = workHourReportService.getOrgUnitEmployeeReport(orgUnitId, month, year);
+                WorkingTimeReportDTO orgUnitReport = workHourReportService.getOrgUnitReport(orgUnitId, month, year);
+                model.addAttribute("reports", reports);
+                model.addAttribute("orgUnitReport", orgUnitReport);
+//            }
         } else if ("employee".equals(searchType)) {
             List<WorkingTimeReportDTO> reports = workHourReportService.getEmployeeReport(employeeIds, month, year);
             model.addAttribute("reports", reports);

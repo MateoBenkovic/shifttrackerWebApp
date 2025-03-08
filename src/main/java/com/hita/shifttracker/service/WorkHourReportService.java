@@ -27,4 +27,7 @@ public class WorkHourReportService {
         return workHourReportRepository.getOrgUnitWorkSummary(orgUnitId, month, year);
     }
 
+//    public WorkingTimeReportDTO getAllOrgUnitReport(int month, int year) {
+//        return workHourReportRepository.getAllOrgUnitWorkSummary(month, year);
+//    }
 }

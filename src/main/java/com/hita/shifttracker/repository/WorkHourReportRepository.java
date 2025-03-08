@@ -113,4 +113,44 @@ public class WorkHourReportRepository {
 
         return results.get(0);
     }
+
+//    public WorkingTimeReportDTO getAllOrgUnitWorkSummary(int month, int year) {
+//        String sql = "SELECT \"mjesec\", \"godina\", " +
+//                "COALESCE(SUM(\"Redovni\"), 0) AS total_redovan, " +
+//                "COALESCE(SUM(\"Prekovremeni\"), 0) AS total_prekovremeni, " +
+//                "COALESCE(SUM(\"Odsustva\"), 0) AS total_odsustva, " +
+//                "COALESCE(SUM(\"Ukupno\"), 0) AS total_ukupno " +
+//                "FROM \"test_view\" " +
+//                "WHERE \"mjesec\" = ? AND \"godina\" = ? " +
+//                "GROUP BY \"mjesec\", \"godina\"";
+//
+//        System.out.println("SQL UPIT: " + sql);
+//        System.out.println("PARAMETRI: mjesec=" + month + ", godina=" + year);
+//
+//        List<WorkingTimeReportDTO> results = jdbcTemplate.query(sql, new Object[]{month, year},
+//                (rs, rowNum) -> new WorkingTimeReportDTO(
+//                        month,
+//                        year,
+//                        rs.getBigDecimal("total_redovan"),
+//                        rs.getBigDecimal("total_prekovremeni"),
+//                        rs.getBigDecimal("total_odsustva"),
+//                        rs.getBigDecimal("total_ukupno")
+//                )
+//        );
+//
+//        // Ako nema rezultata, vraćamo objekt sa 0 satima
+//        if (results.isEmpty()) {
+//            System.out.println("Nema podataka za ovaj mjesec. Vraćamo default.");
+//            return new WorkingTimeReportDTO(
+//                    month, year,
+//                    BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO
+//            );
+//        }
+//
+//        return results.get(0);
+//    }
+
+
+
+
 }
