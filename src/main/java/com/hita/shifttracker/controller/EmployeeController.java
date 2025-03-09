@@ -187,6 +187,7 @@ public class EmployeeController {
         workingOvertime.setDateTo(overtimeDateTo);
         workingOvertime.setHoursTo(overtimeHoursTo);
         workingOvertime.setAppUserId(appUser.getId());
+        workingOvertime.setUidInsUpd(appUser.getId());
 
         workingTimeService.addOvertimeWorkHour(workingOvertime);
 
