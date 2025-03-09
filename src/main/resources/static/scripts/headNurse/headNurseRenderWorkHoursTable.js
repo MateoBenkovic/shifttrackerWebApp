@@ -3,8 +3,6 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
     const tableBody = document.querySelector("#workHoursTable tbody");
     const totalSumParagraph = document.getElementById("totalSum");
     const prescribedHours = document.getElementById('prescribed-hours').textContent;
-    console.log(workingTimes);
-    console.log(workHours);
 
     tableHead.innerHTML = "";
     tableBody.innerHTML = "";
@@ -25,7 +23,6 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
         let firstShiftDataAttr = "";
         if (workEntry.length > 0) {
             firstShiftDataAttr = `data-shift='${JSON.stringify([workEntry[0]])}'`;
-            console.log("Prva: " + JSON.stringify([workEntry[0]]));
         }
 
         headerHTML += `<th data-day ${firstShiftDataAttr} onclick="openForm(${i}, this, ${year}, ${month})" class="calendar-day">${i}</th>`;
@@ -129,7 +126,7 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
     workHours.forEach(row => {
         let backgroundColor = row.workTypeName.includes("Redovan rad") ? "" : "background-color: #ff00000d;";
 
-        let tr = `<tr style="${backgroundColor}"><td style="text-align: left;">${row.idWorkTypes} - ${row.workTypeName}`;
+        let tr = `<tr><td style="${backgroundColor}; text-align: left;">${row.idWorkTypes} - ${row.workTypeName}`;
         if (row.copNum !== null && row.copNum !== undefined && row.copNum !== '') {
             tr += ` - ${row.copNum}</td>`;
         }
@@ -161,10 +158,10 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
                     value = "";
                 }
 
-            tr += `<td class="${dayClass}">${value}</td>`;
+            tr += `<td class="${dayClass}" style="${backgroundColor}">${value}</td>`;
         }
 
-        tr += `<td>${row.total}</td></tr>`;
+        tr += `<td style="${backgroundColor}">${row.total}</td></tr>`;
         tableBody.innerHTML += tr;
     });
     totalSumParagraph.innerText = totalSum;

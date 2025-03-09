@@ -1,5 +1,6 @@
 package com.hita.shifttracker.service;
 
+import com.hita.shifttracker.dto.OrgUnitWorkingTimeReportDTO;
 import com.hita.shifttracker.dto.WorkingTimeReportDTO;
 import com.hita.shifttracker.repository.WorkHourReportRepository;
 import org.springframework.stereotype.Service;
@@ -23,11 +24,11 @@ public class WorkHourReportService {
         return workHourReportRepository.getOrgUnitEmployeeReport(orgUnitId, month, year);
     }
 
-    public WorkingTimeReportDTO getOrgUnitReport(int orgUnitId, int month, int year) {
+    public List<OrgUnitWorkingTimeReportDTO> getOrgUnitReport(int orgUnitId, int month, int year) {
         return workHourReportRepository.getOrgUnitWorkSummary(orgUnitId, month, year);
     }
 
-//    public WorkingTimeReportDTO getAllOrgUnitReport(int month, int year) {
-//        return workHourReportRepository.getAllOrgUnitWorkSummary(month, year);
-//    }
+    public List<OrgUnitWorkingTimeReportDTO> getAllOrgUnitReport(int month, int year) {
+        return workHourReportRepository.getAllOrgUnitWorkSummary(month, year);
+    }
 }

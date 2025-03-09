@@ -103,7 +103,6 @@
         <div class="navbar-nav">
             <img src="/logo.png" style="height: 50px; width:100px" class="me-5" alt="Logo">
             <a class="nav-link active me-4" href="/head_nurse/employee/list">Zaposlenici</a>
-            <a class="nav-link me-4" href="#">Raspored</a>
             <a class="nav-link me-4" href="/head_nurse/workhour/report">Izvještaj</a>
         </div>
         <div class="navbar-nav ms-auto d-flex align-items-center">
@@ -117,7 +116,11 @@
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li class="px-3 py-1 text-muted" th:text="${appUser.roleName}">Admin</li>
                     <li class="px-3 pb-2 text-muted small" th:text="${appUser.email}">admin@example.com</li>
-                    <li><button class="dropdown-item" onclick="location.href = '/logout'"><i class="bi bi-box-arrow-right"></i> Odjava</button></li>
+                    <li>
+                        <button class="dropdown-item" onclick="location.href = '/logout'"><i
+                                class="bi bi-box-arrow-right"></i> Odjava
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -131,10 +134,12 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div class="search-container">
                 <i class="bi bi-search"></i>
-                <input type="search" id="searchInput" class="form-control search-input" placeholder="Pretraži zaposlenike...">
+                <input type="search" id="searchInput" class="form-control search-input"
+                       placeholder="Pretraži zaposlenike...">
             </div>
             <div>
-                <button class="btn btn-warning" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterDrawer" aria-controls="filterDrawer">
+                <button class="btn btn-warning" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterDrawer"
+                        aria-controls="filterDrawer">
                     <i class="bi bi-funnel"></i> Filtriraj
                 </button>
                 <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
@@ -167,7 +172,8 @@
                 <tbody>
                 <tr th:each="employee : ${employees}">
                     <td>
-                        <a th:text="${employee.firstName} + ' ' + ${employee.lastName}" th:href="@{/head_nurse/workhour/list(id=${employee.id})}" class="employeeName"></a>
+                        <a th:text="${employee.firstName} + ' ' + ${employee.lastName}"
+                           th:href="@{/head_nurse/workhour/list(id=${employee.id})}" class="employeeName"></a>
                     </td>
                     <td th:text="${employee.orgUnitName}"></td>
                     <td th:text="${employee.teamName}">Tim 1</td>
@@ -185,16 +191,15 @@
 <div class="modal fade" id="addEmployeeModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <div>
-                    <h5 class="modal-title">Dodaj novog zaposlenika</h5>
-                    <p class="text-muted mb-0">Ispunite podatke o novom zaposleniku</p>
+            <form action="/head_nurse/add/employee">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title">Dodaj novog zaposlenika</h5>
+                        <p class="text-muted mb-0">Ispunite podatke o novom zaposleniku</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body">
-                <form action="/head_nurse/add/employee">
+                <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Ime</label>
                         <input type="text" class="form-control" name="firstName">
@@ -247,12 +252,12 @@
                             <option value="2">Tim 2</option>
                         </select>
                     </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Odustani</button>
-                <button type="submit" class="btn btn-dark">Spremi</button>
-                </form>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Odustani</button>
+                    <button type="submit" class="btn btn-dark">Spremi</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -268,7 +273,8 @@
 
             <!-- Ispostava -->
             <div class="filter-section">
-                <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#ispostavaCollapse" aria-expanded="false">
+                <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#ispostavaCollapse"
+                     aria-expanded="false">
                     Ispostava
                 </div>
                 <div id="ispostavaCollapse" class="collapse">
@@ -277,7 +283,8 @@
                         <label class="form-check-label" for="krapina">Krapina</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="ispostava" id="donjaStubica" value="Donja Stubica">
+                        <input class="form-check-input" type="radio" name="ispostava" id="donjaStubica"
+                               value="Donja Stubica">
                         <label class="form-check-label" for="donjaStubica">Donja Stubica</label>
                     </div>
                     <div class="form-check">
@@ -297,7 +304,8 @@
                         <label class="form-check-label" for="konjscina">Konjščina</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="ispostava" id="marijaBistrica" value="Marija Bistrica">
+                        <input class="form-check-input" type="radio" name="ispostava" id="marijaBistrica"
+                               value="Marija Bistrica">
                         <label class="form-check-label" for="marijaBistrica">Marija Bistrica</label>
                     </div>
                     <div class="form-check">
@@ -309,7 +317,8 @@
 
             <!-- Uloga -->
             <div class="filter-section">
-                <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#ulogaCollapse" aria-expanded="false">
+                <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#ulogaCollapse"
+                     aria-expanded="false">
                     Uloga
                 </div>
                 <div id="ulogaCollapse" class="collapse">

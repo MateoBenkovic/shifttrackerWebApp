@@ -1,5 +1,6 @@
 package com.hita.shifttracker.repository;
 
+import com.hita.shifttracker.dto.OrgUnitWorkingTimeReportDTO;
 import com.hita.shifttracker.dto.WorkingTimeReportDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -78,75 +79,56 @@ public class WorkHourReportRepository {
         );
     }
 
-    public WorkingTimeReportDTO getOrgUnitWorkSummary(int orgUnitId, int month, int year) {
-        String sql = "SELECT \"org_unit_id\", \"org_unit_name\", \"mjesec\", \"godina\", " +
-                "SUM(\"Redovni\") AS total_redovan, " +
-                "SUM(\"Prekovremeni\") AS total_prekovremeni, " +
-                "SUM(\"Odsustva\") AS total_odsustva, " +
-                "SUM(\"Ukupno\") AS total_ukupno " +
-                "FROM \"test_view\" " +
-                "WHERE \"org_unit_id\" = ? AND \"mjesec\" = ? AND \"godina\" = ? " +
-                "GROUP BY \"org_unit_id\", \"org_unit_name\", \"mjesec\", \"godina\"";
+    public List<OrgUnitWorkingTimeReportDTO> getOrgUnitWorkSummary(int orgUnitId, int month, int year) {
+        String sql = "SELECT w.godina, w.mjesec, o.name AS org_unit_name, w.naziv_vr_rada AS vrsta_rada, " +
+                "COALESCE(SUM(w.\"Ukupno\"), 0) AS ukupni_sati, " +
+                "(SELECT COALESCE(SUM(w2.\"Ukupno\"), 0) " +
+                " FROM vw_working_time_user_all_wt_cal w2 " +
+                " JOIN app_user u2 ON w2.us_code = u2.user_code " +
+                " JOIN org_unit o2 ON u2.org_unit_id = o2.id " +
+                " WHERE w2.godina = ? AND w2.mjesec = ? AND o2.id = ?) AS ukupno_sati_sve_vrste " +
+                "FROM vw_working_time_user_all_wt_cal w " +
+                "JOIN app_user u ON w.us_code = u.user_code " +
+                "JOIN org_unit o ON u.org_unit_id = o.id " +
+                "WHERE w.godina = ? AND w.mjesec = ? AND o.id = ? " +
+                "GROUP BY w.godina, w.mjesec, o.name, w.naziv_vr_rada " +
+                "ORDER BY w.naziv_vr_rada";
 
-        List<WorkingTimeReportDTO> results = jdbcTemplate.query(sql, new Object[]{orgUnitId, month, year},
-                (rs, rowNum) -> new WorkingTimeReportDTO(
-                        rs.getInt("org_unit_id"),
-                        rs.getString("org_unit_name"),
+        return jdbcTemplate.query(sql, new Object[]{year, month, orgUnitId, year, month, orgUnitId},
+                (rs, rowNum) -> new OrgUnitWorkingTimeReportDTO(
+                        orgUnitId,
+                        rs.getString("org_unit_name"),  // Ispravan naziv stupca
                         rs.getInt("mjesec"),
                         rs.getInt("godina"),
-                        rs.getBigDecimal("total_redovan"),
-                        rs.getBigDecimal("total_prekovremeni"),
-                        rs.getBigDecimal("total_odsustva"),
-                        rs.getBigDecimal("total_ukupno")
+                        rs.getString("vrsta_rada"),
+                        rs.getBigDecimal("ukupni_sati"),
+                        rs.getBigDecimal("ukupno_sati_sve_vrste")
                 )
         );
 
-        if (results.isEmpty()) {
-            String orgUnitNameQuery = "SELECT \"name\" FROM \"org_unit\" WHERE \"id\" = ?";
-            String orgUnitName = jdbcTemplate.queryForObject(orgUnitNameQuery, new Object[]{orgUnitId}, String.class);
+    }
 
-            return new WorkingTimeReportDTO(
-                    orgUnitId, orgUnitName, month, year,
-                    BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO
-            );
-        }
+    public List<OrgUnitWorkingTimeReportDTO> getAllOrgUnitWorkSummary(int month, int year) {
+        String sql = "SELECT w.mjesec, w.godina, w.naziv_vr_rada AS vrsta_rada, " +
+                "COALESCE(SUM(w.\"Ukupno\"), 0) AS ukupni_sati, " +
+                "(SELECT COALESCE(SUM(w2.\"Ukupno\"), 0) " +
+                " FROM vw_working_time_user_all_wt_cal w2 " +
+                " WHERE w2.godina = ? AND w2.mjesec = ?) AS ukupno_sati_sve_vrste " +
+                "FROM vw_working_time_user_all_wt_cal w " +
+                "WHERE w.godina = ? AND w.mjesec = ? " +
+                "GROUP BY w.mjesec, w.godina, w.naziv_vr_rada " +
+                "ORDER BY w.naziv_vr_rada";
 
-        return results.get(0);
+        return jdbcTemplate.query(sql, new Object[]{year, month, year, month},
+                (rs, rowNum) -> new OrgUnitWorkingTimeReportDTO(
+                        month,
+                        year,
+                        rs.getString("vrsta_rada"),
+                        rs.getBigDecimal("ukupni_sati"),
+                        rs.getBigDecimal("ukupno_sati_sve_vrste")
+                )
+        );
     }
 }
 
-//    public WorkingTimeReportDTO getAllOrgUnitWorkSummary(int month, int year) {
-//        String sql = "SELECT \"mjesec\", \"godina\", " +
-//                "COALESCE(SUM(\"Redovni\"), 0) AS total_redovan, " +
-//                "COALESCE(SUM(\"Prekovremeni\"), 0) AS total_prekovremeni, " +
-//                "COALESCE(SUM(\"Odsustva\"), 0) AS total_odsustva, " +
-//                "COALESCE(SUM(\"Ukupno\"), 0) AS total_ukupno " +
-//                "FROM \"test_view\" " +
-//                "WHERE \"mjesec\" = ? AND \"godina\" = ? " +
-//                "GROUP BY \"mjesec\", \"godina\"";
-//
-//        System.out.println("SQL UPIT: " + sql);
-//        System.out.println("PARAMETRI: mjesec=" + month + ", godina=" + year);
-//
-//        List<WorkingTimeReportDTO> results = jdbcTemplate.query(sql, new Object[]{month, year},
-//                (rs, rowNum) -> new WorkingTimeReportDTO(
-//                        month,
-//                        year,
-//                        rs.getBigDecimal("total_redovan"),
-//                        rs.getBigDecimal("total_prekovremeni"),
-//                        rs.getBigDecimal("total_odsustva"),
-//                        rs.getBigDecimal("total_ukupno")
-//                )
-//        );
-//
-//        // Ako nema rezultata, vraćamo objekt sa 0 satima
-//        if (results.isEmpty()) {
-//            System.out.println("Nema podataka za ovaj mjesec. Vraćamo default.");
-//            return new WorkingTimeReportDTO(
-//                    month, year,
-//                    BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO
-//            );
-//        }
-//
-//        return results.get(0);
-//    }
+
