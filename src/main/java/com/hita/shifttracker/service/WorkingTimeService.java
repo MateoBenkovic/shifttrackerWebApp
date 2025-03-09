@@ -168,6 +168,15 @@ public class WorkingTimeService {
 
     public void addLeaveRecord(LeaveRecord leaveRecord) {
         // unesti total days, hours per day, total hours, status
+        boolean isExists = leaveRecordRepository.existsByAppUserIdAndDateFrom(leaveRecord.getAppUserId(), leaveRecord.getDateFrom());
+        boolean overlapRecord = leaveRecordRepository.overlapRecord(leaveRecord.getAppUserId(), leaveRecord.getWorkTypeOtherId(),
+                leaveRecord.getDateFrom(), leaveRecord.getDateTo());
+        System.out.println("Leave record id: " + leaveRecord.getIdLeave());
+        System.out.println("Leave record type: " + leaveRecord.getWorkTypeOtherId());
+        System.out.println("Leave record exists: " + isExists);
+        System.out.println("Leave record overlap: " + overlapRecord);
+
+        // worktype other id, and date from in between date from and date to, and date to in between date from and date to
 
         int totalDays = TimeConverterHelper.calculateTotalDays(leaveRecord.getDateFrom(), leaveRecord.getDateTo());
         int totalHours = totalDays * leaveRecord.getHoursPerDay();
@@ -182,8 +191,9 @@ public class WorkingTimeService {
         System.out.println("total days: " + totalDays);
         System.out.println("leave record setup: " +  leaveRecord.toString());
 
-        // pogledaj da li leave record postoji
-        leaveRecordRepository.insert(leaveRecord);
+        if(!isExists && !overlapRecord) {
+            leaveRecordRepository.insert(leaveRecord);
+        }
     }
 
 
