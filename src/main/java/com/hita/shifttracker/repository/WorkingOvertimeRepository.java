@@ -38,11 +38,11 @@ public class WorkingOvertimeRepository {
     // insert into overtime
     public void insert(WorkingOvertime workingOvertime) {
         String sql = "INSERT INTO working_overtime (id_work_time, app_user_id, date_from, hours_from, date_to," +
-                "hours_to, total_hours) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                "hours_to, total_hours, uid_ins_upd) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql, workingOvertime.getIdWorkTime(), workingOvertime.getAppUserId(),
                 workingOvertime.getDateFrom(), workingOvertime.getHoursFrom(), workingOvertime.getDateTo(),
-                workingOvertime.getHoursTo(), workingOvertime.getTotalHours());
+                workingOvertime.getHoursTo(), workingOvertime.getTotalHours(), workingOvertime.getUidInsUpd());
     }
 
     public boolean existsByAppUserIdAndDateFromAndIdWorkTime(int appUserId, LocalDate dateFrom, int idWorkTime) {
@@ -69,8 +69,8 @@ public class WorkingOvertimeRepository {
     }
 
     // set status to s
-    public void setStatusToS(int idOvertime, int idWorkTime) {
-        String sql = "UPDATE working_overtime SET status = 'S' WHERE id_overtime = ? AND id_work_time = ?";
-        jdbcTemplate.update(sql, idOvertime, idWorkTime);
+    public void setStatusToS(int idOvertime, int idWorkTime, int appUserId) {
+        String sql = "UPDATE working_overtime SET status = 'S', uid_ins_upd = ? WHERE id_overtime = ? AND id_work_time = ?";
+        jdbcTemplate.update(sql, appUserId,idOvertime, idWorkTime);
     }
 }
