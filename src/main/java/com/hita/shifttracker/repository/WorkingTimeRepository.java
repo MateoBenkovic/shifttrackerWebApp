@@ -22,6 +22,8 @@ public class WorkingTimeRepository {
         String sql = "INSERT INTO working_time (app_user_id, date_from, hours_from, date_to, hours_to," +
                 "total_hours, shift_id, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
+        System.out.println("insert repository:");
+
         jdbcTemplate.update(sql, workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getHoursFrom(),
                 workingTime.getDateTo(), workingTime.getHoursTo(), workingTime.getTotalHours(), workingTime.getShiftId(),
                 workingTime.getStatus());
@@ -134,16 +136,13 @@ public class WorkingTimeRepository {
     }
 
     // update working time
-    public void updateWorkingTimeByAppUserId(WorkingTime workingTime) {
+    public void updateWorkingTimeByIdWorkTime(WorkingTime workingTime) {
         String sql = "UPDATE working_time " +
                 "SET date_from = ?, hours_from = ?, date_to = ?, hours_to = ?, status = ? " +
-                "WHERE app_user_id = ? AND date_from = ? AND id_work_time = ?" ;
+                "WHERE id_work_time = ?"; ;
 
-        //System.out.println("preforming update: ");
-        //System.out.println(workingTime.toString());
         jdbcTemplate.update(sql, workingTime.getDateFrom(), workingTime.getHoursFrom(), workingTime.getDateTo(),
-                workingTime.getHoursTo(), workingTime.getStatus(), workingTime.getAppUserId(),
-                workingTime.getDateFrom(), workingTime.getIdWorkTime());
+                workingTime.getHoursTo(), workingTime.getStatus(), workingTime.getIdWorkTime());
     }
 
     // delete all
@@ -176,5 +175,34 @@ public class WorkingTimeRepository {
                 "WHERE app_user_id = ? AND id_work_time = ?";
 
         jdbcTemplate.update(sql, status, appUserId, workingTimeId);
+    }
+
+    public boolean existsByIdWorkTime(int idWorkTime) {
+        String sql = "SELECT COUNT(*) FROM working_time WHERE id_work_time = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{idWorkTime}, Integer.class) > 0;
+    }
+
+    public WorkingTime findByIdWorkTime(int idWorkTime) {
+        String sql = "SELECT * FROM working_time WHERE id_work_time = ?";
+
+        return jdbcTemplate.queryForObject(sql, new Object[]{idWorkTime},
+                (rs, rowNum) -> {
+                    WorkingTime workingTime = new WorkingTime();
+                    workingTime.setIdWorkTime(rs.getInt("id_work_time"));
+                    workingTime.setAppUserId(rs.getInt("app_user_id"));
+                    workingTime.setDateFrom(rs.getDate("date_from").toLocalDate());
+                    workingTime.setHoursFrom(rs.getInt("hours_from"));
+                    workingTime.setDateTo(rs.getDate("date_to").toLocalDate());
+                    workingTime.setHoursTo(rs.getInt("hours_to"));
+                    workingTime.setTotalHours(rs.getInt("total_hours"));
+                    workingTime.setShiftId(rs.getInt("shift_id"));
+                    workingTime.setStatus(rs.getString("status"));
+                    return workingTime;
+                });
+    }
+
+    public void setWorkingTimeStatusToSByIdWorkTime(int idWorkTime) {
+        String sql = "UPDATE working_time SET status = 'S' WHERE id_work_time = ?";
+        jdbcTemplate.update(sql, idWorkTime);
     }
 }

@@ -336,6 +336,7 @@
                     <div class="tab-pane fade" id="overtime" role="tabpanel">
                         <h4 class="mb-4 text-center">Unos prekovremenog rada</h4>
                             <form id="overtimeForm" action="/employee/workhour/overtime">
+                                <input type="hidden" name="workingOvertimeId" id="workingOvertimeId">
                             <div class="mb-3">
                                 <label for="overtimeStart" class="form-label">Početak prekovremenog rada</label>
                                 <input type="datetime-local" class="form-control" id="overtimeStart" name="overtimeStart" required step="3600">
@@ -361,28 +362,30 @@
 <div id="absenceFormContainer" class="form-section col-md-6 col-lg-5 bg-light p-4 rounded shadow">
     <span id="closeForm" class="close-btn">&times;</span>
     <h4 class="mb-4 text-center">Unos odsutnosti</h4>
-    <form id="absenceForm">
+    <form id="absenceForm" th:action="@{/employee/workhour/leaveRecord}" th:object="${leaveRecord}" th:method="POST">
         <div class="mb-3">
             <label for="absenceType" class="form-label">Vrsta odsutnosti</label>
-            <select class="form-select" id="absenceType" required>
-                <option value="">Odaberite vrstu odsutnosti</option>
-                <option value="Godišnji odmor">Godišnji odmor</option>
-                <option value="Bolovanje">Bolovanje</option>
-                <option value="Edukacija">Edukacija</option>
-                <option value="Ostale odsutnosti">Ostale odsutnosti</option>
+            <select class="form-select" id="absenceType" th:field="*{workTypeOtherId}" required>
+                <option value="0">Odaberite vrstu odsutnosti</option>
+                <option th:each="wto : ${workTypesOtherList}" th:value="${wto.id}" th:text="${wto.workTypeName}">Godišnji odmor</option>
+
             </select>
         </div>
         <div class="mb-3">
             <label for="startDate" class="form-label">Od datuma</label>
-            <input type="date" class="form-control" id="startDate" required>
+            <input type="date" class="form-control" id="startDate" th:field="*{dateFrom}" required>
         </div>
         <div class="mb-3">
             <label for="endDate" class="form-label">Do datuma</label>
-            <input type="date" class="form-control" id="endDate" required>
+            <input type="date" class="form-control" id="endDate" th:field="*{dateTo}" required>
+        </div>
+        <div class="mb-3">
+            <label for="hoursPerDay" class="form-label">Stnica po danu</label>
+            <input type="number" class="form-control" id="hoursPerDay" th:field="*{hoursPerDay}" value="8" required min="0" max="24">
         </div>
         <div class="mb-3">
             <label for="absenceReason" class="form-label">Razlog</label>
-            <textarea class="form-control" id="absenceReason" rows="3"></textarea>
+            <textarea class="form-control" id="absenceReason" th:field="*{commentLeave}" rows="3"></textarea>
         </div>
         <button type="submit" class="btn btn-dark w-100">Spremi</button>
     </form>

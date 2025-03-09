@@ -45,11 +45,16 @@ public class EmployeeController {
 
         AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
         Company company = companyService.findWithData();
-        int month = dateService.getCurrentMonthFromDatabase();
-        int year = dateService.getCurrentYearFromDatabase();
+        //int month = dateService.getCurrentMonthFromDatabase();
+        //int year = dateService.getCurrentYearFromDatabase();
+        List<WorkTypesOther> workTypesOtherList = workingTimeService.findAllWorkTypesOther();
 
         model.addAttribute("appUser", appUser);
         model.addAttribute("company", company);
+        model.addAttribute("workTypesOtherList", workTypesOtherList);
+        // leave record
+        model.addAttribute("leaveRecord", new LeaveRecord());
+       // model.addAttribute("workTypesOther", new WorkTypesOther());
 
 
         return "employee_workhour_list";
@@ -113,26 +118,39 @@ public class EmployeeController {
         workingTime.setAppUserId(appUser.getId());
         workingTime.setSchedId(1);
 
-        workingTimeService.addWorkingTime(workingTime);
+        if (workingTimeId == null) {
+            workingTimeService.addWorkingTime(workingTime);
+        } else if (workingTimeId != null) {
+            // update working time
+            workingTime.setIdWorkTime(workingTimeId);
+            workingTimeService.updateWorkingTime(workingTime);
+        }
+
+
 
         return "redirect:/employee/workhour/list";
     }
-
-//    @GetMapping("/employee/workhour/add")
-//    public String getEmployeeWorkHourAdd(Model model, HttpSession session){
-//        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
-//        model.addAttribute("appUser", appUser);
-//
-//        return "employee_workhour_add";
-//    }
 
     @GetMapping("/employee/workhour/delete")
     public String employeeWorkHourDelete(@RequestParam("workingTimeToDelete") int workingTimeToDelete, HttpSession session){
 
         AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
 
-        workingTimeService.deleteWorkingTimeById(appUser.getId(), workingTimeToDelete);
+        workingTimeService.deleteWorkingTimeById(workingTimeToDelete);
 
+        return "redirect:/employee/workhour/list";
+    }
+
+    // leave records (odsutnosti)
+    @PostMapping("/employee/workhour/leaveRecord")
+    public String leaveRecordsProcess(@ModelAttribute LeaveRecord leaveRecord, HttpSession session) {
+
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+        System.out.println("leave record: " + leaveRecord.toString());
+        leaveRecord.setAppUserId(appUser.getId());
+        leaveRecord.setUidInsUpd(appUser.getId());
+
+        workingTimeService.addLeaveRecord(leaveRecord);
         return "redirect:/employee/workhour/list";
     }
 
@@ -140,6 +158,7 @@ public class EmployeeController {
     @GetMapping("/employee/workhour/overtime")
     public String employeeWorkHourOvertimeProcess(@RequestParam("overtimeStart") String overtimeStart,
                                                   @RequestParam("overtimeEnd") String overtimeEnd,
+                                                  @RequestParam(value = "workingOvertimeId",required = false) Integer workingOvertimeId,
                                                   Model model, HttpSession session) {
 
         AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
@@ -149,6 +168,7 @@ public class EmployeeController {
 
         System.out.println("overtime start: " + overtimeEndDT);
         System.out.println("overtime end: " + overtimeEndDT);
+        System.out.println("working overtime id: " + workingOvertimeId);
 
         LocalDate overtimeDateFrom = overtimeStartDT.toLocalDate();
         LocalDate overtimeDateTo = overtimeEndDT.toLocalDate();
