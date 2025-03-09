@@ -116,6 +116,7 @@ public class EmployeeController {
         workingTime.setDateTo(dateTo);
         workingTime.setHoursTo(hoursTo);
         workingTime.setAppUserId(appUser.getId());
+        workingTime.setUidInsUpd(appUser.getId());
         workingTime.setSchedId(1);
 
         if (workingTimeId == null) {
@@ -136,7 +137,7 @@ public class EmployeeController {
 
         AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
 
-        workingTimeService.deleteWorkingTimeById(workingTimeToDelete);
+        workingTimeService.deleteWorkingTimeById(workingTimeToDelete, appUser.getId());
 
         return "redirect:/employee/workhour/list";
     }
@@ -186,6 +187,7 @@ public class EmployeeController {
         workingOvertime.setDateTo(overtimeDateTo);
         workingOvertime.setHoursTo(overtimeHoursTo);
         workingOvertime.setAppUserId(appUser.getId());
+        workingOvertime.setUidInsUpd(appUser.getId());
 
         workingTimeService.addOvertimeWorkHour(workingOvertime);
 

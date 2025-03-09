@@ -34,7 +34,8 @@ public class WorkingOvertime {
     @Column("shift_id")
     private int shiftId;
 
-    // private int uidInsUpd;
+    @Column("uid_ins_upd")
+    private int uidInsUpd;
     // private Timestamp createdAt;
     // private Timestamp updatedAt;
 

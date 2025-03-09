@@ -138,11 +138,11 @@ public class WorkingTimeRepository {
     // update working time
     public void updateWorkingTimeByIdWorkTime(WorkingTime workingTime) {
         String sql = "UPDATE working_time " +
-                "SET date_from = ?, hours_from = ?, date_to = ?, hours_to = ?, status = ? " +
+                "SET date_from = ?, hours_from = ?, date_to = ?, hours_to = ?, status = ?, uid_ins_upd = ? " +
                 "WHERE id_work_time = ?"; ;
 
         jdbcTemplate.update(sql, workingTime.getDateFrom(), workingTime.getHoursFrom(), workingTime.getDateTo(),
-                workingTime.getHoursTo(), workingTime.getStatus(), workingTime.getIdWorkTime());
+                workingTime.getHoursTo(), workingTime.getStatus(), workingTime.getUidInsUpd(), workingTime.getIdWorkTime());
     }
 
     // delete all
