@@ -143,18 +143,12 @@ public class HeadNurseController {
         LocalDate dateTo = endDateTime.toLocalDate();
         int hoursTo = endDateTime.toLocalTime().getHour();
 
-        int shiftType = 2;
-        if(dateFrom.equals(dateTo)) {
-            shiftType = 1;
-        }
-
         WorkingTime workingTime = new WorkingTime();
         workingTime.setDateFrom(dateFrom);
         workingTime.setHoursFrom(hoursFrom);
         workingTime.setDateTo(dateTo);
         workingTime.setHoursTo(hoursTo);
         workingTime.setAppUserId(employee.getId());
-        workingTime.setShiftId(shiftType);
         workingTime.setSchedId(1);
 
         workingTimeService.addWorkingTime(workingTime);
