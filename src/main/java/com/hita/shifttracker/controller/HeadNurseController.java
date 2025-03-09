@@ -134,6 +134,7 @@ public class HeadNurseController {
         System.out.println(workingTimeId);
 
         AppUserDTO employee = appUserService.getEmployeeById(employeeId);
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
 
         LocalDateTime startDateTime = LocalDateTime.parse(startShift);
         LocalDateTime endDateTime = LocalDateTime.parse(endShift);
@@ -149,9 +150,16 @@ public class HeadNurseController {
         workingTime.setDateTo(dateTo);
         workingTime.setHoursTo(hoursTo);
         workingTime.setAppUserId(employee.getId());
+        workingTime.setUidInsUpd(appUser.getId());
         workingTime.setSchedId(1);
 
-        workingTimeService.addWorkingTime(workingTime);
+        if(workingTimeId == null) {
+            workingTimeService.addWorkingTime(workingTime);
+        } else if (workingTimeId != null) {
+            // update working time
+            workingTime.setIdWorkTime(workingTimeId);
+            workingTimeService.updateWorkingTime(workingTime);
+        }
 
         return "redirect:/head_nurse/workhour/list?id=" + employee.getId();
     }
