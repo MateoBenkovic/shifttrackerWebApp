@@ -381,7 +381,8 @@
         </div>
         <div class="mb-3">
             <label for="hoursPerDay" class="form-label">Stnica po danu</label>
-            <input type="number" class="form-control" id="hoursPerDay" th:field="*{hoursPerDay}" value="8" required min="0" max="24">
+<!--            th:field="*{hoursPerDay}"-->
+            <input type="number" class="form-control" id="hoursPerDay"  th:value="${8}" required min="0" max="24">
         </div>
         <div class="mb-3">
             <label for="absenceReason" class="form-label">Razlog</label>

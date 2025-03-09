@@ -149,6 +149,7 @@ public class EmployeeController {
         System.out.println("leave record: " + leaveRecord.toString());
         leaveRecord.setAppUserId(appUser.getId());
         leaveRecord.setUidInsUpd(appUser.getId());
+        leaveRecord.setHoursPerDay(8);
 
         workingTimeService.addLeaveRecord(leaveRecord);
         return "redirect:/employee/workhour/list";
