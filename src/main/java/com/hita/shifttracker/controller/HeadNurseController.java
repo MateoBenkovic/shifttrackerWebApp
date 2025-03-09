@@ -165,7 +165,7 @@ public class HeadNurseController {
     @GetMapping("/head_nurse/employee/workhour/delete")
     public String employeeWorkHourDelete(@RequestParam("workingTimeToDelete") int workingTimeToDelete, @RequestParam("employeeId") int employeeId, HttpSession session){
 
-        workingTimeService.deleteWorkingTimeById(employeeId, workingTimeToDelete);
+        //workingTimeService.deleteWorkingTimeById(employeeId, workingTimeToDelete);
 
         return "redirect:/head_nurse/workhour/list?id=" + employeeId;
     }

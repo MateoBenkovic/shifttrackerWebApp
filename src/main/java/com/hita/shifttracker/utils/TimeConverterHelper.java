@@ -1,6 +1,8 @@
 package com.hita.shifttracker.utils;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class TimeConverterHelper {
 
@@ -27,5 +29,10 @@ public class TimeConverterHelper {
 
     public static BigDecimal calculateTotalHours(BigDecimal hoursFrom, BigDecimal hoursTo) {
         return hoursTo.subtract(hoursFrom).abs();
+    }
+
+    public static int calculateTotalDays(LocalDate dateFrom, LocalDate dateTo) {
+        int days = (int) ChronoUnit.DAYS.between(dateFrom, dateTo);
+        return days;
     }
 }

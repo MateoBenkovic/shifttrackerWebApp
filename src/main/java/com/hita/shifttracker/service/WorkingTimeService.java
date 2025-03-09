@@ -2,10 +2,7 @@ package com.hita.shifttracker.service;
 
 import com.hita.shifttracker.dto.WorkingTimeDTO;
 import com.hita.shifttracker.model.*;
-import com.hita.shifttracker.repository.PeriodRepository;
-import com.hita.shifttracker.repository.WorkingOvertimeRepository;
-import com.hita.shifttracker.repository.WorkingTimeItemRepository;
-import com.hita.shifttracker.repository.WorkingTimeRepository;
+import com.hita.shifttracker.repository.*;
 import com.hita.shifttracker.utils.TimeConverterHelper;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.stereotype.Service;
@@ -24,13 +21,18 @@ public class WorkingTimeService {
     private final PeriodRepository periodRepository;
     private final WorkingTimeItemRepository workingTimeItemRepository;
     private final WorkingOvertimeRepository workingOvertimeRepository;
+    private final WorkTypesOtherRepository workTypesOtherRepository;
+    private final LeaveRecordRepository leaveRecordRepository;
 
     public WorkingTimeService(WorkingTimeRepository workingTimeRepository, PeriodRepository periodRepository,
-                              WorkingTimeItemRepository workingTimeItemRepository, WorkingOvertimeRepository workingOvertimeRepository) {
+                              WorkingTimeItemRepository workingTimeItemRepository, WorkingOvertimeRepository workingOvertimeRepository,
+                              WorkTypesOtherRepository workTypesOtherRepository, LeaveRecordRepository leaveRecordRepository) {
         this.workingTimeRepository = workingTimeRepository;
         this.periodRepository = periodRepository;
         this.workingTimeItemRepository = workingTimeItemRepository;
         this.workingOvertimeRepository = workingOvertimeRepository;
+        this.workTypesOtherRepository = workTypesOtherRepository;
+        this.leaveRecordRepository = leaveRecordRepository;
     }
 
     // add workhour
@@ -40,44 +42,37 @@ public class WorkingTimeService {
             shiftType = 1;
         }
         workingTime.setShiftId(shiftType);
-        System.out.println("working time: " + workingTime.toString());
 
-        WorkingTime wt = new WorkingTime();
-
-        if(workingTimeRepository.existsByAppUserIdAndDateFromAndShiftId(workingTime.getAppUserId(),
-                workingTime.getDateFrom(), workingTime.getShiftId())) {
-            workingTimeRepository.setStatusToO(workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getShiftId());
-            wt = workingTimeRepository.findByAppUserIdAndDateFromAndShiftId(workingTime.getAppUserId(), workingTime.getDateFrom(), workingTime.getShiftId());
-        }
-
-        if(wt.getIdWorkTime() != 0) {
-            workingTime.setIdWorkTime(wt.getIdWorkTime());
-            workingTime.setStatus("O");
-            workingTimeRepository.updateWorkingTimeByAppUserId(workingTime);
-        } else {
+        // check period status
+        if (periodRepository.isPeriodStatusO(workingTime.getDateFrom().getMonthValue(), workingTime.getDateFrom().getYear())) {
             workingTime.setStatus("O");
             workingTimeRepository.insertWorkingTimeByAppUserId(workingTime);
         }
     }
 
+    public void updateWorkingTime(WorkingTime workingTime) {
+        // get working time by id
+        if (workingTimeRepository.existsByIdWorkTime(workingTime.getIdWorkTime()) &&
+                periodRepository.isPeriodStatusO(workingTime.getDateFrom().getMonthValue(), workingTime.getDateFrom().getYear())) {
+            workingTime.setStatus("O");
+            workingTimeRepository.updateWorkingTimeByIdWorkTime(workingTime);
+        }
+    }
 
 
-    public void deleteWorkingTimeById(int appUserId, int workingTimeId) {
-        // find working time by id and app user id
-        WorkingTime wt = workingTimeRepository.findByAppUserIdAndWorkingTimeId(appUserId, workingTimeId);
-        System.out.println("wt: " + wt.toString());
-        //wt.setStatus("S");
-        System.out.println("wt: " + wt.toString());
-        if(wt.getIdWorkTime() != 0) {
-            // check status if status is o
-            if (wt.getStatus().equals("O")){
-                // check mjesec iz period == O i radnik period_radnik == O
-                // promjeni u S
-                // set status to S
-                wt.setStatus("S");
-                workingTimeRepository.setStatusByAppUserIdAndWorkingTimeId(appUserId, workingTimeId, wt.getStatus());
+
+    public void deleteWorkingTimeById(int idWorkTime) {
+        // exists by id
+        if (workingTimeRepository.existsByIdWorkTime(idWorkTime)) {
+            // find if hase overtime
+            List<WorkingOvertime> workingOvertimes = workingOvertimeRepository.findByIdWorkTime(idWorkTime);
+            if (workingOvertimes.size() > 0) {
+                for (WorkingOvertime wo : workingOvertimes) {
+                    workingOvertimeRepository.setStatusToS(wo.getIdOvertime(), wo.getIdWorkTime());
+                }
             }
 
+            workingTimeRepository.setWorkingTimeStatusToSByIdWorkTime(idWorkTime);
         }
     }
 
@@ -165,12 +160,45 @@ public class WorkingTimeService {
 
     }
 
-    // onemoguciti unos preklapanja
+    // work types
+// odustva
+    public List<WorkTypesOther> findAllWorkTypesOther() {
+        return workTypesOtherRepository.findAll();
+    }
 
-    // insert overtime
+    public void addLeaveRecord(LeaveRecord leaveRecord) {
+        // unesti total days, hours per day, total hours, status
+        boolean isExists = leaveRecordRepository.existsByAppUserIdAndDateFrom(leaveRecord.getAppUserId(), leaveRecord.getDateFrom());
+        boolean overlapRecord = leaveRecordRepository.overlapRecord(leaveRecord.getAppUserId(), leaveRecord.getWorkTypeOtherId(),
+                leaveRecord.getDateFrom(), leaveRecord.getDateTo());
+        System.out.println("Leave record id: " + leaveRecord.getIdLeave());
+        System.out.println("Leave record type: " + leaveRecord.getWorkTypeOtherId());
+        System.out.println("Leave record exists: " + isExists);
+        System.out.println("Leave record overlap: " + overlapRecord);
 
-    // automate overtime
+        // worktype other id, and date from in between date from and date to, and date to in between date from and date to
+
+        int totalDays = TimeConverterHelper.calculateTotalDays(leaveRecord.getDateFrom(), leaveRecord.getDateTo());
+        int totalHours = totalDays * leaveRecord.getHoursPerDay();
+        // if status of period is o
+        if(periodRepository.isPeriodStatusO(leaveRecord.getDateFrom().getMonthValue(), leaveRecord.getDateFrom().getYear())) {
+            leaveRecord.setStatus("O");
+        }
+
+        // ovo sve mozes unesti nule
+        leaveRecord.setTotalDays(totalDays);
+        leaveRecord.setTotalHours(totalHours);
+        System.out.println("total days: " + totalDays);
+        System.out.println("leave record setup: " +  leaveRecord.toString());
+
+        if(!isExists && !overlapRecord) {
+            leaveRecordRepository.insert(leaveRecord);
+        }
+    }
 
 
-
+    // working time service for period status
+    // period radnik status
+    // ako je u tablici period_radnik status Z onemoguci unosenje za cijeli mjesec
+    // ako je null onda
 }
