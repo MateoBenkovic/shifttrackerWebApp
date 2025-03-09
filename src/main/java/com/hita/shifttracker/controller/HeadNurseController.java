@@ -171,7 +171,7 @@ public class HeadNurseController {
         AppUserDTO employee = appUserService.getEmployeeById(employeeId);
         System.out.println("working time to delete: " + workingTimeToDelete);
 
-        workingTimeService.deleteWorkingTimeById(workingTimeToDelete);
+        //workingTimeService.deleteWorkingTimeById(workingTimeToDelete);
 
         return "redirect:/head_nurse/workhour/list?id=" + employeeId;
     }

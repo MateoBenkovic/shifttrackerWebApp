@@ -61,14 +61,15 @@ public class WorkingTimeService {
 
 
 
-    public void deleteWorkingTimeById(int idWorkTime) {
+    public void deleteWorkingTimeById(int idWorkTime, int appUserId) {
         // exists by id
         if (workingTimeRepository.existsByIdWorkTime(idWorkTime)) {
             // find if hase overtime
             List<WorkingOvertime> workingOvertimes = workingOvertimeRepository.findByIdWorkTime(idWorkTime);
             if (workingOvertimes.size() > 0) {
                 for (WorkingOvertime wo : workingOvertimes) {
-                    workingOvertimeRepository.setStatusToS(wo.getIdOvertime(), wo.getIdWorkTime());
+
+                    workingOvertimeRepository.setStatusToS(wo.getIdOvertime(), wo.getIdWorkTime(), appUserId);
                 }
             }
 

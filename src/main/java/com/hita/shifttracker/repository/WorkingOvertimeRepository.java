@@ -69,8 +69,8 @@ public class WorkingOvertimeRepository {
     }
 
     // set status to s
-    public void setStatusToS(int idOvertime, int idWorkTime) {
-        String sql = "UPDATE working_overtime SET status = 'S' WHERE id_overtime = ? AND id_work_time = ?";
-        jdbcTemplate.update(sql, idOvertime, idWorkTime);
+    public void setStatusToS(int idOvertime, int idWorkTime, int appUserId) {
+        String sql = "UPDATE working_overtime SET status = 'S', uid_ins_upd = ? WHERE id_overtime = ? AND id_work_time = ?";
+        jdbcTemplate.update(sql, appUserId,idOvertime, idWorkTime);
     }
 }
