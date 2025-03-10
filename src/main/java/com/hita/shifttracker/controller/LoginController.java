@@ -24,10 +24,10 @@ public class LoginController {
         return "login";
     }
 
-//    @GetMapping("/")
-//    public String redirectToLogin() {
-//        return "redirect:/login";
-//    }
+    @GetMapping("/")
+    public String redirectToLogin() {
+        return "index.html";
+    }
 
     @GetMapping("/loginProcess")
     public String loginProcess(@RequestParam("email") String email, @RequestParam("password") String password,
