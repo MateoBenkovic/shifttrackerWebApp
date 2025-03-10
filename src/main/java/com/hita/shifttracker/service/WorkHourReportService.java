@@ -5,6 +5,7 @@ import com.hita.shifttracker.dto.WorkingTimeReportDTO;
 import com.hita.shifttracker.repository.WorkHourReportRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -25,10 +26,14 @@ public class WorkHourReportService {
     }
 
     public List<OrgUnitWorkingTimeReportDTO> getOrgUnitReport(int orgUnitId, int month, int year) {
-        return workHourReportRepository.getOrgUnitWorkSummary(orgUnitId, month, year);
+        List<OrgUnitWorkingTimeReportDTO> reverseList = workHourReportRepository.getOrgUnitWorkSummary(orgUnitId, month, year);
+        Collections.reverse(reverseList);
+        return reverseList;
     }
 
     public List<OrgUnitWorkingTimeReportDTO> getAllOrgUnitReport(int month, int year) {
-        return workHourReportRepository.getAllOrgUnitWorkSummary(month, year);
+        List<OrgUnitWorkingTimeReportDTO> reverseList = workHourReportRepository.getAllOrgUnitWorkSummary(month, year);
+        Collections.reverse(reverseList);
+        return reverseList;
     }
 }

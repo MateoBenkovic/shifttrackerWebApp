@@ -262,6 +262,21 @@ public class HeadNurseController {
         return "head_nurse_workhour_report.html";
     }
 
+    @GetMapping ("/head_nurse/statistics")
+    public String getStatistics(HttpSession session, Model model) {
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+        model.addAttribute("appUser", appUser);
+
+        return "head_nurse_statistics";
+    }
+
+    @GetMapping("/head_nurse/apache-superset-railway-production-1c0e.up.railway.app")
+    @ResponseBody
+    public ResponseEntity<String> getSupersetData() {
+        return ResponseEntity.ok("apache-superset-railway-production-1c0e.up.railway.app");
+    }
+
+
 //    @GetMapping("/head_nurse/workhour/report/download")
 //    public ResponseEntity<byte[]> getEmployeeWorkHourReport(@RequestParam ("employeeId") int employeeId,
 //                                            @RequestParam ("monthYearSelect") String monthYearSelect,
