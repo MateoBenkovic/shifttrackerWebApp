@@ -70,6 +70,7 @@ public class HeadNurseController {
         // find all employees
         List<AppUserDTO> employees = appUserService.getAllEmployees();
         model.addAttribute("employees", employees);
+        //model.addAttribute("leaveRecord", new LeaveRecord());
 
         return "head_nurse_employee_list";
     }
@@ -85,6 +86,12 @@ public class HeadNurseController {
 
         Company company = companyService.findWithData();
         model.addAttribute("company", company);
+
+        List<WorkTypesOther> workTypesOtherList = workingTimeService.findAllWorkTypesOther();
+        model.addAttribute("workTypesOtherList", workTypesOtherList);
+
+
+        model.addAttribute("leaveRecord", new LeaveRecord());
 
         return "head_nurse_employee_workhour";
     }
@@ -134,6 +141,7 @@ public class HeadNurseController {
         System.out.println(workingTimeId);
 
         AppUserDTO employee = appUserService.getEmployeeById(employeeId);
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
 
         LocalDateTime startDateTime = LocalDateTime.parse(startShift);
         LocalDateTime endDateTime = LocalDateTime.parse(endShift);
@@ -143,21 +151,22 @@ public class HeadNurseController {
         LocalDate dateTo = endDateTime.toLocalDate();
         int hoursTo = endDateTime.toLocalTime().getHour();
 
-        int shiftType = 2;
-        if(dateFrom.equals(dateTo)) {
-            shiftType = 1;
-        }
-
         WorkingTime workingTime = new WorkingTime();
         workingTime.setDateFrom(dateFrom);
         workingTime.setHoursFrom(hoursFrom);
         workingTime.setDateTo(dateTo);
         workingTime.setHoursTo(hoursTo);
         workingTime.setAppUserId(employee.getId());
-        workingTime.setShiftId(shiftType);
+        workingTime.setUidInsUpd(appUser.getId());
         workingTime.setSchedId(1);
 
-        workingTimeService.addWorkingTime(workingTime);
+        if(workingTimeId == null) {
+            workingTimeService.addWorkingTime(workingTime);
+        } else if (workingTimeId != null) {
+            // update working time
+            workingTime.setIdWorkTime(workingTimeId);
+            workingTimeService.updateWorkingTime(workingTime);
+        }
 
         return "redirect:/head_nurse/workhour/list?id=" + employee.getId();
     }
@@ -165,10 +174,65 @@ public class HeadNurseController {
     @GetMapping("/head_nurse/employee/workhour/delete")
     public String employeeWorkHourDelete(@RequestParam("workingTimeToDelete") int workingTimeToDelete, @RequestParam("employeeId") int employeeId, HttpSession session){
 
-        //workingTimeService.deleteWorkingTimeById(employeeId, workingTimeToDelete);
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+        System.out.println("working time to delete: " + workingTimeToDelete);
+
+        workingTimeService.deleteWorkingTimeById(workingTimeToDelete, appUser.getId());
 
         return "redirect:/head_nurse/workhour/list?id=" + employeeId;
     }
+
+    @PostMapping("/headnurse/workhour/leaveRecord")
+    public String leaveRecordsProcess(@ModelAttribute LeaveRecord leaveRecord, HttpSession session, @RequestParam("employeeId") int employeeId) {
+
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+        AppUserDTO employee = appUserService.getEmployeeById(employeeId);
+        System.out.println("leave record: " + leaveRecord.toString());
+        leaveRecord.setAppUserId(employee.getId());
+        leaveRecord.setUidInsUpd(appUser.getId());
+        leaveRecord.setHoursPerDay(8);
+
+        workingTimeService.addLeaveRecord(leaveRecord);
+        return "redirect:/head_nurse/workhour/list?id=" + employeeId;
+    }
+
+    // prekovremeni sati
+
+//    @GetMapping("/head_nurse/workhour/overtime")
+//    public String employeeWorkHourOvertimeProcess(@RequestParam("overtimeStart") String overtimeStart,
+//                                                  @RequestParam("overtimeEnd") String overtimeEnd,
+//                                                  @RequestParam(value = "employeeIdOvertime", required = false) Integer workingOvertimeId,
+//                                                  @RequestParam("employeeId") int employeeId,
+//                                                  Model model, HttpSession session){
+//
+//        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+//
+//        LocalDateTime overtimeStartDT = LocalDateTime.parse(overtimeStart);
+//        LocalDateTime overtimeEndDT = LocalDateTime.parse(overtimeEnd);
+//
+//        System.out.println("overtime start: " + overtimeEndDT);
+//        System.out.println("overtime end: " + overtimeEndDT);
+//        System.out.println("working overtime id: " + workingOvertimeId);
+//
+//        LocalDate overtimeDateFrom = overtimeStartDT.toLocalDate();
+//        LocalDate overtimeDateTo = overtimeEndDT.toLocalDate();
+//
+//        BigDecimal overtimeHoursFrom = TimeConverterHelper.convertAndRoundToHalf(
+//                overtimeStartDT.toLocalTime().getHour(), overtimeStartDT.toLocalTime().getMinute());
+//        BigDecimal overtimeHoursTo = TimeConverterHelper.convertAndRoundToHalf(
+//                overtimeEndDT.toLocalTime().getHour(), overtimeEndDT.toLocalTime().getMinute());
+//
+//        // create overtime object
+//        WorkingOvertime workingOvertime = new WorkingOvertime();
+//        workingOvertime.setDateFrom(overtimeDateFrom);
+//        workingOvertime.setHoursFrom(overtimeHoursFrom);
+//        workingOvertime.setDateTo(overtimeDateTo);
+//        workingOvertime.setHoursTo(overtimeHoursTo);
+//        workingOvertime.setAppUserId(employeeId);
+//        workingOvertime.setUidInsUpd(appUser.getId());
+//
+//        return "redirect:/employee/workhour/list?id=" + employeeId;
+//    }
 
     // Dodaj novog zaposlenika
     @GetMapping("/head_nurse/add/employee")
