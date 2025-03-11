@@ -31,9 +31,9 @@ function loadWorkHours(year, month) {
         return response.json();
     })
     .then(data => {
-        updateTable(data.workHours, data.workingTimes, year, month, data.schedule);
         const prescribedHours = data.period;
         document.getElementById('prescribed-hours').textContent = `${prescribedHours.totalHours}`;
+        updateTable(data.workHours, data.workingTimes, year, month, data.schedule);
     })
     .catch(error => console.error("Greška:", error));
 }

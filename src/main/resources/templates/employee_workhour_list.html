@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Raspored Zaposlenika</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <style>
         body {
             background-color: #f8f9fa;
@@ -48,7 +48,7 @@
             background-color: #e6e6e6;
         }
         td.holiday {
-            background-color: #ffeb3b;
+            background-color: #ffeb3b94;
         }
         #work-type {
             text-align: center;
@@ -165,7 +165,7 @@
             font-weight: 500;
         }
         #deviation {
-            background-color: #ffd254;
+            background-color: #ffc857a6;
             font-weight: bold;
         }
         .secondShift:hover {
@@ -190,9 +190,6 @@
             cursor: pointer;
             font-size: 20px;
             font-weight: bold;
-        }
-        #posebneVrsteRada{
-            background-color: #ff00000d;
         }
     </style>
 </head>
@@ -395,14 +392,12 @@
     </form>
 </div>
 
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 <script th:src="@{/scripts/highlightNewEntry.js}"></script>
 <script th:src="@{/scripts/workHoursFormDisplay.js}"></script>
 <script th:src="@{/scripts/workHoursFormRules.js}"></script>
 <script type="module" th:src="@{/scripts/employee/employeeRenderWorkHoursTable.js}"></script>
 <script type="module" th:src="@{/scripts/employee/employeeLoadWorkHoursData.js}"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
