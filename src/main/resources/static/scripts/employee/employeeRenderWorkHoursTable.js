@@ -126,7 +126,7 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
     workHours.forEach(row => {
         let backgroundColor = row.workTypeName.includes("Redovan rad") ? "" : "background-color: #ff00000d;";
 
-        let tr = `<tr><td style="${backgroundColor}; text-align: left;">${row.workTypeName}`;
+        let tr = `<tr style="${backgroundColor}"><td style="text-align: left;">${row.workTypeName}`;
 
         for (let i = 1; i <= daysInMonth; i++) {
             let dayKey = `day${String(i).padStart(2, '0')}`;
@@ -155,10 +155,10 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
                         value = "";
                     }
 
-            tr += `<td class="${dayClass}" style="${backgroundColor}">${value}</td>`;
+            tr += `<td class="${dayClass}">${value}</td>`;
         }
 
-        tr += `<td style="${backgroundColor}">${row.total}</td></tr>`;
+        tr += `<td>${row.total}</td></tr>`;
         tableBody.innerHTML += tr;
     });
     totalSumParagraph.innerText = totalSum;
