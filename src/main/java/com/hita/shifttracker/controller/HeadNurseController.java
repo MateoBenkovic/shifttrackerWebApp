@@ -1,6 +1,7 @@
 package com.hita.shifttracker.controller;
 
 import com.hita.shifttracker.dto.AppUserDTO;
+import com.hita.shifttracker.dto.OrgUnitWorkingTimeReportDTO;
 import com.hita.shifttracker.dto.WorkingTimeDTO;
 import com.hita.shifttracker.dto.WorkingTimeReportDTO;
 import com.hita.shifttracker.model.*;
@@ -24,9 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -263,9 +262,6 @@ public class HeadNurseController {
         return "redirect:/head_nurse/employee/list";
     }
 
-
-
-
     @GetMapping("/head_nurse/workhour/report")
     public String getWorkHourReport(Model model, HttpSession session) {
 
@@ -274,7 +270,6 @@ public class HeadNurseController {
 
         List<AppUserDTO> employees = appUserService.getAllEmployees();
         model.addAttribute("employees", employees);
-//        System.out.println(employees);
 
         return "head_nurse_workhour_report.html";
     }
@@ -298,22 +293,53 @@ public class HeadNurseController {
         int month = Integer.parseInt(parts[1]);
 
         if ("orgUnit".equals(searchType)) {
-//            if (orgUnitId.equals("9")){
-//                WorkingTimeReportDTO allOrgUnitReport = workHourReportService.getAllOrgUnitReport(month, year);
-//                model.addAttribute("allOrgUnitReport", allOrgUnitReport);
-//            } else {
-            List<WorkingTimeReportDTO> reports = workHourReportService.getOrgUnitEmployeeReport(orgUnitId, month, year);
-            WorkingTimeReportDTO orgUnitReport = workHourReportService.getOrgUnitReport(orgUnitId, month, year);
-            model.addAttribute("reports", reports);
-            model.addAttribute("orgUnitReport", orgUnitReport);
-//            }
+            if (orgUnitId.equals(9)){
+                List<OrgUnitWorkingTimeReportDTO> allOrgUnitReport = workHourReportService.getAllOrgUnitReport(month, year);
+
+                if(allOrgUnitReport != null && !allOrgUnitReport.isEmpty()) {
+                    model.addAttribute("allOrgUnitReport", allOrgUnitReport);
+                } else {
+                    model.addAttribute("errorMessage", 1);
+                }
+
+            } else {
+                List<WorkingTimeReportDTO> reports = workHourReportService.getOrgUnitEmployeeReport(orgUnitId, month, year);
+                List<OrgUnitWorkingTimeReportDTO> orgUnitReport = workHourReportService.getOrgUnitReport(orgUnitId, month, year);
+
+                if (orgUnitReport != null && !orgUnitReport.isEmpty() && reports != null & !reports.isEmpty()) {
+                    model.addAttribute("orgUnitReport", orgUnitReport);
+                    model.addAttribute("reports", reports);
+                } else {
+                    model.addAttribute("errorMessage", 1);
+                }
+            }
+
         } else if ("employee".equals(searchType)) {
             List<WorkingTimeReportDTO> reports = workHourReportService.getEmployeeReport(employeeIds, month, year);
-            model.addAttribute("reports", reports);
+            if (reports != null && !reports.isEmpty()) {
+                model.addAttribute("reports", reports);
+            } else {
+                model.addAttribute("errorMessage", 1);
+            }
         }
 
         return "head_nurse_workhour_report.html";
     }
+
+    @GetMapping ("/head_nurse/statistics")
+    public String getStatistics(HttpSession session, Model model) {
+        AppUserDTO appUser = (AppUserDTO) session.getAttribute("appUser");
+        model.addAttribute("appUser", appUser);
+
+        return "head_nurse_statistics";
+    }
+
+    @GetMapping("/head_nurse/apache-superset-railway-production-1c0e.up.railway.app")
+    @ResponseBody
+    public ResponseEntity<String> getSupersetData() {
+        return ResponseEntity.ok("apache-superset-railway-production-1c0e.up.railway.app");
+    }
+
 
 //    @GetMapping("/head_nurse/workhour/report/download")
 //    public ResponseEntity<byte[]> getEmployeeWorkHourReport(@RequestParam ("employeeId") int employeeId,
