@@ -165,7 +165,7 @@ export function updateTable(workHours, workingTimes, year, month, schedule) {
         tableBody.innerHTML += tr;
     });
     totalSumParagraph.innerText = totalSum;
-    if (totalSum > prescribedHours) {
+    if (totalSum >= prescribedHours) {
         totalSumParagraph.style.color = "black";
         totalSumParagraph.style.fontWeight = "bold";
     } else {
