@@ -26,7 +26,7 @@ public class LoginController {
 
     @GetMapping("/")
     public String redirectToLogin() {
-        return "redirect:/login";
+        return "index";
     }
 
     @GetMapping("/loginProcess")
